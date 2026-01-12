@@ -178,15 +178,17 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           {/* Logo */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <img
               src={`${import.meta.env.BASE_URL}assets/logo-white.svg`}
               alt="NESMA"
-              className="h-8 lg:h-10"
+              className="h-6 sm:h-8 lg:h-10"
             />
-            <div className="hidden lg:block">
+            <div className="hidden sm:block">
               <span className="text-white/60 text-sm">|</span>
-              <span className="text-white/80 text-sm ml-3">HR System</span>
+              <span className="text-white/80 text-sm ml-2 lg:ml-3">
+                HR System
+              </span>
             </div>
           </div>
 
