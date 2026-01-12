@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 70">
+  <!-- Tameeni تأميني Official Logo for Sidebar -->
+  <!-- Cyan Blue: #29ABE2 -->
+
+  <!-- Arabic text تأميني -->
+  <text x="5" y="50" fill="#29ABE2" font-family="'Tajawal', 'Cairo', Arial, sans-serif" font-size="48" font-weight="700" direction="rtl">تأميني</text>
+
+  <!-- Shield with checkmark icon -->
+  <g transform="translate(195, 5)">
+    <!-- Outer shield outline -->
+    <path d="M35 2 L60 12 L60 30 C60 48 35 60 35 60 C35 60 10 48 10 30 L10 12 Z"
+          fill="none" stroke="#29ABE2" stroke-width="4" stroke-linejoin="round"/>
+    <!-- Inner shield -->
+    <path d="M35 12 L52 18 L52 30 C52 42 35 50 35 50 C35 50 18 42 18 30 L18 18 Z"
+          fill="none" stroke="#29ABE2" stroke-width="3" stroke-linejoin="round"/>
+    <!-- Checkmark -->
+    <path d="M24 32 L32 40 L48 24"
+          fill="none" stroke="#29ABE2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,3413 @@
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cairo:wght@300;400;500;600;700;800&display=swap");
+
+/* ========================================
+   NESMA Infrastructure & Technology
+   Brand Identity 2025 - HR System Theme
+   Version: 2.0.0 | January 2026
+   ======================================== */
+
+@theme {
+  /* Primary Brand Colors - NESMA 2025 Official */
+  --color-primary: #2e3192;
+  --color-primary-hover: #252880;
+  --color-primary-light: #e8e9f5;
+  --color-primary-50: #f0f0fa;
+  --color-primary-100: #e0e1f5;
+  --color-primary-200: #c1c3eb;
+  --color-primary-300: #9295d9;
+  --color-primary-400: #6367c7;
+  --color-primary-500: #2e3192;
+  --color-primary-600: #252880;
+  --color-primary-700: #1c1f6e;
+  --color-primary-800: #13165c;
+  --color-primary-900: #0a0d4a;
+
+  /* Secondary - Cyan */
+  --color-secondary: #80d1e9;
+  --color-secondary-50: #f0fafb;
+  --color-secondary-100: #e0f5f7;
+  --color-secondary-200: #b3e8f2;
+  --color-secondary-300: #80d1e9;
+  --color-secondary-400: #5cc4e0;
+  --color-secondary-500: #38b7d7;
+  --color-secondary-600: #2c92ac;
+  --color-secondary-700: #206d81;
+
+  /* Dark Navy */
+  --color-dark: #0e2841;
+  --color-dark-50: #e6eaed;
+  --color-dark-100: #c0c9d1;
+  --color-dark-200: #96a4b3;
+  --color-dark-300: #6c7f95;
+  --color-dark-400: #4d637f;
+  --color-dark-500: #2e4769;
+  --color-dark-600: #293f5d;
+  --color-dark-700: #0e2841;
+
+  /* Accent - Medium Blue */
+  --color-accent: #203366;
+  --color-accent-light: #e0e7ff;
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-200: #a7f3d0;
+  --color-success-300: #6ee7b7;
+  --color-success-400: #34d399;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+
+  --color-warning: #f59e0b;
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+
+  --color-error: #ef4444;
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+
+  --color-info: #3b82f6;
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+
+  /* Neutral Colors */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* Shadows - NESMA Brand */
+  --shadow-xs: 0 1px 2px rgba(14, 40, 65, 0.05);
+  --shadow-sm: 0 2px 8px rgba(14, 40, 65, 0.08);
+  --shadow-soft: 0 2px 8px rgba(14, 40, 65, 0.08);
+  --shadow-md: 0 4px 20px rgba(14, 40, 65, 0.1);
+  --shadow-medium: 0 4px 20px rgba(14, 40, 65, 0.1);
+  --shadow-lg: 0 8px 40px rgba(14, 40, 65, 0.15);
+  --shadow-large: 0 8px 40px rgba(14, 40, 65, 0.15);
+  --shadow-xl: 0 16px 60px rgba(14, 40, 65, 0.2);
+  --shadow-glow: 0 0 40px rgba(128, 209, 233, 0.3);
+  --shadow-primary: 0 4px 20px rgba(46, 49, 146, 0.25);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* Custom fonts */
+  --font-sans: "Inter", "Cairo", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* CSS Variables for legacy support */
+:root {
+  /* NESMA Primary Colors */
+  --nesma-primary: #2e3192;
+  --nesma-secondary: #80d1e9;
+  --nesma-dark: #0e2841;
+  --nesma-accent: #203366;
+  --nesma-neutral: #b3b3b3;
+  --nesma-light-bg: #e8e8e8;
+
+  /* Status Colors */
+  --nesma-success: #10b981;
+  --nesma-success-light: #d1fae5;
+  --nesma-warning: #f59e0b;
+  --nesma-warning-light: #fef3c7;
+  --nesma-danger: #ef4444;
+  --nesma-danger-light: #fee2e2;
+  --nesma-info: #3b82f6;
+  --nesma-info-light: #dbeafe;
+
+  /* Gradients - NESMA Brand */
+  --nesma-gradient-primary: linear-gradient(135deg, #2e3192 0%, #0e2841 100%);
+  --nesma-gradient-secondary: linear-gradient(135deg, #80d1e9 0%, #2e3192 100%);
+  --nesma-gradient-dark: linear-gradient(
+    135deg,
+    #0e2841 0%,
+    #203366 50%,
+    #0e2841 100%
+  );
+  --nesma-gradient-light: linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%);
+  --nesma-gradient-header: linear-gradient(
+    135deg,
+    #2e3192 0%,
+    #203366 50%,
+    #0e2841 100%
+  );
+  --nesma-gradient-success: linear-gradient(135deg, #10b981 0%, #0e2841 100%);
+
+  /* Chart Colors - NESMA Palette */
+  --nesma-chart-1: #2e3192;
+  --nesma-chart-2: #80d1e9;
+  --nesma-chart-3: #0e2841;
+  --nesma-chart-4: #203366;
+  --nesma-chart-5: #10b981;
+  --nesma-chart-6: #f59e0b;
+  --nesma-chart-7: #ef4444;
+  --nesma-chart-8: #8b5cf6;
+
+  /* Shadows */
+  --nesma-shadow-xs: 0 1px 2px rgba(14, 40, 65, 0.05);
+  --nesma-shadow-sm: 0 2px 8px rgba(14, 40, 65, 0.08);
+  --nesma-shadow-md: 0 4px 20px rgba(14, 40, 65, 0.1);
+  --nesma-shadow-lg: 0 8px 40px rgba(14, 40, 65, 0.15);
+  --nesma-shadow-xl: 0 16px 60px rgba(14, 40, 65, 0.2);
+  --nesma-shadow-glow: 0 0 40px rgba(128, 209, 233, 0.3);
+  --nesma-shadow-primary: 0 4px 20px rgba(46, 49, 146, 0.25);
+
+  /* Border Radius */
+  --nesma-radius-xs: 4px;
+  --nesma-radius-sm: 8px;
+  --nesma-radius-md: 12px;
+  --nesma-radius-lg: 16px;
+  --nesma-radius-xl: 24px;
+  --nesma-radius-full: 9999px;
+
+  /* Transitions */
+  --nesma-transition-fast: all 0.15s ease;
+  --nesma-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --nesma-transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    "Inter",
+    "Cairo",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: linear-gradient(180deg, #f8fafc 0%, #e8e8e8 100%);
+  color: #1e293b;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ========================================
+   Scrollbar Styling - NESMA Brand
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #2e3192 0%, #0e2841 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #252880 0%, #0a1e33 100%);
+}
+
+/* ========================================
+   Focus Styles
+   ======================================== */
+:focus-visible {
+  outline: 2px solid var(--nesma-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   NESMA Header Styles
+   ======================================== */
+.nesma-header {
+  background: var(--nesma-gradient-header);
+  color: white;
+  position: relative;
+  box-shadow: var(--nesma-shadow-primary);
+}
+
+.nesma-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--nesma-secondary) 0%,
+    transparent 100%
+  );
+}
+
+/* ========================================
+   Button Styles - NESMA Brand
+   ======================================== */
+.btn-primary {
+  background: var(--nesma-gradient-primary);
+  color: white;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: var(--nesma-transition);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  box-shadow: var(--nesma-shadow-primary);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-secondary {
+  background: var(--nesma-secondary);
+  color: var(--nesma-dark);
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: var(--nesma-transition);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #6bc4de;
+  box-shadow: var(--nesma-shadow-md);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--nesma-primary);
+  color: var(--nesma-primary);
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: var(--nesma-transition);
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background: var(--nesma-primary);
+  color: white;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #4b5563;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: var(--nesma-transition);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: rgba(46, 49, 146, 0.1);
+  color: var(--nesma-primary);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: var(--nesma-transition);
+  cursor: pointer;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ========================================
+   Card Styles - NESMA Brand
+   ======================================== */
+.card {
+  background: white;
+  border-radius: var(--nesma-radius-lg);
+  box-shadow: var(--nesma-shadow-sm);
+  padding: 1.5rem;
+  border: 1px solid rgba(46, 49, 146, 0.05);
+  transition: var(--nesma-transition);
+}
+
+.card:hover {
+  box-shadow: var(--nesma-shadow-md);
+  transform: translateY(-2px);
+  border-color: rgba(128, 209, 233, 0.2);
+}
+
+.card-hover {
+  background: white;
+  border-radius: var(--nesma-radius-lg);
+  box-shadow: var(--nesma-shadow-sm);
+  padding: 1.5rem;
+  border: 1px solid rgba(46, 49, 146, 0.05);
+  transition: var(--nesma-transition);
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  box-shadow: var(--nesma-shadow-lg);
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(128, 209, 233, 0.3);
+}
+
+/* Glass Card for Portals/Dark backgrounds */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(128, 209, 233, 0.1);
+  border-radius: var(--nesma-radius-xl);
+  transition: var(--nesma-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--nesma-radius-xl);
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(128, 209, 233, 0.3) 50%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.glass-card:hover::before {
+  opacity: 1;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(128, 209, 233, 0.3);
+  box-shadow: var(--nesma-shadow-glow);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Light Glass Card */
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: var(--nesma-radius-xl);
+  transition: var(--nesma-transition);
+}
+
+.glass-card-light:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(46, 49, 146, 0.2);
+}
+
+/* KPI/Stat Card */
+.nesma-kpi-card {
+  background: white;
+  border-radius: var(--nesma-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--nesma-shadow-sm);
+  border-left: 4px solid var(--nesma-primary);
+  transition: var(--nesma-transition);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.nesma-kpi-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(128, 209, 233, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+[dir="rtl"] .nesma-kpi-card {
+  border-left: none;
+  border-right: 4px solid var(--nesma-primary);
+}
+
+.nesma-kpi-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--nesma-shadow-md);
+}
+
+.nesma-kpi-card.kpi-success {
+  border-left-color: var(--nesma-success);
+}
+.nesma-kpi-card.kpi-warning {
+  border-left-color: var(--nesma-warning);
+}
+.nesma-kpi-card.kpi-danger {
+  border-left-color: var(--nesma-danger);
+}
+.nesma-kpi-card.kpi-info {
+  border-left-color: var(--nesma-info);
+}
+.nesma-kpi-card.kpi-secondary {
+  border-left-color: var(--nesma-secondary);
+}
+
+/* Stat Card */
+.stat-card {
+  background: white;
+  border-radius: var(--nesma-radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--nesma-shadow-sm);
+  transition: var(--nesma-transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -30%;
+  width: 60%;
+  height: 120%;
+  background: rgba(46, 49, 146, 0.03);
+  transform: rotate(-30deg);
+  pointer-events: none;
+  transition: var(--nesma-transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--nesma-shadow-lg);
+}
+
+.stat-card:hover::after {
+  background: rgba(46, 49, 146, 0.08);
+}
+
+/* ========================================
+   Input & Form Styles
+   ======================================== */
+.input-field {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: var(--nesma-radius-sm);
+  color: #111827;
+  transition: var(--nesma-transition);
+  background: white;
+}
+
+.input-field::placeholder {
+  color: #9ca3af;
+}
+
+.input-field:focus {
+  border-color: var(--nesma-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 49, 146, 0.1);
+}
+
+.select-field {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: var(--nesma-radius-sm);
+  color: #111827;
+  background-color: white;
+  cursor: pointer;
+  transition: var(--nesma-transition);
+}
+
+.select-field:focus {
+  border-color: var(--nesma-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 49, 146, 0.1);
+}
+
+/* ========================================
+   Badge Styles - NESMA Brand
+   ======================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.badge-primary {
+  background: rgba(46, 49, 146, 0.15);
+  color: var(--nesma-primary);
+}
+
+.badge-secondary {
+  background: rgba(128, 209, 233, 0.2);
+  color: var(--nesma-dark);
+}
+
+.badge-success {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.badge-warning {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.badge-error,
+.badge-danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.badge-info {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+/* Badge with dot */
+.badge-dot::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 0.375rem;
+}
+
+/* ========================================
+   Table Styles - NESMA Brand
+   ======================================== */
+.table-container {
+  background: white;
+  border-radius: var(--nesma-radius-lg);
+  box-shadow: var(--nesma-shadow-sm);
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.data-table th {
+  background: var(--nesma-gradient-primary);
+  color: white;
+  padding: 0.875rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.data-table th:first-child {
+  border-radius: var(--nesma-radius-sm) 0 0 0;
+}
+
+.data-table th:last-child {
+  border-radius: 0 var(--nesma-radius-sm) 0 0;
+}
+
+.data-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.data-table tbody tr {
+  transition: var(--nesma-transition-fast);
+}
+
+.data-table tbody tr:hover {
+  background-color: rgba(128, 209, 233, 0.08);
+}
+
+.table-header {
+  background: linear-gradient(135deg, #2e3192 0%, #0e2841 100%);
+  color: white;
+}
+
+.table-row {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s;
+}
+
+.table-row:hover {
+  background-color: rgba(128, 209, 233, 0.08);
+}
+
+/* ========================================
+   Tabs - NESMA Brand
+   ======================================== */
+.nesma-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: var(--nesma-radius-md);
+  box-shadow: var(--nesma-shadow-sm);
+}
+
+.nesma-tab {
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--nesma-radius-sm);
+  font-weight: 500;
+  transition: var(--nesma-transition);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--nesma-dark);
+}
+
+.nesma-tab:hover {
+  background: rgba(46, 49, 146, 0.1);
+}
+
+.nesma-tab.active {
+  background: var(--nesma-primary);
+  color: white;
+}
+
+/* ========================================
+   Sidebar Styles
+   ======================================== */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--nesma-radius-sm);
+  color: #4b5563;
+  font-weight: 500;
+  transition: var(--nesma-transition);
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  background: rgba(128, 209, 233, 0.15);
+  color: var(--nesma-primary);
+}
+
+.sidebar-item-active {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--nesma-radius-sm);
+  font-weight: 500;
+  background: rgba(128, 209, 233, 0.2);
+  color: var(--nesma-primary);
+  border-left: 3px solid var(--nesma-primary);
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+@media (min-width: 768px) {
+  .page-title {
+    font-size: 1.875rem;
+  }
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.text-muted {
+  color: #6b7280;
+}
+
+.glow-text {
+  text-shadow: 0 0 40px rgba(128, 209, 233, 0.5);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Stagger animations */
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+.stagger-5 {
+  animation-delay: 0.5s;
+}
+
+/* ========================================
+   Loading & Spinners
+   ======================================== */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: var(--nesma-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-sm {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--nesma-radius-sm);
+}
+
+/* ========================================
+   Modal Styles
+   ======================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(14, 40, 65, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--nesma-radius-xl);
+  box-shadow: var(--nesma-shadow-xl);
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* ========================================
+   Tooltip
+   ======================================== */
+.tooltip {
+  position: absolute;
+  z-index: 50;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  background: var(--nesma-dark);
+  border-radius: var(--nesma-radius-sm);
+  box-shadow: var(--nesma-shadow-md);
+}
+
+/* ========================================
+   Charts Container
+   ======================================== */
+.chart-container {
+  position: relative;
+  height: 300px;
+}
+
+/* ========================================
+   Feature Tags (Portal)
+   ======================================== */
+.feature-tag {
+  font-size: 0.6875rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--nesma-radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ========================================
+   Status Labels
+   ======================================== */
+.status-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--nesma-success);
+}
+
+.status-active::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nesma-success);
+}
+
+.status-pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  background: rgba(251, 191, 36, 0.2);
+  color: var(--nesma-warning);
+}
+
+.status-pending::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nesma-warning);
+}
+
+/* ========================================
+   Gradient Backgrounds
+   ======================================== */
+.gradient-primary {
+  background: var(--nesma-gradient-primary);
+}
+
+.gradient-header {
+  background: var(--nesma-gradient-header);
+}
+
+.gradient-dark {
+  background: var(--nesma-gradient-dark);
+}
+
+.gradient-success {
+  background: var(--nesma-gradient-success);
+}
+
+/* Icon Gradients */
+.icon-gradient {
+  background: var(--nesma-gradient-primary);
+  color: white;
+  border-radius: var(--nesma-radius-lg);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================
+   Particles (Portal Background)
+   ======================================== */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--nesma-secondary);
+  border-radius: 50%;
+  opacity: 0.2;
+  animation: particleFloat 20s linear infinite;
+}
+
+/* ========================================
+   Hero Gradient (Portal)
+   ======================================== */
+.hero-gradient {
+  background:
+    radial-gradient(
+      ellipse at top,
+      rgba(128, 209, 233, 0.15) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(46, 49, 146, 0.2) 0%,
+      transparent 60%
+    );
+}
+
+/* ========================================
+   RTL Support
+   ======================================== */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .sidebar-item-active {
+  border-left: none;
+  border-right: 3px solid var(--nesma-primary);
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .card,
+  .nesma-kpi-card,
+  .stat-card {
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb !important;
+  }
+}
+
+/* ========================================
+   Responsive Utilities
+   ======================================== */
+@media (max-width: 768px) {
+  .nesma-kpi-card {
+    padding: 1rem;
+  }
+
+  .nesma-tabs {
+    flex-wrap: wrap;
+  }
+
+  .nesma-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ========================================
+   Map Container
+   ======================================== */
+.map-container {
+  border-radius: var(--nesma-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--nesma-shadow-md);
+}
+
+.map-marker {
+  cursor: pointer;
+  transition: var(--nesma-transition);
+}
+
+.map-marker:hover {
+  transform: scale(1.2);
+}
+
+.map-tooltip {
+  background: white;
+  border-radius: var(--nesma-radius-md);
+  padding: 1rem;
+  box-shadow: var(--nesma-shadow-lg);
+  min-width: 200px;
+}
+
+/* ========================================
+   Theme System - Multi-Mode Support
+   ======================================== */
+
+/* Theme CSS Variables */
+:root {
+  --theme-background: #f9fafb;
+  --theme-background-gradient: linear-gradient(
+    135deg,
+    #f9fafb 0%,
+    #f3f4f6 100%
+  );
+  --theme-surface: #ffffff;
+  --theme-surface-hover: #f3f4f6;
+  --theme-border: #e5e7eb;
+  --theme-text: #1f2937;
+  --theme-text-secondary: #6b7280;
+  --theme-text-muted: #9ca3af;
+  --theme-primary: #2e3192;
+  --theme-primary-light: rgba(46, 49, 146, 0.1);
+  --theme-secondary: #80d1e9;
+  --theme-secondary-light: rgba(128, 209, 233, 0.2);
+  --theme-success: #10b981;
+  --theme-warning: #f59e0b;
+  --theme-danger: #ef4444;
+  --theme-info: #3b82f6;
+  --theme-sidebar: #ffffff;
+  --theme-sidebar-text: #374151;
+  --theme-sidebar-hover: #f3f4f6;
+  --theme-header: linear-gradient(
+    135deg,
+    #2e3192 0%,
+    #203366 50%,
+    #0e2841 100%
+  );
+  --theme-header-text: #ffffff;
+  --theme-card: #ffffff;
+  --theme-card-border: #e5e7eb;
+  --theme-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --theme-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Light Theme */
+body.theme-light {
+  --theme-background: #f9fafb;
+  --theme-background-gradient: linear-gradient(
+    135deg,
+    #f9fafb 0%,
+    #f3f4f6 100%
+  );
+  --theme-surface: #ffffff;
+  --theme-surface-hover: #f3f4f6;
+  --theme-border: #e5e7eb;
+  --theme-text: #1f2937;
+  --theme-text-secondary: #6b7280;
+  --theme-text-muted: #9ca3af;
+  --theme-primary: #2e3192;
+  --theme-primary-light: rgba(46, 49, 146, 0.1);
+  --theme-secondary: #80d1e9;
+  --theme-secondary-light: rgba(128, 209, 233, 0.2);
+  --theme-sidebar: #ffffff;
+  --theme-sidebar-text: #374151;
+  --theme-sidebar-hover: #f3f4f6;
+  --theme-card: #ffffff;
+  --theme-card-border: #e5e7eb;
+  --theme-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --theme-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background: var(--theme-background-gradient);
+  color: var(--theme-text);
+}
+
+/* Dark Theme */
+body.theme-dark {
+  --theme-background: #0f172a;
+  --theme-background-gradient: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 100%
+  );
+  --theme-surface: #1e293b;
+  --theme-surface-hover: #334155;
+  --theme-border: #334155;
+  --theme-text: #f1f5f9;
+  --theme-text-secondary: #94a3b8;
+  --theme-text-muted: #64748b;
+  --theme-primary: #80d1e9;
+  --theme-primary-light: rgba(128, 209, 233, 0.15);
+  --theme-secondary: #2e3192;
+  --theme-secondary-light: rgba(46, 49, 146, 0.2);
+  --theme-sidebar: #1e293b;
+  --theme-sidebar-text: #e2e8f0;
+  --theme-sidebar-hover: #334155;
+  --theme-header: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --theme-card: #1e293b;
+  --theme-card-border: #334155;
+  --theme-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --theme-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: var(--theme-background-gradient);
+  color: var(--theme-text);
+}
+
+/* Company/NESMA Brand Theme */
+body.theme-company {
+  --theme-background: #0e2841;
+  --theme-background-gradient: linear-gradient(
+    135deg,
+    #0e2841 0%,
+    #203366 50%,
+    #0e2841 100%
+  );
+  --theme-surface: rgba(255, 255, 255, 0.05);
+  --theme-surface-hover: rgba(255, 255, 255, 0.1);
+  --theme-border: rgba(128, 209, 233, 0.2);
+  --theme-text: #ffffff;
+  --theme-text-secondary: #80d1e9;
+  --theme-text-muted: rgba(255, 255, 255, 0.6);
+  --theme-primary: #2e3192;
+  --theme-primary-light: rgba(46, 49, 146, 0.3);
+  --theme-secondary: #80d1e9;
+  --theme-secondary-light: rgba(128, 209, 233, 0.2);
+  --theme-sidebar: rgba(14, 40, 65, 0.95);
+  --theme-sidebar-text: #ffffff;
+  --theme-sidebar-hover: rgba(128, 209, 233, 0.15);
+  --theme-header: linear-gradient(
+    135deg,
+    #2e3192 0%,
+    #203366 50%,
+    #0e2841 100%
+  );
+  --theme-card: rgba(255, 255, 255, 0.05);
+  --theme-card-border: rgba(128, 209, 233, 0.2);
+  --theme-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --theme-shadow-hover: 0 10px 40px rgba(128, 209, 233, 0.2);
+  background: var(--theme-background-gradient);
+  color: var(--theme-text);
+}
+
+/* ========================================
+   Particle Animation (from Supply Chain)
+   ======================================== */
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  background: var(--nesma-secondary);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ========================================
+   Progress Bar Animations
+   ======================================== */
+.progress-striped {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+}
+
+.progress-striped-animated {
+  animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+  0% {
+    background-position: 1rem 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* ========================================
+   Fade In Up Animation (from Supply Chain)
+   ======================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+.stagger-5 {
+  animation-delay: 0.5s;
+}
+.stagger-6 {
+  animation-delay: 0.6s;
+}
+
+/* ========================================
+   Glass Card Effect (from Supply Chain)
+   ======================================== */
+.glass-card-effect {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card-effect::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(128, 209, 233, 0.3) 50%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.glass-card-effect:hover::before {
+  opacity: 1;
+}
+
+.glass-card-effect:hover {
+  transform: translateY(-12px) scale(1.03);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 40px 80px rgba(128, 209, 233, 0.2);
+}
+
+/* ========================================
+   Glow Text Effect (from Supply Chain)
+   ======================================== */
+.glow-text {
+  text-shadow: 0 0 40px rgba(128, 209, 233, 0.5);
+}
+
+/* ========================================
+   Section Card (from MITC)
+   ======================================== */
+.section-card-dark {
+  background: rgba(14, 40, 65, 0.5);
+  border: 1px solid rgba(128, 209, 233, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.section-header-dark {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(128, 209, 233, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ========================================
+   Metric Card (from MITC)
+   ======================================== */
+.metric-card-dark {
+  background: rgba(128, 209, 233, 0.1);
+  border: 1px solid rgba(128, 209, 233, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.metric-card-dark:hover {
+  transform: translateY(-2px);
+  border-color: rgba(128, 209, 233, 0.4);
+}
+
+/* ========================================
+   Badge Variants (from MITC)
+   ======================================== */
+.badge-critical {
+  background: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.badge-warning-dark {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.badge-info-dark {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.badge-success-dark {
+  background: rgba(52, 211, 153, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+/* ========================================
+   Scrollbar for Dark/Company Theme
+   ======================================== */
+body.theme-dark ::-webkit-scrollbar-track,
+body.theme-company ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+body.theme-dark ::-webkit-scrollbar-thumb,
+body.theme-company ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #80d1e9 0%, #2e3192 100%);
+}
+
+/* ========================================
+   Form Elements Theme Support
+   ======================================== */
+body.theme-dark input,
+body.theme-dark select,
+body.theme-dark textarea,
+body.theme-company input,
+body.theme-company select,
+body.theme-company textarea {
+  background: var(--theme-surface);
+  border-color: var(--theme-border);
+  color: var(--theme-text);
+}
+
+body.theme-dark input::placeholder,
+body.theme-dark textarea::placeholder,
+body.theme-company input::placeholder,
+body.theme-company textarea::placeholder {
+  color: var(--theme-text-muted);
+}
+
+/* ========================================
+   Slide In Animation
+   ======================================== */
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease forwards;
+}
+
+/* ========================================
+   Pulse Animation for Status Indicators
+   ======================================== */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ========================================
+   Scale Animation on Hover
+   ======================================== */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-lift {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--theme-shadow-hover);
+}
+
+/* ========================================
+   GLASS MODE THEME - Premium Glassmorphism
+   ======================================== */
+body.theme-glass {
+  --theme-background: #0a0a1a;
+  --theme-background-gradient: linear-gradient(
+    135deg,
+    #0a0a1a 0%,
+    #1a1a2e 25%,
+    #16213e 50%,
+    #0f3460 75%,
+    #1a1a2e 100%
+  );
+  --theme-surface: rgba(255, 255, 255, 0.03);
+  --theme-surface-hover: rgba(255, 255, 255, 0.08);
+  --theme-border: rgba(255, 255, 255, 0.08);
+  --theme-text: #ffffff;
+  --theme-text-secondary: rgba(255, 255, 255, 0.8);
+  --theme-text-muted: rgba(255, 255, 255, 0.5);
+  --theme-primary: #80d1e9;
+  --theme-primary-light: rgba(128, 209, 233, 0.15);
+  --theme-secondary: #a855f7;
+  --theme-secondary-light: rgba(168, 85, 247, 0.2);
+  --theme-sidebar: rgba(255, 255, 255, 0.02);
+  --theme-sidebar-text: #ffffff;
+  --theme-sidebar-hover: rgba(128, 209, 233, 0.1);
+  --theme-card: rgba(255, 255, 255, 0.03);
+  --theme-card-border: rgba(255, 255, 255, 0.08);
+  --theme-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --theme-shadow-hover: 0 16px 48px rgba(128, 209, 233, 0.15);
+  --theme-blur: 20px;
+  background: var(--theme-background-gradient);
+  color: var(--theme-text);
+}
+
+body.theme-glass ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+body.theme-glass ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    135deg,
+    rgba(128, 209, 233, 0.5) 0%,
+    rgba(168, 85, 247, 0.5) 100%
+  );
+}
+
+body.theme-glass input,
+body.theme-glass select,
+body.theme-glass textarea {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+body.theme-glass input::placeholder,
+body.theme-glass textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ========================================
+   GLASS MORPHISM COMPONENTS
+   ======================================== */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-morphism-light {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.glass-morphism-heavy {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Glass Card with Gradient Border */
+.glass-card-premium {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.glass-card-premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(128, 209, 233, 0.3) 0%,
+    rgba(168, 85, 247, 0.2) 50%,
+    rgba(128, 209, 233, 0.3) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.glass-card-premium:hover::before {
+  opacity: 1;
+}
+
+/* ========================================
+   ANIMATED ICONS - Professional Animations
+   ======================================== */
+
+/* Float Animation */
+@keyframes icon-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+}
+
+.icon-animate-float:hover {
+  animation: icon-float 2s ease-in-out infinite;
+}
+
+/* Pulse Glow Animation */
+@keyframes icon-pulse-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px var(--glow-color, rgba(128, 209, 233, 0.6)));
+    transform: scale(1.05);
+  }
+}
+
+.icon-animate-pulse:hover {
+  --glow-color: rgba(128, 209, 233, 0.6);
+  animation: icon-pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* Bounce Animation */
+@keyframes icon-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.icon-animate-bounce:hover {
+  animation: icon-bounce 0.6s ease-in-out;
+}
+
+/* Spin Animation */
+@keyframes icon-spin-once {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.icon-animate-spin:hover {
+  animation: icon-spin-once 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Shake Animation */
+@keyframes icon-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px) rotate(-5deg);
+  }
+  40% {
+    transform: translateX(3px) rotate(5deg);
+  }
+  60% {
+    transform: translateX(-2px) rotate(-3deg);
+  }
+  80% {
+    transform: translateX(2px) rotate(3deg);
+  }
+}
+
+.icon-animate-shake:hover {
+  animation: icon-shake 0.5s ease-in-out;
+}
+
+/* Pop Animation */
+@keyframes icon-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.icon-animate-pop:hover {
+  animation: icon-pop 0.3s ease-out;
+}
+
+/* Wiggle Animation */
+@keyframes icon-wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-8deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+}
+
+.icon-animate-wiggle:hover {
+  animation: icon-wiggle 0.4s ease-in-out;
+}
+
+/* Heartbeat Animation */
+@keyframes icon-heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.15);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.15);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+.icon-animate-heartbeat:hover {
+  animation: icon-heartbeat 1s ease-in-out;
+}
+
+/* Ring/Bell Animation */
+@keyframes icon-ring {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(15deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  30% {
+    transform: rotate(12deg);
+  }
+  40% {
+    transform: rotate(-12deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  70% {
+    transform: rotate(4deg);
+  }
+  80% {
+    transform: rotate(-4deg);
+  }
+  90% {
+    transform: rotate(2deg);
+  }
+}
+
+.icon-animate-ring:hover {
+  animation: icon-ring 0.8s ease-in-out;
+  transform-origin: top center;
+}
+
+/* Flip Animation */
+@keyframes icon-flip {
+  0% {
+    transform: perspective(400px) rotateY(0);
+  }
+  100% {
+    transform: perspective(400px) rotateY(360deg);
+  }
+}
+
+.icon-animate-flip:hover {
+  animation: icon-flip 0.6s ease-out;
+}
+
+/* Tada Animation */
+@keyframes icon-tada {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  10%,
+  20% {
+    transform: scale(0.9) rotate(-3deg);
+  }
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: scale(1.1) rotate(3deg);
+  }
+  40%,
+  60%,
+  80% {
+    transform: scale(1.1) rotate(-3deg);
+  }
+}
+
+.icon-animate-tada:hover {
+  animation: icon-tada 0.8s ease-in-out;
+}
+
+/* ========================================
+   ICON BOX STYLES - Premium Design
+   ======================================== */
+.icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.icon-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.icon-box:hover::before {
+  opacity: 1;
+}
+
+.icon-box-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--gradient-from, #2e3192) 0%,
+    var(--gradient-to, #0e2841) 100%
+  );
+  color: white;
+}
+
+.icon-box-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.icon-box-glow {
+  box-shadow: 0 0 20px var(--glow-color, rgba(128, 209, 233, 0.3));
+}
+
+.icon-box-glow:hover {
+  box-shadow: 0 0 30px var(--glow-color, rgba(128, 209, 233, 0.5));
+}
+
+/* ========================================
+   UNIFIED BORDER RADIUS SYSTEM
+   ======================================== */
+.radius-sm {
+  border-radius: 8px;
+}
+.radius-md {
+  border-radius: 12px;
+}
+.radius-lg {
+  border-radius: 16px;
+}
+.radius-xl {
+  border-radius: 20px;
+}
+.radius-2xl {
+  border-radius: 24px;
+}
+.radius-full {
+  border-radius: 9999px;
+}
+
+/* ========================================
+   CONSISTENT CARD STYLES
+   ======================================== */
+.card-consistent {
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-consistent:hover {
+  transform: translateY(-4px);
+}
+
+/* ========================================
+   GRADIENT TEXT
+   ======================================== */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #2e3192 0%, #80d1e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-secondary {
+  background: linear-gradient(135deg, #80d1e9 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-rainbow {
+  background: linear-gradient(
+    135deg,
+    #f43f5e 0%,
+    #f59e0b 25%,
+    #22c55e 50%,
+    #3b82f6 75%,
+    #a855f7 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========================================
+   PREMIUM SHADOWS
+   ======================================== */
+.shadow-glow-cyan {
+  box-shadow: 0 0 30px rgba(128, 209, 233, 0.3);
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+}
+
+.shadow-glow-mixed {
+  box-shadow:
+    0 0 30px rgba(128, 209, 233, 0.2),
+    0 0 60px rgba(168, 85, 247, 0.1);
+}
+
+.shadow-premium {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.shadow-premium-hover:hover {
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.2),
+    0 8px 10px -6px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(128, 209, 233, 0.2);
+}
+
+/* ========================================
+   BUTTON ENHANCEMENTS
+   ======================================== */
+.btn-premium {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-premium::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-premium:hover::before {
+  left: 100%;
+}
+
+.btn-glass-premium {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-glass-premium:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(128, 209, 233, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   LOADING SHIMMER
+   ======================================== */
+@keyframes shimmer-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: shimmer-slide 2s infinite;
+}
+
+/* ========================================
+   BORDER GRADIENT
+   ======================================== */
+.border-gradient {
+  position: relative;
+  background: var(--theme-card);
+  border-radius: 20px;
+}
+
+.border-gradient::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 21px;
+  background: linear-gradient(
+    135deg,
+    rgba(128, 209, 233, 0.5) 0%,
+    rgba(168, 85, 247, 0.5) 50%,
+    rgba(128, 209, 233, 0.5) 100%
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.border-gradient:hover::before {
+  opacity: 1;
+}
+
+/* ========================================
+   CORNER ACCENTS
+   ======================================== */
+.corner-accent {
+  position: relative;
+}
+
+.corner-accent::before,
+.corner-accent::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(128, 209, 233, 0.3);
+  transition: all 0.3s ease;
+}
+
+.corner-accent::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+  border-top-left-radius: 20px;
+}
+
+.corner-accent::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+  border-bottom-right-radius: 20px;
+}
+
+.corner-accent:hover::before,
+.corner-accent:hover::after {
+  width: 60px;
+  height: 60px;
+  border-color: rgba(128, 209, 233, 0.6);
+}
+
+/* ========================================
+   NOISE TEXTURE OVERLAY
+   ======================================== */
+.noise-overlay {
+  position: relative;
+}
+
+.noise-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ========================================
+   ANIMATED BACKGROUND PATTERNS
+   ======================================== */
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.bg-animated-gradient {
+  background: linear-gradient(-45deg, #0a0a1a, #1a1a2e, #16213e, #0f3460);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* ========================================
+   DOT PATTERN
+   ======================================== */
+.dot-pattern {
+  background-image: radial-gradient(
+    rgba(128, 209, 233, 0.15) 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+}
+
+/* ========================================
+   CONSISTENT TABLE STYLES
+   ======================================== */
+.table-premium {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--theme-border);
+}
+
+.table-premium thead {
+  background: linear-gradient(135deg, #2e3192 0%, #0e2841 100%);
+}
+
+.table-premium thead th:first-child {
+  border-top-left-radius: 19px;
+}
+
+.table-premium thead th:last-child {
+  border-top-right-radius: 19px;
+}
+
+.table-premium tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 19px;
+}
+
+.table-premium tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 19px;
+}
+
+/* ========================================
+   STATUS INDICATORS - PREMIUM
+   ======================================== */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-dot::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0.3;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-dot-success {
+  background: #22c55e;
+}
+
+.status-dot-warning {
+  background: #eab308;
+}
+
+.status-dot-danger {
+  background: #ef4444;
+}
+
+.status-dot-info {
+  background: #3b82f6;
+}
+
+/* ========================================
+   FOCUS STYLES - PREMIUM
+   ======================================== */
+.focus-premium:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--theme-background),
+    0 0 0 4px rgba(128, 209, 233, 0.5);
+}
+
+/* ========================================
+   RESPONSIVE UTILITIES
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   GLASS MODE - COMPLETE OVERHAUL
+   ======================================== */
+
+/* ========================================
+   1. GLASS MODE TYPOGRAPHY - NESMA BRAND BLUE #2E3192
+   ======================================== */
+
+body.theme-glass {
+  color: #2e3192 !important;
+}
+
+body.theme-glass * {
+  color: inherit;
+}
+
+/* All text elements - NESMA DARK BLUE */
+body.theme-glass h1,
+body.theme-glass h2,
+body.theme-glass h3,
+body.theme-glass h4,
+body.theme-glass h5,
+body.theme-glass h6,
+body.theme-glass p,
+body.theme-glass span,
+body.theme-glass label,
+body.theme-glass div,
+body.theme-glass a,
+body.theme-glass li,
+body.theme-glass td,
+body.theme-glass th {
+  color: #2e3192 !important;
+}
+
+/* Muted text - slightly lighter blue */
+body.theme-glass .text-gray-400,
+body.theme-glass .text-gray-500,
+body.theme-glass .text-gray-600,
+body.theme-glass [class*="text-muted"],
+body.theme-glass [class*="text-secondary"] {
+  color: rgba(46, 49, 146, 0.7) !important;
+}
+
+body.theme-glass .text-gray-300 {
+  color: rgba(46, 49, 146, 0.85) !important;
+}
+
+/* Large text - extra visible with glow */
+body.theme-glass [class*="text-3xl"],
+body.theme-glass [class*="text-2xl"],
+body.theme-glass [class*="text-xl"],
+body.theme-glass [class*="text-lg"] {
+  color: #2e3192 !important;
+  text-shadow: 0 0 20px rgba(46, 49, 146, 0.3);
+}
+
+/* Bold text */
+body.theme-glass [class*="font-bold"],
+body.theme-glass [class*="font-semibold"],
+body.theme-glass strong,
+body.theme-glass b {
+  color: #2e3192 !important;
+}
+
+/* Links - Cyan accent for contrast */
+body.theme-glass a {
+  color: #0e2841 !important;
+}
+
+body.theme-glass a:hover {
+  color: #2e3192 !important;
+}
+
+/* ========================================
+   2. UNIFIED CARD SIZES - ALL THEMES
+   ======================================== */
+
+/* Stats Cards - Consistent Size */
+.grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > div {
+  min-height: 160px;
+  padding: 1.5rem;
+}
+
+/* Card padding standardization */
+.p-5,
+.p-6 {
+  padding: 1.5rem !important;
+}
+
+/* Card grid gaps */
+.grid.gap-4,
+.grid.gap-5 {
+  gap: 1.25rem !important;
+}
+
+.grid.gap-6 {
+  gap: 1.5rem !important;
+}
+
+/* Space between sections */
+.space-y-6 > * + *,
+.space-y-7 > * + * {
+  margin-top: 1.5rem !important;
+}
+
+/* ========================================
+   3. GLASS MODE BACKGROUNDS
+   ======================================== */
+
+body.theme-glass .bg-white,
+body.theme-glass .bg-gray-50,
+body.theme-glass .bg-gray-100 {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-glass [class*="bg-white\/"] {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(24px) !important;
+}
+
+/* ========================================
+   4. GLASS MODE ICON BOXES - BEAUTIFUL DESIGN
+   ======================================== */
+
+body.theme-glass .w-12.h-12,
+body.theme-glass .w-11.h-11,
+body.theme-glass .w-10.h-10 {
+  border-radius: 16px !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  ) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+body.theme-glass .w-12.h-12:hover,
+body.theme-glass .w-11.h-11:hover,
+body.theme-glass .w-10.h-10:hover {
+  transform: scale(1.1) rotate(5deg) !important;
+  box-shadow:
+    0 8px 25px rgba(128, 209, 233, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Icon colors in glass mode */
+body.theme-glass .w-12.h-12 svg,
+body.theme-glass .w-11.h-11 svg,
+body.theme-glass .w-10.h-10 svg {
+  color: #ffffff !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Colored icon backgrounds */
+body.theme-glass .bg-\[\#2E3192\]\/10,
+body.theme-glass .bg-\[\#2E3192\]\/20,
+body.theme-glass [class*="bg-primary"] {
+  background: linear-gradient(
+    135deg,
+    rgba(46, 49, 146, 0.4) 0%,
+    rgba(128, 209, 233, 0.2) 100%
+  ) !important;
+}
+
+body.theme-glass .bg-emerald-50,
+body.theme-glass .bg-emerald-100,
+body.theme-glass .bg-emerald-500\/20,
+body.theme-glass .bg-green-50,
+body.theme-glass .bg-green-100 {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.4) 0%,
+    rgba(52, 211, 153, 0.2) 100%
+  ) !important;
+}
+
+body.theme-glass .bg-amber-50,
+body.theme-glass .bg-amber-100,
+body.theme-glass .bg-amber-500\/20,
+body.theme-glass .bg-yellow-50,
+body.theme-glass .bg-yellow-100 {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.4) 0%,
+    rgba(251, 191, 36, 0.2) 100%
+  ) !important;
+}
+
+body.theme-glass .bg-sky-50,
+body.theme-glass .bg-sky-100,
+body.theme-glass .bg-sky-500\/20,
+body.theme-glass .bg-blue-50,
+body.theme-glass .bg-blue-100 {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(96, 165, 250, 0.2) 100%
+  ) !important;
+}
+
+body.theme-glass .bg-rose-50,
+body.theme-glass .bg-rose-100,
+body.theme-glass .bg-rose-500\/20,
+body.theme-glass .bg-red-50,
+body.theme-glass .bg-red-100 {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.4) 0%,
+    rgba(248, 113, 113, 0.2) 100%
+  ) !important;
+}
+
+body.theme-glass .bg-purple-50,
+body.theme-glass .bg-purple-100,
+body.theme-glass .bg-purple-500\/20 {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.4) 0%,
+    rgba(192, 132, 252, 0.2) 100%
+  ) !important;
+}
+
+body.theme-glass .bg-pink-50,
+body.theme-glass .bg-pink-100,
+body.theme-glass .bg-pink-500\/20 {
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.4) 0%,
+    rgba(244, 114, 182, 0.2) 100%
+  ) !important;
+}
+
+body.theme-glass .bg-cyan-50,
+body.theme-glass .bg-cyan-100,
+body.theme-glass .bg-cyan-500\/20 {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.4) 0%,
+    rgba(34, 211, 238, 0.2) 100%
+  ) !important;
+}
+
+/* ========================================
+   5. GLASS MODE BUTTONS - STUNNING DESIGN
+   ======================================== */
+
+body.theme-glass button,
+body.theme-glass [role="button"],
+body.theme-glass .btn {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  ) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(46, 49, 146, 0.3) !important;
+  color: #2e3192 !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+body.theme-glass button::before,
+body.theme-glass .btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+body.theme-glass button:hover::before,
+body.theme-glass .btn:hover::before {
+  left: 100%;
+}
+
+body.theme-glass button:hover,
+body.theme-glass .btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  ) !important;
+  border-color: rgba(128, 209, 233, 0.5) !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(128, 209, 233, 0.2) !important;
+}
+
+body.theme-glass button:active,
+body.theme-glass .btn:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* Primary buttons */
+body.theme-glass .btn-primary,
+body.theme-glass button[class*="primary"],
+body.theme-glass [class*="bg-\[#2E3192\]"] {
+  background: linear-gradient(135deg, #2e3192 0%, #0e2841 100%) !important;
+  border: 1px solid rgba(128, 209, 233, 0.3) !important;
+}
+
+body.theme-glass .btn-primary:hover,
+body.theme-glass button[class*="primary"]:hover {
+  box-shadow:
+    0 8px 25px rgba(46, 49, 146, 0.4),
+    0 0 40px rgba(128, 209, 233, 0.3) !important;
+}
+
+/* Secondary buttons */
+body.theme-glass .btn-secondary,
+body.theme-glass button[class*="secondary"] {
+  background: linear-gradient(135deg, #80d1e9 0%, #5cc4e0 100%) !important;
+  color: #0e2841 !important;
+  border: none !important;
+}
+
+/* Glass buttons */
+body.theme-glass .btn-glass {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ========================================
+   6. GLASS MODE BADGES - GLOWING PILLS
+   ======================================== */
+
+body.theme-glass .badge,
+body.theme-glass [class*="badge"],
+body.theme-glass [class*="rounded-full"][class*="px-"] {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  ) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Status badges with glow */
+body.theme-glass .badge-success,
+body.theme-glass [class*="bg-emerald"][class*="rounded-full"],
+body.theme-glass [class*="bg-green"][class*="rounded-full"] {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.3) 0%,
+    rgba(52, 211, 153, 0.15) 100%
+  ) !important;
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.4) !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
+}
+
+body.theme-glass .badge-warning,
+body.theme-glass [class*="bg-amber"][class*="rounded-full"],
+body.theme-glass [class*="bg-yellow"][class*="rounded-full"] {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.3) 0%,
+    rgba(251, 191, 36, 0.15) 100%
+  ) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(251, 191, 36, 0.4) !important;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3) !important;
+}
+
+body.theme-glass .badge-danger,
+body.theme-glass .badge-error,
+body.theme-glass [class*="bg-rose"][class*="rounded-full"],
+body.theme-glass [class*="bg-red"][class*="rounded-full"] {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.3) 0%,
+    rgba(248, 113, 113, 0.15) 100%
+  ) !important;
+  color: #f87171 !important;
+  border-color: rgba(248, 113, 113, 0.4) !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+body.theme-glass .badge-info,
+body.theme-glass [class*="bg-blue"][class*="rounded-full"],
+body.theme-glass [class*="bg-sky"][class*="rounded-full"] {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.3) 0%,
+    rgba(96, 165, 250, 0.15) 100%
+  ) !important;
+  color: #60a5fa !important;
+  border-color: rgba(96, 165, 250, 0.4) !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* ========================================
+   7. GLASS MODE CARDS - PREMIUM GLASS EFFECT
+   ======================================== */
+
+body.theme-glass [class*="rounded-2xl"],
+body.theme-glass [class*="rounded-xl"],
+body.theme-glass [class*="rounded-\[20px\]"] {
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-glass [class*="rounded-2xl"]:hover,
+body.theme-glass [class*="rounded-xl"]:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(128, 209, 233, 0.2) !important;
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(128, 209, 233, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Border radius standardization */
+body.theme-glass [class*="rounded-2xl"] {
+  border-radius: 20px !important;
+}
+
+body.theme-glass [class*="rounded-xl"] {
+  border-radius: 16px !important;
+}
+
+body.theme-glass [class*="rounded-lg"] {
+  border-radius: 12px !important;
+}
+
+body.theme-glass [class*="rounded-md"] {
+  border-radius: 10px !important;
+}
+
+/* ========================================
+   8. GLASS MODE INPUTS & SELECTS
+   ======================================== */
+
+body.theme-glass input,
+body.theme-glass select,
+body.theme-glass textarea {
+  background: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(46, 49, 146, 0.2) !important;
+  color: #2e3192 !important;
+  border-radius: 12px !important;
+}
+
+body.theme-glass input::placeholder,
+body.theme-glass textarea::placeholder {
+  color: rgba(46, 49, 146, 0.5) !important;
+}
+
+body.theme-glass input:focus,
+body.theme-glass select:focus,
+body.theme-glass textarea:focus {
+  border-color: rgba(46, 49, 146, 0.5) !important;
+  box-shadow:
+    0 0 0 3px rgba(46, 49, 146, 0.15),
+    0 0 20px rgba(46, 49, 146, 0.2) !important;
+  outline: none !important;
+}
+
+body.theme-glass select option {
+  background: #ffffff !important;
+  color: #2e3192 !important;
+}
+
+/* ========================================
+   9. GLASS MODE TABLES
+   ======================================== */
+
+body.theme-glass table {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+body.theme-glass thead {
+  background: linear-gradient(
+    135deg,
+    rgba(46, 49, 146, 0.6) 0%,
+    rgba(14, 40, 65, 0.6) 100%
+  ) !important;
+}
+
+body.theme-glass th {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Keep table header text white for contrast */
+body.theme-glass thead th,
+body.theme-glass thead td {
+  color: #ffffff !important;
+}
+
+body.theme-glass tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-glass tbody tr:hover {
+  background: rgba(128, 209, 233, 0.1) !important;
+}
+
+body.theme-glass td {
+  color: #2e3192 !important;
+}
+
+/* ========================================
+   10. GLASS MODE CHARTS & TOOLTIPS
+   ======================================== */
+
+body.theme-glass .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-glass .recharts-text,
+body.theme-glass .recharts-label {
+  fill: rgba(255, 255, 255, 0.8) !important;
+}
+
+body.theme-glass .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ========================================
+   11. GLASS MODE SIDEBAR
+   ======================================== */
+
+body.theme-glass aside,
+body.theme-glass [class*="sidebar"],
+body.theme-glass nav {
+  background: rgba(10, 10, 26, 0.95) !important;
+  backdrop-filter: blur(30px) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+body.theme-glass [class*="sidebar"] a,
+body.theme-glass nav a {
+  color: #2e3192 !important;
+  transition: all 0.2s ease !important;
+}
+
+body.theme-glass [class*="sidebar"] a:hover,
+body.theme-glass nav a:hover {
+  background: rgba(46, 49, 146, 0.1) !important;
+  color: #0e2841 !important;
+}
+
+body.theme-glass [class*="sidebar"] a.active,
+body.theme-glass nav a.active {
+  background: linear-gradient(
+    135deg,
+    rgba(46, 49, 146, 0.3) 0%,
+    rgba(128, 209, 233, 0.15) 100%
+  ) !important;
+  color: #0e2841 !important;
+  border-left: 3px solid #2e3192 !important;
+}
+
+/* ========================================
+   12. GLASS MODE MODALS
+   ======================================== */
+
+body.theme-glass [class*="modal"],
+body.theme-glass [role="dialog"] {
+  background: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(30px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 0 100px rgba(128, 209, 233, 0.1) !important;
+}
+
+/* ========================================
+   13. GLASS MODE SCROLLBAR
+   ======================================== */
+
+body.theme-glass ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.theme-glass ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+
+body.theme-glass ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(128, 209, 233, 0.4) 0%,
+    rgba(168, 85, 247, 0.4) 100%
+  );
+  border-radius: 4px;
+}
+
+body.theme-glass ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(128, 209, 233, 0.6) 0%,
+    rgba(168, 85, 247, 0.6) 100%
+  );
+}
+
+/* ========================================
+   14. TEXT COLOR OVERRIDES BY CLASS - NESMA BRAND
+   ======================================== */
+
+body.theme-glass .text-\[\#2E3192\] {
+  color: #2e3192 !important;
+}
+
+/* Status colors remain vibrant for visibility */
+body.theme-glass .text-emerald-600,
+body.theme-glass .text-emerald-500,
+body.theme-glass .text-green-600,
+body.theme-glass .text-green-500 {
+  color: #059669 !important;
+}
+
+body.theme-glass .text-amber-600,
+body.theme-glass .text-amber-500,
+body.theme-glass .text-yellow-600,
+body.theme-glass .text-yellow-500 {
+  color: #d97706 !important;
+}
+
+body.theme-glass .text-rose-600,
+body.theme-glass .text-rose-500,
+body.theme-glass .text-red-600,
+body.theme-glass .text-red-500 {
+  color: #dc2626 !important;
+}
+
+body.theme-glass .text-sky-600,
+body.theme-glass .text-sky-500,
+body.theme-glass .text-blue-600,
+body.theme-glass .text-blue-500 {
+  color: #2563eb !important;
+}
+
+body.theme-glass .text-purple-600,
+body.theme-glass .text-purple-500 {
+  color: #9333ea !important;
+}
+
+body.theme-glass .text-cyan-600,
+body.theme-glass .text-cyan-500 {
+  color: #0891b2 !important;
+}
+
+body.theme-glass .text-pink-500,
+body.theme-glass .text-pink-400 {
+  color: #db2777 !important;
+}
+
+/* Numbers and values - NESMA primary blue */
+body.theme-glass .text-gray-800,
+body.theme-glass .text-gray-900 {
+  color: #2e3192 !important;
+}
+
+/* ========================================
+   15. HOVER STATES
+   ======================================== */
+
+body.theme-glass .hover\:bg-gray-50:hover,
+body.theme-glass .hover\:bg-gray-100:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-glass .hover\:-translate-y-1:hover {
+  transform: translateY(-4px) !important;
+}
+
+/* ========================================
+   16. AVATAR STYLING
+   ======================================== */
+
+body.theme-glass [class*="avatar"],
+body.theme-glass .rounded-full[class*="w-"][class*="h-"] {
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ========================================
+   17. BORDERS
+   ======================================== */
+
+body.theme-glass .border-gray-100,
+body.theme-glass .border-gray-200,
+body.theme-glass .border-gray-300 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-glass .border-l-4 {
+  border-left-width: 4px !important;
+  border-left-style: solid !important;
+}
+
+body.theme-glass .border-\[\#2E3192\] {
+  border-color: #2e3192 !important;
+}
+
+/* ========================================
+   18. SHADOWS
+   ======================================== */
+
+body.theme-glass .shadow-sm,
+body.theme-glass .shadow-md,
+body.theme-glass .shadow-lg {
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+body.theme-glass .hover\:shadow-lg:hover {
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(128, 209, 233, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ========================================
+    END OF GLASS MODE STYLES
+    ======================================== */
+
+/* ========================================
+    MOBILE RESPONSIVENESS - HIGH EFFICIENCY
+    ======================================== */
+
+/* Mobile First Breakpoints */
+@media (max-width: 640px) {
+  /* Page Headers */
+  .text-2xl {
+    font-size: 1.25rem !important;
+  }
+
+  /* Stats Cards Grid */
+  .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4,
+  .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-5 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Card Padding */
+  .p-5,
+  .p-6 {
+    padding: 1rem !important;
+  }
+
+  /* Buttons */
+  button,
+  .btn {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  /* Hide less important columns on tables */
+  table th:nth-child(n + 4),
+  table td:nth-child(n + 4) {
+    display: none;
+  }
+
+  /* Modal Width */
+  .max-w-4xl,
+  .max-w-3xl,
+  .max-w-2xl {
+    max-width: 95vw !important;
+    margin: 0.5rem !important;
+  }
+
+  /* Export Modal */
+  .lg\:flex-row {
+    flex-direction: column !important;
+  }
+
+  .lg\:w-80 {
+    width: 100% !important;
+  }
+
+  /* Filter Bar */
+  .flex.flex-wrap.gap-3 {
+    gap: 0.5rem !important;
+  }
+
+  .flex.flex-wrap.gap-3 > * {
+    flex: 1 1 calc(50% - 0.25rem) !important;
+    min-width: 120px !important;
+  }
+
+  /* Quick Actions */
+  .grid.grid-cols-2.md\:grid-cols-4.lg\:grid-cols-8 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  /* AI Assistant */
+  .fixed.bottom-6.right-6 {
+    bottom: 1rem !important;
+    right: 1rem !important;
+  }
+
+  /* Sidebar - Hidden on mobile, show toggle */
+  aside.w-64 {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 50;
+    transition: transform 0.3s ease;
+  }
+
+  aside.w-64.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Main content full width */
+  main.ml-64 {
+    margin-left: 0 !important;
+  }
+
+  /* Header adjustments */
+  header .flex.items-center.gap-4 {
+    gap: 0.5rem !important;
+  }
+
+  /* Chart containers */
+  .h-80,
+  .h-64 {
+    height: 200px !important;
+  }
+
+  /* Notification Bell Dropdown */
+  .absolute.right-0.mt-2.w-80 {
+    width: calc(100vw - 2rem) !important;
+    right: -4rem !important;
+  }
+
+  /* Tab buttons */
+  .flex.gap-2 button {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Avatar sizes */
+  .w-10.h-10 {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+
+  /* Icon sizes */
+  .w-6.h-6 {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+}
+
+/* Tablet Adjustments */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Stats Grid */
+  .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-5 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Sidebar width */
+  aside.w-64 {
+    width: 200px !important;
+  }
+
+  main.ml-64 {
+    margin-left: 200px !important;
+  }
+
+  /* Quick Actions */
+  .grid.grid-cols-2.md\:grid-cols-4.lg\:grid-cols-8 {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  button,
+  .btn,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Remove hover effects that don't work on touch */
+  .hover\:scale-105:hover {
+    transform: none !important;
+  }
+
+  /* Add active states instead */
+  button:active,
+  .btn:active {
+    transform: scale(0.98) !important;
+    opacity: 0.9 !important;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 896px) and (orientation: landscape) {
+  .h-screen,
+  .min-h-screen {
+    min-height: 100vh;
+  }
+
+  /* Reduce vertical padding */
+  .py-6,
+  .py-8 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+}
+
+/* Print optimizations already exist above */
+
+/* Safe area insets for notched phones */
+@supports (padding: max(0px)) {
+  .fixed.bottom-6 {
+    bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+  }
+
+  .fixed.top-0 {
+    top: max(0px, env(safe-area-inset-top)) !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  body.theme-glass {
+    --theme-border: rgba(255, 255, 255, 0.3);
+  }
+
+  body.theme-glass * {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+}
+
+/* Dark mode preference */
+@media (prefers-color-scheme: dark) {
+  body:not([class*="theme-"]) {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #f1f5f9;
+  }
+}

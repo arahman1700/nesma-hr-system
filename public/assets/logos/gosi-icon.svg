@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <!-- GOSI التأمينات الاجتماعية Official Logo for Sidebar -->
+  <!-- Dark Blue: #1A2B5F -->
+  <!-- Green: #4CAF50 -->
+
+  <!-- gosi text -->
+  <g transform="translate(10, 5)">
+    <!-- g -->
+    <text x="0" y="38" fill="#1A2B5F" font-family="'Poppins', 'Segoe UI', Arial, sans-serif" font-size="36" font-weight="700">g</text>
+    <!-- o -->
+    <text x="28" y="38" fill="#1A2B5F" font-family="'Poppins', 'Segoe UI', Arial, sans-serif" font-size="36" font-weight="700">o</text>
+    <!-- s -->
+    <text x="58" y="38" fill="#1A2B5F" font-family="'Poppins', 'Segoe UI', Arial, sans-serif" font-size="36" font-weight="700">s</text>
+    <!-- i with dot -->
+    <text x="82" y="38" fill="#1A2B5F" font-family="'Poppins', 'Segoe UI', Arial, sans-serif" font-size="36" font-weight="700">i</text>
+
+    <!-- Green arrow > -->
+    <path d="M105 15 L125 28 L105 41" fill="none" stroke="#4CAF50" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Arabic التأمينات الاجتماعية -->
+  <text x="100" y="65" text-anchor="middle" fill="#1A2B5F" font-family="'Tajawal', 'Cairo', Arial, sans-serif" font-size="14" font-weight="500">التأمينات الاجتماعية</text>
+
+  <!-- English Social Insurance -->
+  <text x="100" y="85" text-anchor="middle" fill="#1A2B5F" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="400">Social Insurance</text>
+</svg>

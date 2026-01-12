@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 65">
+  <!-- Muqeem مقيم Official Logo for Sidebar -->
+  <!-- Orange: #F39200 -->
+
+  <!-- Arabic مقيم -->
+  <text x="70" y="28" text-anchor="middle" fill="#F39200" font-family="'Tajawal', 'Cairo', Arial, sans-serif" font-size="28" font-weight="700">مقيم</text>
+
+  <!-- English Muqeem -->
+  <text x="70" y="55" text-anchor="middle" fill="#F39200" font-family="'Segoe UI', Arial, sans-serif" font-size="30" font-weight="700">Muqeem</text>
+</svg>
