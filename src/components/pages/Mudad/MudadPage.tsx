@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Check, Clock, Calendar, Building2, AlertCircle, Save } from "lucide-react";
+import {
+  Check,
+  Clock,
+  Calendar,
+  Building2,
+  AlertCircle,
+  Save,
+} from "lucide-react";
 import { Button } from "../../common/Button";
 import { Card } from "../../common/Card";
 import { Select } from "../../common/Select";
@@ -284,7 +291,7 @@ const MudadPage: React.FC = () => {
       >
         <div className="flex items-center gap-4">
           <img
-            src="/assets/logos/mudad.svg"
+            src={`${import.meta.env.BASE_URL}assets/logos/mudad.svg`}
             alt="Mudad"
             className="h-12 w-auto"
           />

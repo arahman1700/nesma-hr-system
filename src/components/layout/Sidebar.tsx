@@ -90,14 +90,18 @@ const sidebarItems: SidebarItem[] = [
     label: "Muqeem",
     icon: (
       <img
-        src="/assets/logos/muqeem-icon.svg"
+        src={`${import.meta.env.BASE_URL}assets/logos/muqeem-icon.svg`}
         alt="Muqeem"
         className="h-5 w-auto"
       />
     ),
     path: "/muqeem",
     fullLogo: (
-      <img src="/assets/logos/muqeem.svg" alt="Muqeem" className="h-8 w-auto" />
+      <img
+        src={`${import.meta.env.BASE_URL}assets/logos/muqeem.svg`}
+        alt="Muqeem"
+        className="h-8 w-auto"
+      />
     ),
   },
   {
@@ -111,14 +115,18 @@ const sidebarItems: SidebarItem[] = [
     label: "Mudad",
     icon: (
       <img
-        src="/assets/logos/mudad-icon.svg"
+        src={`${import.meta.env.BASE_URL}assets/logos/mudad-icon.svg`}
         alt="Mudad"
         className="h-5 w-auto"
       />
     ),
     path: "/mudad",
     fullLogo: (
-      <img src="/assets/logos/mudad.svg" alt="Mudad" className="h-8 w-auto" />
+      <img
+        src={`${import.meta.env.BASE_URL}assets/logos/mudad.svg`}
+        alt="Mudad"
+        className="h-8 w-auto"
+      />
     ),
   },
   {
@@ -126,7 +134,7 @@ const sidebarItems: SidebarItem[] = [
     label: "Qsalary",
     icon: (
       <img
-        src="/assets/logos/qsalary-icon.svg"
+        src={`${import.meta.env.BASE_URL}assets/logos/qsalary-icon.svg`}
         alt="Qsalary"
         className="h-5 w-auto"
       />
@@ -135,7 +143,7 @@ const sidebarItems: SidebarItem[] = [
     isNew: true,
     fullLogo: (
       <img
-        src="/assets/logos/qsalary.svg"
+        src={`${import.meta.env.BASE_URL}assets/logos/qsalary.svg`}
         alt="Qsalary"
         className="h-8 w-auto"
       />
@@ -146,14 +154,18 @@ const sidebarItems: SidebarItem[] = [
     label: "GOSI",
     icon: (
       <img
-        src="/assets/logos/gosi-icon.svg"
+        src={`${import.meta.env.BASE_URL}assets/logos/gosi-icon.svg`}
         alt="GOSI"
         className="h-5 w-auto"
       />
     ),
     path: "/gosi",
     fullLogo: (
-      <img src="/assets/logos/gosi.svg" alt="GOSI" className="h-8 w-auto" />
+      <img
+        src={`${import.meta.env.BASE_URL}assets/logos/gosi.svg`}
+        alt="GOSI"
+        className="h-8 w-auto"
+      />
     ),
   },
   {
@@ -161,7 +173,7 @@ const sidebarItems: SidebarItem[] = [
     label: "Tameeni",
     icon: (
       <img
-        src="/assets/logos/tameeni-icon.svg"
+        src={`${import.meta.env.BASE_URL}assets/logos/tameeni-icon.svg`}
         alt="Tameeni"
         className="h-5 w-auto"
       />
@@ -169,7 +181,7 @@ const sidebarItems: SidebarItem[] = [
     path: "/tameeni",
     fullLogo: (
       <img
-        src="/assets/logos/tameeni.svg"
+        src={`${import.meta.env.BASE_URL}assets/logos/tameeni.svg`}
         alt="Tameeni"
         className="h-8 w-auto"
       />

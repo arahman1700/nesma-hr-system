@@ -315,7 +315,7 @@ export const GOSIPage: React.FC = () => {
       >
         <div className="flex items-center gap-4">
           <img
-            src="/assets/logos/gosi.svg"
+            src={`${import.meta.env.BASE_URL}assets/logos/gosi.svg`}
             alt="GOSI"
             className="h-14 w-auto rounded-lg shadow-lg"
           />

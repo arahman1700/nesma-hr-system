@@ -374,7 +374,7 @@ export const MuqeemPage: React.FC = () => {
       >
         <div className="flex items-center gap-4">
           <img
-            src="/assets/logos/muqeem.svg"
+            src={`${import.meta.env.BASE_URL}assets/logos/muqeem.svg`}
             alt="Muqeem"
             className="h-14 w-auto"
           />
@@ -477,7 +477,12 @@ export const MuqeemPage: React.FC = () => {
       </Card>
 
       {/* Tabs */}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="separated" />
+      <Tabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        variant="separated"
+      />
 
       {/* Services Tab */}
       <TabPanel id="services" activeTab={activeTab}>

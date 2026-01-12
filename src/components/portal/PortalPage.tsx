@@ -124,7 +124,7 @@ const PortalPage: React.FC = () => {
           <nav className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <img
-                src="/assets/logo-white.svg"
+                src={`${import.meta.env.BASE_URL}assets/logo-white.svg`}
                 alt="NESMA"
                 className="h-10 lg:h-12"
                 onError={(e) => {

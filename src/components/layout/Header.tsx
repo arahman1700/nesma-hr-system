@@ -180,7 +180,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Logo */}
           <div className="hidden sm:flex items-center gap-3">
             <img
-              src="/assets/logo-white.svg"
+              src={`${import.meta.env.BASE_URL}assets/logo-white.svg`}
               alt="NESMA"
               className="h-8 lg:h-10"
             />

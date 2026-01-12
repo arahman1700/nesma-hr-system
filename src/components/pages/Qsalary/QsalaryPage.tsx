@@ -78,19 +78,21 @@ export const QsalaryPage: React.FC = () => {
 
   // Calculate statistics
   const stats = useMemo(() => {
-    const pending = advanceRequests.filter((r) => r.status === "Pending").length;
+    const pending = advanceRequests.filter(
+      (r) => r.status === "Pending",
+    ).length;
     const approved = advanceRequests.filter(
-      (r) => r.status === "Approved"
+      (r) => r.status === "Approved",
     ).length;
     const disbursed = advanceRequests.filter(
-      (r) => r.status === "Disbursed"
+      (r) => r.status === "Disbursed",
     ).length;
     const totalDisbursed = advanceRequests
       .filter((r) => r.status === "Disbursed")
       .reduce((acc, r) => acc + (r.approvedAmount || 0), 0);
     const avgAdvance = Math.round(
       advanceRequests.reduce((acc, r) => acc + r.requestedAmount, 0) /
-        advanceRequests.length
+        advanceRequests.length,
     );
 
     return { pending, approved, disbursed, totalDisbursed, avgAdvance };
@@ -134,12 +136,17 @@ export const QsalaryPage: React.FC = () => {
             <p
               className={cn(
                 "font-medium",
-                isDark ? "text-white" : "text-gray-800"
+                isDark ? "text-white" : "text-gray-800",
               )}
             >
               {request.employeeName}
             </p>
-            <p className={cn("text-xs", isDark ? "text-gray-400" : "text-gray-500")}>
+            <p
+              className={cn(
+                "text-xs",
+                isDark ? "text-gray-400" : "text-gray-500",
+              )}
+            >
               {request.department}
             </p>
           </div>
@@ -150,7 +157,12 @@ export const QsalaryPage: React.FC = () => {
       key: "salary",
       label: "Base Salary",
       render: (request: (typeof advanceRequests)[0]) => (
-        <span className={cn("font-medium", isDark ? "text-gray-300" : "text-gray-700")}>
+        <span
+          className={cn(
+            "font-medium",
+            isDark ? "text-gray-300" : "text-gray-700",
+          )}
+        >
           SAR {request.salary.toLocaleString()}
         </span>
       ),
@@ -162,7 +174,7 @@ export const QsalaryPage: React.FC = () => {
         <span
           className={cn(
             "font-semibold",
-            isDark ? "text-purple-400" : "text-purple-600"
+            isDark ? "text-purple-400" : "text-purple-600",
           )}
         >
           SAR {request.requestedAmount.toLocaleString()}
@@ -175,7 +187,9 @@ export const QsalaryPage: React.FC = () => {
       render: (request: (typeof advanceRequests)[0]) => (
         <Badge
           className={cn(
-            isDark ? "bg-purple-500/20 text-purple-400" : "bg-purple-50 text-purple-600"
+            isDark
+              ? "bg-purple-500/20 text-purple-400"
+              : "bg-purple-50 text-purple-600",
           )}
         >
           {request.reason}
@@ -202,14 +216,20 @@ export const QsalaryPage: React.FC = () => {
                 ? "bg-emerald-500/20 text-emerald-400"
                 : "bg-emerald-50 text-emerald-600"),
             request.status === "Rejected" &&
-              (isDark ? "bg-red-500/20 text-red-400" : "bg-red-50 text-red-600")
+              (isDark
+                ? "bg-red-500/20 text-red-400"
+                : "bg-red-50 text-red-600"),
           )}
         >
           <span className="flex items-center gap-1">
             {request.status === "Pending" && <Clock className="w-3 h-3" />}
-            {request.status === "Approved" && <CheckCircle className="w-3 h-3" />}
+            {request.status === "Approved" && (
+              <CheckCircle className="w-3 h-3" />
+            )}
             {request.status === "Disbursed" && <Send className="w-3 h-3" />}
-            {request.status === "Rejected" && <AlertCircle className="w-3 h-3" />}
+            {request.status === "Rejected" && (
+              <AlertCircle className="w-3 h-3" />
+            )}
             {request.status}
           </span>
         </Badge>
@@ -226,11 +246,16 @@ export const QsalaryPage: React.FC = () => {
           }}
           className={cn(
             "p-1.5 rounded-lg transition-colors",
-            isDark ? "hover:bg-white/10" : "hover:bg-gray-100"
+            isDark ? "hover:bg-white/10" : "hover:bg-gray-100",
           )}
           title="View Details"
         >
-          <Eye className={cn("w-4 h-4", isDark ? "text-gray-400" : "text-gray-500")} />
+          <Eye
+            className={cn(
+              "w-4 h-4",
+              isDark ? "text-gray-400" : "text-gray-500",
+            )}
+          />
         </button>
       ),
     },
@@ -267,12 +292,12 @@ export const QsalaryPage: React.FC = () => {
           "flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-6 rounded-2xl",
           isDark
             ? "bg-gradient-to-r from-purple-900/50 to-purple-800/30 border border-purple-500/20"
-            : "bg-gradient-to-r from-purple-50 to-purple-100/50 border border-purple-200"
+            : "bg-gradient-to-r from-purple-50 to-purple-100/50 border border-purple-200",
         )}
       >
         <div className="flex items-center gap-4">
           <img
-            src="/assets/logos/qsalary.svg"
+            src={`${import.meta.env.BASE_URL}assets/logos/qsalary.svg`}
             alt="Qsalary"
             className="h-16 w-auto"
           />
@@ -280,7 +305,7 @@ export const QsalaryPage: React.FC = () => {
             <h1
               className={cn(
                 "text-2xl font-bold",
-                isDark ? "text-white" : "text-gray-900"
+                isDark ? "text-white" : "text-gray-900",
               )}
             >
               Qsalary
@@ -288,7 +313,7 @@ export const QsalaryPage: React.FC = () => {
             <p
               className={cn(
                 "mt-1",
-                isDark ? "text-purple-300/70" : "text-purple-700"
+                isDark ? "text-purple-300/70" : "text-purple-700",
               )}
             >
               Instant Salary Advance - سلفة راتب فورية
@@ -348,13 +373,18 @@ export const QsalaryPage: React.FC = () => {
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Requests Table */}
-        <Card className={cn("lg:col-span-2 p-6", isDark && "bg-[var(--theme-card)]")}>
+        <Card
+          className={cn(
+            "lg:col-span-2 p-6",
+            isDark && "bg-[var(--theme-card)]",
+          )}
+        >
           <div className="flex flex-col lg:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
               <Search
                 className={cn(
                   "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5",
-                  isDark ? "text-gray-500" : "text-gray-400"
+                  isDark ? "text-gray-500" : "text-gray-400",
                 )}
               />
               <input
@@ -366,7 +396,7 @@ export const QsalaryPage: React.FC = () => {
                   "w-full pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:ring-2",
                   isDark
                     ? "bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:ring-purple-500/20 focus:border-purple-500/50"
-                    : "border border-gray-200 focus:ring-purple-500/20 focus:border-purple-500"
+                    : "border border-gray-200 focus:ring-purple-500/20 focus:border-purple-500",
                 )}
               />
             </div>
@@ -392,7 +422,7 @@ export const QsalaryPage: React.FC = () => {
           <h3
             className={cn(
               "font-semibold mb-4",
-              isDark ? "text-white" : "text-gray-800"
+              isDark ? "text-white" : "text-gray-800",
             )}
           >
             Request Status Overview
@@ -436,7 +466,7 @@ export const QsalaryPage: React.FC = () => {
                 <span
                   className={cn(
                     "text-sm",
-                    isDark ? "text-gray-400" : "text-gray-600"
+                    isDark ? "text-gray-400" : "text-gray-600",
                   )}
                 >
                   {item.name}: {item.value}
@@ -483,7 +513,10 @@ export const QsalaryPage: React.FC = () => {
             ]}
           />
           <div className="flex justify-end gap-3 pt-4">
-            <Button variant="outline" onClick={() => setShowRequestModal(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowRequestModal(false)}
+            >
               Cancel
             </Button>
             <Button
@@ -545,7 +578,10 @@ export const QsalaryPage: React.FC = () => {
             </div>
 
             <div className="flex justify-end gap-3 pt-4">
-              <Button variant="outline" onClick={() => setShowDetailModal(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowDetailModal(false)}
+              >
                 Close
               </Button>
               {selectedRequest.status === "Pending" && (

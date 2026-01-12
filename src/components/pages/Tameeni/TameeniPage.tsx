@@ -403,7 +403,7 @@ export const TameeniPage: React.FC = () => {
       >
         <div className="flex items-center gap-4">
           <img
-            src="/assets/logos/tameeni.svg"
+            src={`${import.meta.env.BASE_URL}assets/logos/tameeni.svg`}
             alt="Tameeni"
             className="h-14 w-auto rounded-lg shadow-lg"
           />
@@ -527,7 +527,12 @@ export const TameeniPage: React.FC = () => {
       </Card>
 
       {/* Tabs */}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="separated" />
+      <Tabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        variant="separated"
+      />
 
       {/* Members Tab */}
       <TabPanel id="members" activeTab={activeTab}>
