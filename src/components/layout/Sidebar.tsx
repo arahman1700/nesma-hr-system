@@ -417,9 +417,15 @@ const MiniStat: React.FC<MiniStatProps> = ({ value, color, isDark }) => {
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+  onClose?: () => void;
+  isMobile?: boolean;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  onClose,
+  isMobile,
+}) => {
   const location = useLocation();
   const { theme } = useTheme();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
@@ -535,6 +541,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         <NavLink
           key={item.id}
           to={item.path || "#"}
+          onClick={() => isMobile && onClose?.()}
           className={({ isActive: linkIsActive }) =>
             cn(
               baseItemStyles,
@@ -574,6 +581,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
       <NavLink
         key={item.id}
         to={item.path || "#"}
+        onClick={() => isMobile && onClose?.()}
         className={({ isActive: linkIsActive }) =>
           cn(
             baseItemStyles,
@@ -645,23 +653,81 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-16 h-[calc(100vh-4rem)]",
-        "border-r transition-all duration-300 ease-in-out z-40",
-        "flex flex-col w-64",
+        "fixed left-0 top-0 lg:top-16 h-full lg:h-[calc(100vh-4rem)]",
+        "border-r transition-all duration-300 ease-in-out z-50 lg:z-40",
+        "flex flex-col w-72 lg:w-64",
         // الإخفاء الكامل عند الإغلاق باستخدام transform
         isOpen ? "translate-x-0" : "-translate-x-full",
         isGlass
-          ? "bg-black/40 backdrop-blur-2xl border-white/10"
+          ? "bg-black/95 lg:bg-black/40 backdrop-blur-2xl border-white/10"
           : isDark
             ? "bg-[var(--theme-sidebar)] border-[var(--theme-border)]"
             : "bg-white border-gray-200",
         DESIGN_TOKENS.shadow.sm,
       )}
     >
-      {/* Logo Section */}
+      {/* Mobile Header with Close Button */}
       <div
         className={cn(
-          "flex-shrink-0 p-4 border-b",
+          "lg:hidden flex items-center justify-between p-4 border-b",
+          isGlass
+            ? "border-white/10"
+            : isDark
+              ? "border-[var(--theme-border)]"
+              : "border-gray-100",
+        )}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className={cn(
+              "w-10 h-10 flex-shrink-0",
+              "bg-gradient-to-br from-[#2E3192] to-[#0E2841]",
+              DESIGN_TOKENS.borderRadius.md,
+              "flex items-center justify-center",
+            )}
+          >
+            <span className="text-white font-bold text-lg">N</span>
+          </div>
+          <div>
+            <h1
+              className={cn(
+                "font-bold",
+                isGlass || isDark ? "text-white" : "text-gray-800",
+              )}
+            >
+              NESMA HR
+            </h1>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className={cn(
+            "p-2 rounded-lg transition-colors",
+            isGlass || isDark
+              ? "text-white hover:bg-white/10"
+              : "text-gray-600 hover:bg-gray-100",
+          )}
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {/* Desktop Logo Section */}
+      <div
+        className={cn(
+          "hidden lg:block flex-shrink-0 p-4 border-b",
           isGlass
             ? "border-white/10"
             : isDark
@@ -704,11 +770,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         </div>
       </div>
 
-      {/* Quick Stats - Animated colored cards */}
+      {/* Quick Stats - Animated colored cards (Hidden on mobile for cleaner UI) */}
       {isOpen && (
         <div
           className={cn(
-            "flex-shrink-0 p-3 border-b space-y-2",
+            "hidden lg:block flex-shrink-0 p-3 border-b space-y-2",
             isGlass
               ? "border-white/10"
               : isDark
