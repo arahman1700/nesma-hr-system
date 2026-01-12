@@ -30,6 +30,7 @@ import { Avatar } from "../common/Avatar";
 import { CountBadge } from "../common/Badge";
 import { ThemeToggle } from "../common/ThemeToggle";
 import { NotificationBell } from "../common/NotificationSystem";
+import { Tooltip } from "../common/EnhancedUI";
 import { useTheme } from "../../contexts/ThemeContext";
 
 interface HeaderProps {
@@ -233,26 +234,32 @@ export const Header: React.FC<HeaderProps> = ({
           <ThemeToggle variant="icon" size="md" />
 
           {/* Help */}
-          <button className="p-2 rounded-lg hover:bg-white/10 transition-colors hidden md:flex">
-            <HelpCircle className="w-5 h-5 text-white/80" />
-          </button>
+          <Tooltip content="Help & Support" position="bottom">
+            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors hidden md:flex">
+              <HelpCircle className="w-5 h-5 text-white/80" />
+            </button>
+          </Tooltip>
 
           {/* Settings */}
-          <button className="p-2 rounded-lg hover:bg-white/10 transition-colors">
-            <Settings className="w-5 h-5 text-white/80" />
-          </button>
+          <Tooltip content="Settings" position="bottom">
+            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors">
+              <Settings className="w-5 h-5 text-white/80" />
+            </button>
+          </Tooltip>
 
           {/* Notifications - Using new NotificationBell component */}
           <NotificationBell />
 
           {/* Modules Menu */}
           <div className="relative">
-            <button
-              onClick={() => setShowModules(!showModules)}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-            >
-              <Grid className="w-5 h-5 text-white/80" />
-            </button>
+            <Tooltip content="NESMA Apps" position="bottom">
+              <button
+                onClick={() => setShowModules(!showModules)}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <Grid className="w-5 h-5 text-white/80" />
+              </button>
+            </Tooltip>
 
             {showModules && (
               <>

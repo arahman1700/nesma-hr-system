@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Users,
   Grid,
@@ -18,6 +18,9 @@ import {
   Award,
   Briefcase,
   MapPin,
+  Eye,
+  Edit,
+  Trash2,
 } from "lucide-react";
 import {
   Button,
@@ -32,6 +35,15 @@ import {
   Table,
 } from "../../common";
 import { ColoredStatsCard, StatsGrid } from "../../common/ColoredStatsCard";
+import {
+  EnhancedStat,
+  SkeletonCard,
+  SkeletonTable,
+  EnhancedAvatar,
+  Tooltip,
+  EmptyState,
+  ProgressIndicator,
+} from "../../common/EnhancedUI";
 import {
   FilterBar,
   ActiveFilter,
@@ -53,6 +65,10 @@ import { Employee } from "../../../types";
 
 // Team Tab Component
 const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark" || theme === "company";
+  const isGlass = theme === "glass";
+
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
@@ -102,64 +118,191 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
           onChange={(e) => setDepartmentFilter(e.target.value)}
           className="w-48"
         />
-        <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
-          <button
-            onClick={() => setViewMode("grid")}
-            className={cn(
-              "p-2 rounded-lg transition-colors",
-              viewMode === "grid" ? "bg-white shadow-sm" : "hover:bg-gray-200",
-            )}
-          >
-            <Grid className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setViewMode("list")}
-            className={cn(
-              "p-2 rounded-lg transition-colors",
-              viewMode === "list" ? "bg-white shadow-sm" : "hover:bg-gray-200",
-            )}
-          >
-            <List className="w-4 h-4" />
-          </button>
+        <div
+          className={cn(
+            "flex items-center gap-1 p-1 rounded-lg",
+            isGlass ? "bg-white/10" : isDark ? "bg-gray-700" : "bg-gray-100",
+          )}
+        >
+          <Tooltip content="Grid View" position="top">
+            <button
+              onClick={() => setViewMode("grid")}
+              className={cn(
+                "p-2 rounded-lg transition-all duration-200",
+                viewMode === "grid"
+                  ? isGlass
+                    ? "bg-white/20 shadow-sm"
+                    : isDark
+                      ? "bg-gray-600 shadow-sm"
+                      : "bg-white shadow-sm"
+                  : isGlass
+                    ? "hover:bg-white/10"
+                    : isDark
+                      ? "hover:bg-gray-600"
+                      : "hover:bg-gray-200",
+              )}
+            >
+              <Grid
+                className={cn(
+                  "w-4 h-4 transition-colors",
+                  viewMode === "grid"
+                    ? "text-[#2E3192]"
+                    : isGlass || isDark
+                      ? "text-white/70"
+                      : "text-gray-500",
+                )}
+              />
+            </button>
+          </Tooltip>
+          <Tooltip content="List View" position="top">
+            <button
+              onClick={() => setViewMode("list")}
+              className={cn(
+                "p-2 rounded-lg transition-all duration-200",
+                viewMode === "list"
+                  ? isGlass
+                    ? "bg-white/20 shadow-sm"
+                    : isDark
+                      ? "bg-gray-600 shadow-sm"
+                      : "bg-white shadow-sm"
+                  : isGlass
+                    ? "hover:bg-white/10"
+                    : isDark
+                      ? "hover:bg-gray-600"
+                      : "hover:bg-gray-200",
+              )}
+            >
+              <List
+                className={cn(
+                  "w-4 h-4 transition-colors",
+                  viewMode === "list"
+                    ? "text-[#2E3192]"
+                    : isGlass || isDark
+                      ? "text-white/70"
+                      : "text-gray-500",
+                )}
+              />
+            </button>
+          </Tooltip>
         </div>
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-gray-500">
+      <p
+        className={cn(
+          "text-sm",
+          isGlass
+            ? "text-white/60"
+            : isDark
+              ? "text-gray-400"
+              : "text-gray-500",
+        )}
+      >
         Showing {filteredEmployees.length} of {employees.length} employees
       </p>
 
-      {/* Employee Grid/List */}
-      {viewMode === "grid" ? (
+      {/* Empty State */}
+      {filteredEmployees.length === 0 ? (
+        <EmptyState
+          icon={<Users />}
+          title="No employees found"
+          description="Try adjusting your search or filter criteria"
+          action={{
+            label: "Clear Filters",
+            onClick: () => {
+              setSearchTerm("");
+              setStatusFilter("all");
+              setDepartmentFilter("all");
+            },
+          }}
+        />
+      ) : viewMode === "grid" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredEmployees.map((emp) => (
-            <Card key={emp.id} hover className="p-4">
+            <Card
+              key={emp.id}
+              hover
+              className={cn(
+                "p-4 group transition-all duration-300",
+                "hover:shadow-lg hover:-translate-y-1",
+              )}
+            >
               <div className="flex items-start gap-4">
-                <Avatar
+                <EnhancedAvatar
                   src={emp.photo}
                   name={emp.fullName}
                   size="lg"
-                  status={emp.status === "Active" ? "online" : "offline"}
+                  status={
+                    emp.status === "Active"
+                      ? "online"
+                      : emp.status === "On Leave"
+                        ? "away"
+                        : "offline"
+                  }
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-gray-800 truncate">
+                    <h3
+                      className={cn(
+                        "font-semibold truncate",
+                        isGlass
+                          ? "text-[#2E3192]"
+                          : isDark
+                            ? "text-white"
+                            : "text-gray-800",
+                      )}
+                    >
                       {emp.fullName}
                     </h3>
-                    {emp.status === "Active" && (
-                      <span className="w-2 h-2 bg-success rounded-full flex-shrink-0" />
-                    )}
                   </div>
-                  <p className="text-sm text-gray-500 truncate">
+                  <p
+                    className={cn(
+                      "text-sm truncate",
+                      isGlass
+                        ? "text-[#2E3192]/70"
+                        : isDark
+                          ? "text-gray-400"
+                          : "text-gray-500",
+                    )}
+                  >
                     {emp.position}
                   </p>
-                  <p className="text-xs text-gray-400 mt-1 truncate">
+                  <p
+                    className={cn(
+                      "text-xs mt-1 truncate",
+                      isGlass
+                        ? "text-[#2E3192]/50"
+                        : isDark
+                          ? "text-gray-500"
+                          : "text-gray-400",
+                    )}
+                  >
                     {emp.email}
                   </p>
-                  <p className="text-xs text-gray-400 truncate">{emp.phone}</p>
+                  <p
+                    className={cn(
+                      "text-xs truncate",
+                      isGlass
+                        ? "text-[#2E3192]/50"
+                        : isDark
+                          ? "text-gray-500"
+                          : "text-gray-400",
+                    )}
+                  >
+                    {emp.phone}
+                  </p>
                 </div>
               </div>
-              <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+              <div
+                className={cn(
+                  "mt-4 pt-4 border-t flex items-center justify-between",
+                  isGlass
+                    ? "border-white/10"
+                    : isDark
+                      ? "border-gray-700"
+                      : "border-gray-100",
+                )}
+              >
                 <Badge
                   variant={
                     emp.employmentType === "Full-time" ? "primary" : "default"
@@ -168,9 +311,36 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
                 >
                   {emp.employmentType}
                 </Badge>
-                <Button variant="ghost" size="sm">
-                  View Profile
-                </Button>
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Tooltip content="View" position="top">
+                    <button
+                      className={cn(
+                        "p-2 rounded-lg transition-colors",
+                        isGlass
+                          ? "hover:bg-white/10 text-[#2E3192]"
+                          : isDark
+                            ? "hover:bg-gray-700 text-gray-400"
+                            : "hover:bg-gray-100 text-gray-500",
+                      )}
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Edit" position="top">
+                    <button
+                      className={cn(
+                        "p-2 rounded-lg transition-colors",
+                        isGlass
+                          ? "hover:bg-white/10 text-[#2E3192]"
+                          : isDark
+                            ? "hover:bg-gray-700 text-gray-400"
+                            : "hover:bg-gray-100 text-gray-500",
+                      )}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                  </Tooltip>
+                </div>
               </div>
             </Card>
           ))}
@@ -183,13 +353,20 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
               label: "Employee",
               sortable: true,
               render: (row: Employee) => (
-                <div className="flex items-center gap-3">
-                  <Avatar src={row.photo} name={row.fullName} size="sm" />
-                  <div>
-                    <p className="font-medium text-gray-800">{row.fullName}</p>
-                    <p className="text-xs text-gray-500">{row.employeeId}</p>
-                  </div>
-                </div>
+                <EnhancedAvatar
+                  src={row.photo}
+                  name={row.fullName}
+                  size="md"
+                  status={
+                    row.status === "Active"
+                      ? "online"
+                      : row.status === "On Leave"
+                        ? "away"
+                        : "offline"
+                  }
+                  showName
+                  subtitle={row.employeeId}
+                />
               ),
             },
             { key: "position", label: "Position", sortable: true },
@@ -207,9 +384,46 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
               key: "actions",
               label: "Actions",
               render: () => (
-                <Button variant="ghost" size="sm">
-                  View
-                </Button>
+                <div className="flex gap-1">
+                  <Tooltip content="View Details" position="top">
+                    <button
+                      className={cn(
+                        "p-2 rounded-lg transition-colors",
+                        isGlass
+                          ? "hover:bg-white/10 text-[#2E3192]"
+                          : isDark
+                            ? "hover:bg-gray-700 text-gray-400"
+                            : "hover:bg-gray-100 text-gray-500",
+                      )}
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Edit" position="top">
+                    <button
+                      className={cn(
+                        "p-2 rounded-lg transition-colors",
+                        isGlass
+                          ? "hover:bg-white/10 text-[#2E3192]"
+                          : isDark
+                            ? "hover:bg-gray-700 text-gray-400"
+                            : "hover:bg-gray-100 text-gray-500",
+                      )}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Delete" position="top">
+                    <button
+                      className={cn(
+                        "p-2 rounded-lg transition-colors",
+                        "hover:bg-rose-500/10 text-rose-500",
+                      )}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </Tooltip>
+                </div>
               ),
             },
           ]}
@@ -504,6 +718,13 @@ const EmployeesPage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportData, setExportData] = useState<ExportData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Calculate stats
   const activeEmployees = employees.filter((e) => e.status === "Active").length;
@@ -735,39 +956,55 @@ const EmployeesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats Cards - Row 1 */}
-      <StatsGrid columns={4}>
-        <ColoredStatsCard
-          title="Total Employees"
-          value={employees.length}
-          icon={<Users className="w-6 h-6" />}
-          color="blue"
-          trend={{ value: 5, isPositive: true, label: "vs last month" }}
-          sparkle
-          onClick={() => handleCardClick("employees")}
-        />
-        <ColoredStatsCard
-          title="Active"
-          value={activeEmployees}
-          icon={<Activity className="w-6 h-6" />}
-          color="emerald"
-          subtitle={`${Math.round((activeEmployees / employees.length) * 100)}% of total`}
-        />
-        <ColoredStatsCard
-          title="New Hires"
-          value={newHires}
-          icon={<UserPlus className="w-6 h-6" />}
-          color="purple"
-          subtitle="Last 30 days"
-        />
-        <ColoredStatsCard
-          title="Departments"
-          value={departments.length}
-          icon={<Building2 className="w-6 h-6" />}
-          color="amber"
-          subtitle="Active departments"
-        />
-      </StatsGrid>
+      {/* Stats Cards - Row 1 with Enhanced Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {isLoading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : (
+          <>
+            <EnhancedStat
+              label="Total Employees"
+              value={employees.length}
+              icon={<Users className="w-5 h-5" />}
+              color="blue"
+              trend={{ value: 5, isPositive: true, label: "vs last month" }}
+              sparkline={[65, 68, 72, 70, 75, 78, 80]}
+              onClick={() => handleCardClick("employees")}
+            />
+            <EnhancedStat
+              label="Active"
+              value={activeEmployees}
+              icon={<Activity className="w-5 h-5" />}
+              color="green"
+              trend={{
+                value: Math.round((activeEmployees / employees.length) * 100),
+                isPositive: true,
+                label: "rate",
+              }}
+              sparkline={[60, 62, 65, 68, 70, 72, 75]}
+            />
+            <EnhancedStat
+              label="New Hires"
+              value={newHires}
+              icon={<UserPlus className="w-5 h-5" />}
+              color="purple"
+              sparkline={[2, 3, 1, 4, 2, 3, 5]}
+            />
+            <EnhancedStat
+              label="Departments"
+              value={departments.length}
+              icon={<Building2 className="w-5 h-5" />}
+              color="amber"
+              sparkline={[5, 5, 6, 6, 6, 6, 6]}
+            />
+          </>
+        )}
+      </div>
 
       {/* HR Analytics Cards - Row 2 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

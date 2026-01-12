@@ -153,3 +153,19 @@ export type {
   NotificationType,
   NotificationCategory,
 } from "./NotificationSystem";
+
+// Enhanced UI Components
+export {
+  Skeleton as EnhancedSkeleton,
+  SkeletonText,
+  SkeletonCard,
+  SkeletonTable,
+  EnhancedStat,
+  EnhancedTableRow,
+  ContextMenu,
+  EmptyState,
+  ProgressIndicator,
+  EnhancedAvatar,
+  Tooltip,
+  commonTableActions,
+} from "./EnhancedUI";

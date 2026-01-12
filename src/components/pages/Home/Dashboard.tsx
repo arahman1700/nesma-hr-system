@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Users,
@@ -37,6 +37,12 @@ import {
   MapLocation,
   NESMA_LOCATIONS,
 } from "../../common/InteractiveMap";
+import {
+  EnhancedStat,
+  SkeletonCard,
+  SkeletonTable,
+  Tooltip as EnhancedTooltip,
+} from "../../common/EnhancedUI";
 import { cn } from "../../../utils/cn";
 import { useTheme } from "../../../contexts/ThemeContext";
 import {
@@ -76,6 +82,15 @@ const Dashboard: React.FC = () => {
   const pendingRequests = getPendingRequests().slice(0, 5);
   const pendingLeaves = getPendingLeaves().slice(0, 5);
   const upcomingLeaves = getUpcomingLeaves(30);
+
+  // Loading state for skeleton display
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading for demo
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Modal states
   const [showStatsModal, setShowStatsModal] = useState(false);
@@ -452,48 +467,59 @@ const Dashboard: React.FC = () => {
         showFilterCount={true}
       />
 
-      {/* Stats Grid - Using new ColoredStatsCard */}
-      <StatsGrid columns={4}>
-        <ColoredStatsCard
-          title="Total Employees"
-          value={stats.totalEmployees}
-          icon={<Users className="w-6 h-6" />}
-          color="blue"
-          trend={{ value: 5, isPositive: true, label: "vs last month" }}
-          sparkle
-          onClick={() => handleCardClick("employees")}
-        />
-        <ColoredStatsCard
-          title="Present Today"
-          value={`${stats.presentToday}/${stats.activeEmployees}`}
-          icon={<Clock className="w-6 h-6" />}
-          color="emerald"
-          trend={{
-            value: stats.attendanceRate,
-            isPositive: stats.attendanceRate > 90,
-            label: "attendance rate",
-          }}
-          subtitle={`${stats.attendanceRate}% on time`}
-          onClick={() => handleCardClick("attendance")}
-        />
-        <ColoredStatsCard
-          title="On Leave"
-          value={stats.onLeave}
-          icon={<Palmtree className="w-6 h-6" />}
-          color="amber"
-          subtitle="Approved leaves today"
-          onClick={() => handleCardClick("leaves")}
-        />
-        <ColoredStatsCard
-          title="Pending Requests"
-          value={stats.pendingRequests}
-          icon={<FileText className="w-6 h-6" />}
-          color="purple"
-          trend={{ value: 8, isPositive: false, label: "need attention" }}
-          subtitle="Awaiting your review"
-          onClick={() => handleCardClick("requests")}
-        />
-      </StatsGrid>
+      {/* Stats Grid - Using Enhanced Stats with sparklines */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {isLoading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : (
+          <>
+            <EnhancedStat
+              label="Total Employees"
+              value={stats.totalEmployees}
+              icon={<Users className="w-5 h-5" />}
+              color="blue"
+              trend={{ value: 5, isPositive: true, label: "vs last month" }}
+              sparkline={[45, 52, 48, 61, 58, 63, 69, 72, 78, 80]}
+              onClick={() => handleCardClick("employees")}
+            />
+            <EnhancedStat
+              label="Present Today"
+              value={stats.presentToday}
+              icon={<Clock className="w-5 h-5" />}
+              color="green"
+              trend={{
+                value: stats.attendanceRate,
+                isPositive: stats.attendanceRate > 90,
+                label: "rate",
+              }}
+              sparkline={[88, 92, 85, 90, 94, 91, 93, 89, 92, 94]}
+              onClick={() => handleCardClick("attendance")}
+            />
+            <EnhancedStat
+              label="On Leave"
+              value={stats.onLeave}
+              icon={<Palmtree className="w-5 h-5" />}
+              color="amber"
+              sparkline={[3, 5, 4, 6, 4, 5, 3, 4, 5, 4]}
+              onClick={() => handleCardClick("leaves")}
+            />
+            <EnhancedStat
+              label="Pending Requests"
+              value={stats.pendingRequests}
+              icon={<FileText className="w-5 h-5" />}
+              color="purple"
+              trend={{ value: 8, isPositive: false, label: "new" }}
+              sparkline={[12, 8, 15, 10, 7, 11, 9, 13, 8, 10]}
+              onClick={() => handleCardClick("requests")}
+            />
+          </>
+        )}
+      </div>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
