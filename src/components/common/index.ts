@@ -169,3 +169,27 @@ export {
   Tooltip,
   commonTableActions,
 } from "./EnhancedUI";
+
+// Interactive Cards with Detail Modals
+export {
+  InteractiveStatCard,
+  DetailModal,
+  DataTable,
+  SummaryStats,
+  MiniChart,
+} from "./InteractiveCard";
+
+// Advanced Charts
+export {
+  ChartWrapper,
+  EnhancedAreaChart,
+  EnhancedDonutChart,
+  EnhancedBarChart,
+  ProgressRing,
+  MultiProgressRing,
+  StatComparison,
+  TimelineChart,
+} from "./AdvancedCharts";
+
+// Employee Detail Modal
+export { EmployeeDetailModal } from "./EmployeeDetailModal";

@@ -481,7 +481,7 @@ export const MuqeemPage: React.FC = () => {
         tabs={tabs}
         activeTab={activeTab}
         onChange={setActiveTab}
-        variant="separated"
+        variant="modern"
       />
 
       {/* Services Tab */}

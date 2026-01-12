@@ -586,7 +586,7 @@ export const AttendancePage: React.FC = () => {
         tabs={tabs}
         activeTab={activeTab}
         onChange={setActiveTab}
-        variant="separated"
+        variant="modern"
       />
 
       {/* Daily View Tab */}

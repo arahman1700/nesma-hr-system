@@ -63,6 +63,8 @@ export interface FilterBarProps {
   showFilterCount?: boolean;
   compact?: boolean;
   variant?: "default" | "colorful" | "minimal";
+  searchValue?: string; // Controlled search value
+  onSearchChange?: (value: string) => void; // Controlled search change handler
 }
 
 // ============================================
@@ -598,21 +600,32 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   showFilterCount = true,
   compact = false,
   variant = "colorful",
+  searchValue,
+  onSearchChange,
 }) => {
   const { theme } = useTheme();
   const isGlass = theme === "glass";
   const isDark = theme === "dark" || theme === "company";
 
-  const [searchQuery, setSearchQuery] = useState("");
+  // Use controlled mode if searchValue and onSearchChange are provided
+  const isControlled = searchValue !== undefined && onSearchChange !== undefined;
+  const [internalSearchQuery, setInternalSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // Use controlled value if available, otherwise use internal state
+  const searchQuery = isControlled ? searchValue : internalSearchQuery;
 
   const handleSearch = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value;
-      setSearchQuery(query);
+      if (isControlled) {
+        onSearchChange?.(query);
+      } else {
+        setInternalSearchQuery(query);
+      }
       onSearch?.(query);
     },
-    [onSearch],
+    [onSearch, isControlled, onSearchChange],
   );
 
   const getFilterValue = useCallback(
@@ -715,7 +728,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  setSearchQuery("");
+                  if (isControlled) {
+                    onSearchChange?.("");
+                  } else {
+                    setInternalSearchQuery("");
+                  }
                   onSearch?.("");
                 }}
                 className={cn(

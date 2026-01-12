@@ -68,7 +68,7 @@ export const SettingsPage: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="separated" />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="modern" />
 
       {/* Company Tab */}
       <TabPanel id="company" activeTab={activeTab}>

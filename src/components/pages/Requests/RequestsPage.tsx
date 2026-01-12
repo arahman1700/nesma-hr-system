@@ -391,7 +391,7 @@ export const RequestsPage: React.FC = () => {
         tabs={tabs}
         activeTab={activeTab}
         onChange={setActiveTab}
-        variant="separated"
+        variant="modern"
       />
 
       {/* Main Content */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
   Clock,
@@ -16,6 +17,21 @@ import {
   ChevronRight,
   DollarSign,
   Download,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  Target,
+  Briefcase,
+  Building2,
+  MapPin,
+  AlertTriangle,
+  Eye,
+  RefreshCw,
+  Filter,
+  BarChart3,
+  PieChart as PieChartIcon,
+  Zap,
+  Bell,
 } from "lucide-react";
 import { Card, ChartCard } from "../../common/Card";
 import { Badge, StatusBadge } from "../../common/Badge";
@@ -42,7 +58,25 @@ import {
   SkeletonCard,
   SkeletonTable,
   Tooltip as EnhancedTooltip,
+  EnhancedAvatar,
 } from "../../common/EnhancedUI";
+import {
+  InteractiveStatCard,
+  DetailModal,
+  DataTable,
+  SummaryStats,
+} from "../../common/InteractiveCard";
+import {
+  ChartWrapper,
+  EnhancedAreaChart,
+  EnhancedDonutChart,
+  EnhancedBarChart,
+  ProgressRing,
+  MultiProgressRing,
+  StatComparison,
+  TimelineChart,
+} from "../../common/AdvancedCharts";
+import { EmployeeDetailModal } from "../../common/EmployeeDetailModal";
 import { cn } from "../../../utils/cn";
 import { useTheme } from "../../../contexts/ThemeContext";
 import {
@@ -54,7 +88,8 @@ import {
   calendarEvents,
   getAttendanceStats,
 } from "../../../data";
-import { format, addDays, isBefore } from "date-fns";
+import { format, addDays, isBefore, differenceInDays } from "date-fns";
+import { Employee } from "../../../types";
 import {
   AreaChart,
   Area,
@@ -68,6 +103,9 @@ import {
   Cell,
   BarChart,
   Bar,
+  Legend,
+  LineChart,
+  Line,
 } from "recharts";
 
 const Dashboard: React.FC = () => {
@@ -93,14 +131,15 @@ const Dashboard: React.FC = () => {
   }, []);
 
   // Modal states
-  const [showStatsModal, setShowStatsModal] = useState(false);
-  const [selectedStat, setSelectedStat] = useState<string | null>(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportData, setExportData] = useState<ExportData | null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
 
   // Filter states
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [dateRange, setDateRange] = useState("week");
 
   // Filter configuration
   const filterConfigs: FilterConfig[] = [
@@ -172,17 +211,18 @@ const Dashboard: React.FC = () => {
     setSearchQuery("");
   };
 
-  // Map locations with coordinates (using NESMA_LOCATIONS from InteractiveMap)
+  // Map locations with coordinates
   const mapLocations = NESMA_LOCATIONS;
 
-  // Sample attendance trend data
+  // Enhanced attendance trend data
   const attendanceTrendData = [
-    { week: "Week 1", present: 92, late: 5, absent: 3 },
-    { week: "Week 2", present: 88, late: 8, absent: 4 },
-    { week: "Week 3", present: 95, late: 3, absent: 2 },
-    { week: "Week 4", present: 90, late: 6, absent: 4 },
-    { week: "Week 5", present: 93, late: 4, absent: 3 },
-    { week: "Week 6", present: 91, late: 5, absent: 4 },
+    { name: "Mon", present: 92, late: 5, absent: 3, target: 95 },
+    { name: "Tue", present: 88, late: 8, absent: 4, target: 95 },
+    { name: "Wed", present: 95, late: 3, absent: 2, target: 95 },
+    { name: "Thu", present: 90, late: 6, absent: 4, target: 95 },
+    { name: "Fri", present: 93, late: 4, absent: 3, target: 95 },
+    { name: "Sat", present: 91, late: 5, absent: 4, target: 95 },
+    { name: "Sun", present: 94, late: 3, absent: 3, target: 95 },
   ];
 
   // Department distribution
@@ -192,17 +232,35 @@ const Dashboard: React.FC = () => {
     { name: "Operations", value: 12, color: "#10B981" },
     { name: "HR", value: 5, color: "#F59E0B" },
     { name: "IT", value: 6, color: "#EF4444" },
-    { name: "Other", value: 9, color: "#6B7280" },
+    { name: "Marketing", value: 4, color: "#8B5CF6" },
   ];
 
   // Monthly payroll data
   const payrollData = [
-    { month: "Jan", amount: 450000 },
-    { month: "Feb", amount: 455000 },
-    { month: "Mar", amount: 460000 },
-    { month: "Apr", amount: 458000 },
-    { month: "May", amount: 465000 },
-    { month: "Jun", amount: 470000 },
+    { name: "Jan", amount: 450000, employees: 72 },
+    { name: "Feb", amount: 455000, employees: 73 },
+    { name: "Mar", amount: 460000, employees: 75 },
+    { name: "Apr", amount: 458000, employees: 74 },
+    { name: "May", amount: 465000, employees: 78 },
+    { name: "Jun", amount: 470000, employees: 80 },
+  ];
+
+  // Leave types distribution
+  const leaveTypesData = [
+    { name: "Annual", value: 45, color: "#2E3192" },
+    { name: "Sick", value: 15, color: "#EF4444" },
+    { name: "Emergency", value: 8, color: "#F59E0B" },
+    { name: "Maternity", value: 3, color: "#EC4899" },
+    { name: "Other", value: 9, color: "#6B7280" },
+  ];
+
+  // Recent activities
+  const recentActivities = [
+    { time: "10 min ago", event: "Ahmed Al-Rashid checked in", type: "success" as const },
+    { time: "25 min ago", event: "Leave request approved for Sara M.", type: "info" as const },
+    { time: "1 hour ago", event: "New employee onboarded: Khalid F.", type: "success" as const },
+    { time: "2 hours ago", event: "Payroll processed for June", type: "info" as const },
+    { time: "3 hours ago", event: "Document expiry alert: 3 iqamas", type: "warning" as const },
   ];
 
   // Expiring documents
@@ -219,178 +277,137 @@ const Dashboard: React.FC = () => {
     .filter((evt) => evt.type === "Birthday")
     .slice(0, 3);
 
-  // Prepare detail data for stats cards
-  const employeeDetailData = {
-    headers: ["ID", "Name", "Department", "Position", "Status"],
-    rows: allEmployees
-      .slice(0, 20)
-      .map((emp) => [
-        emp.employeeId,
-        emp.fullName,
-        emp.department,
-        emp.position,
-        emp.status,
-      ]),
+  // Handle employee click
+  const handleEmployeeClick = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setShowEmployeeModal(true);
   };
 
-  const attendanceDetailData = {
-    headers: ["Employee", "Check In", "Check Out", "Status", "Hours"],
-    rows: allEmployees
-      .slice(0, 15)
-      .map((emp, idx) => [
-        emp.fullName,
-        "08:00 AM",
-        idx % 3 === 0 ? "---" : "05:00 PM",
-        idx % 5 === 0 ? "Late" : idx % 3 === 0 ? "Present" : "Present",
-        idx % 3 === 0 ? "---" : "9h",
-      ]),
-  };
+  // Employee detail content for interactive card
+  const getEmployeeDetailContent = () => (
+    <div className="space-y-4">
+      <SummaryStats
+        stats={[
+          { label: "Total", value: stats.totalEmployees },
+          { label: "Active", value: stats.activeEmployees, color: "text-emerald-500" },
+          { label: "On Leave", value: stats.onLeave, color: "text-amber-500" },
+          { label: "New This Month", value: 5, color: "text-blue-500" },
+        ]}
+      />
+      <DataTable
+        headers={["Employee", "Department", "Position", "Status"]}
+        rows={allEmployees.slice(0, 10).map((emp) => [
+          <div className="flex items-center gap-3" key={emp.id}>
+            <EnhancedAvatar src={emp.photo} name={emp.fullName} size="sm" />
+            <div>
+              <p className={cn("font-medium", isDark ? "text-white" : "text-gray-800")}>
+                {emp.fullName}
+              </p>
+              <p className={cn("text-xs", isDark ? "text-gray-400" : "text-gray-500")}>
+                {emp.employeeId}
+              </p>
+            </div>
+          </div>,
+          emp.department,
+          emp.position,
+          <StatusBadge status={emp.status} size="sm" key={`status-${emp.id}`} />,
+        ])}
+        onRowClick={(index) => handleEmployeeClick(allEmployees[index])}
+      />
+    </div>
+  );
 
-  const leavesDetailData = {
-    headers: ["Employee", "Type", "From", "To", "Days", "Status"],
-    rows: pendingLeaves.map((leave) => [
-      leave.employeeName,
-      leave.type,
-      format(new Date(leave.startDate), "MMM dd"),
-      format(new Date(leave.endDate), "MMM dd"),
-      leave.days,
-      leave.status,
-    ]),
-  };
+  // Attendance detail content
+  const getAttendanceDetailContent = () => (
+    <div className="space-y-6">
+      <SummaryStats
+        stats={[
+          { label: "Present", value: stats.presentToday, color: "text-emerald-500" },
+          { label: "Late", value: attendanceStats.late, color: "text-amber-500" },
+          { label: "Absent", value: attendanceStats.absent, color: "text-rose-500" },
+          { label: "Rate", value: `${stats.attendanceRate}%` },
+        ]}
+      />
+      <EnhancedAreaChart
+        data={attendanceTrendData}
+        dataKeys={[
+          { key: "present", color: "#10B981", name: "Present %" },
+          { key: "late", color: "#F59E0B", name: "Late %" },
+        ]}
+        height={250}
+      />
+    </div>
+  );
 
-  const requestsDetailData = {
-    headers: ["ID", "Employee", "Type", "Title", "Date", "Status"],
-    rows: pendingRequests.map((req) => [
-      req.id,
-      req.employeeName,
-      req.type,
-      req.title,
-      format(new Date(req.createdAt), "MMM dd"),
-      req.status,
-    ]),
-  };
+  // Leaves detail content
+  const getLeavesDetailContent = () => (
+    <div className="space-y-6">
+      <SummaryStats
+        stats={[
+          { label: "On Leave", value: stats.onLeave },
+          { label: "Pending", value: pendingLeaves.length, color: "text-amber-500" },
+          { label: "Approved", value: 12, color: "text-emerald-500" },
+          { label: "Rejected", value: 2, color: "text-rose-500" },
+        ]}
+      />
+      <div className="flex gap-6">
+        <div className="flex-1">
+          <EnhancedDonutChart
+            data={leaveTypesData}
+            height={200}
+            innerRadius={40}
+            outerRadius={70}
+          />
+        </div>
+        <div className="flex-1">
+          <DataTable
+            headers={["Employee", "Type", "Duration", "Status"]}
+            rows={pendingLeaves.map((leave) => [
+              leave.employeeName,
+              leave.type,
+              `${leave.days} days`,
+              <StatusBadge status={leave.status} size="sm" key={leave.id} />,
+            ])}
+          />
+        </div>
+      </div>
+    </div>
+  );
 
-  // Handle card click to show export modal
-  const handleCardClick = (cardType: string) => {
-    let data: ExportData;
-
-    switch (cardType) {
-      case "employees":
-        data = {
-          title: "Employee Report",
-          columns: [
-            { key: "id", label: "Employee ID" },
-            { key: "name", label: "Full Name" },
-            { key: "department", label: "Department" },
-            { key: "position", label: "Position" },
-            { key: "status", label: "Status" },
-          ],
-          data: allEmployees.slice(0, 20).map((emp) => ({
-            id: emp.employeeId,
-            name: emp.fullName,
-            department: emp.department,
-            position: emp.position,
-            status: emp.status,
-          })),
-          summary: [
-            { label: "Total", value: stats.totalEmployees },
-            { label: "Active", value: stats.activeEmployees },
-            { label: "New This Month", value: 5 },
-            { label: "Departments", value: 6 },
-          ],
-        };
-        break;
-      case "attendance":
-        data = {
-          title: "Attendance Report",
-          columns: [
-            { key: "name", label: "Employee" },
-            { key: "checkIn", label: "Check In" },
-            { key: "checkOut", label: "Check Out" },
-            { key: "status", label: "Status" },
-            { key: "hours", label: "Hours" },
-          ],
-          data: allEmployees.slice(0, 15).map((emp, idx) => ({
-            name: emp.fullName,
-            checkIn: "08:00 AM",
-            checkOut: idx % 3 === 0 ? "---" : "05:00 PM",
-            status: idx % 5 === 0 ? "Late" : "Present",
-            hours: idx % 3 === 0 ? "---" : "9h",
-          })),
-          summary: [
-            { label: "Present", value: stats.presentToday },
-            { label: "Late", value: attendanceStats.late },
-            { label: "Absent", value: attendanceStats.absent },
-            { label: "Rate", value: `${stats.attendanceRate}%` },
-          ],
-        };
-        break;
-      case "leaves":
-        data = {
-          title: "Leave Report",
-          columns: [
-            { key: "employee", label: "Employee" },
-            { key: "type", label: "Type" },
-            { key: "from", label: "From" },
-            { key: "to", label: "To" },
-            { key: "days", label: "Days" },
-            { key: "status", label: "Status" },
-          ],
-          data: pendingLeaves.map((leave) => ({
-            employee: leave.employeeName,
-            type: leave.type,
-            from: format(new Date(leave.startDate), "MMM dd"),
-            to: format(new Date(leave.endDate), "MMM dd"),
-            days: leave.days,
-            status: leave.status,
-          })),
-          summary: [
-            { label: "On Leave", value: stats.onLeave },
-            { label: "Pending", value: pendingLeaves.length },
-            { label: "Approved", value: 12 },
-            { label: "Total Days", value: 45 },
-          ],
-        };
-        break;
-      case "requests":
-        data = {
-          title: "Requests Report",
-          columns: [
-            { key: "id", label: "ID" },
-            { key: "employee", label: "Employee" },
-            { key: "type", label: "Type" },
-            { key: "title", label: "Title" },
-            { key: "date", label: "Date" },
-            { key: "status", label: "Status" },
-          ],
-          data: pendingRequests.map((req) => ({
-            id: req.id,
-            employee: req.employeeName,
-            type: req.type,
-            title: req.title,
-            date: format(new Date(req.createdAt), "MMM dd"),
-            status: req.status,
-          })),
-          summary: [
-            { label: "Pending", value: stats.pendingRequests },
-            { label: "Approved", value: 8 },
-            { label: "Rejected", value: 2 },
-            { label: "Total", value: pendingRequests.length + 10 },
-          ],
-        };
-        break;
-      default:
-        return;
-    }
-
-    setExportData(data);
-    setShowExportModal(true);
-  };
+  // Requests detail content
+  const getRequestsDetailContent = () => (
+    <div className="space-y-4">
+      <SummaryStats
+        stats={[
+          { label: "Pending", value: stats.pendingRequests, color: "text-amber-500" },
+          { label: "Approved Today", value: 8, color: "text-emerald-500" },
+          { label: "Rejected", value: 2, color: "text-rose-500" },
+          { label: "Total This Week", value: 25 },
+        ]}
+      />
+      <DataTable
+        headers={["ID", "Employee", "Type", "Title", "Date", "Status"]}
+        rows={pendingRequests.map((req) => [
+          req.id,
+          req.employeeName,
+          <Badge variant="default" size="sm" key={`type-${req.id}`}>
+            {req.type}
+          </Badge>,
+          req.title,
+          format(new Date(req.createdAt), "MMM dd"),
+          <StatusBadge status={req.status} size="sm" key={`status-${req.id}`} />,
+        ])}
+      />
+    </div>
+  );
 
   return (
-    <div className="space-y-7 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn">
       {/* Welcome Banner */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         className={cn(
           "relative overflow-hidden p-6 md:p-8 text-white",
           DESIGN_TOKENS.borderRadius.lg,
@@ -407,11 +424,28 @@ const Dashboard: React.FC = () => {
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
-            <p className="text-[#80D1E9] text-sm font-medium">Good Morning,</p>
-            <h1 className="text-2xl md:text-3xl font-bold mt-1">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-[#80D1E9] text-sm font-medium"
+            >
+              Good Morning,
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-2xl md:text-3xl font-bold mt-1"
+            >
               Abdulrahman Hussein
-            </h1>
-            <p className="text-white/70 mt-2 max-w-lg text-sm md:text-base">
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-white/70 mt-2 max-w-lg text-sm md:text-base"
+            >
               You have{" "}
               <span className="text-[#80D1E9] font-semibold">
                 {stats.pendingApprovals} pending approvals
@@ -421,9 +455,14 @@ const Dashboard: React.FC = () => {
                 {pendingRequests.length} new requests
               </span>{" "}
               today
-            </p>
+            </motion.p>
 
-            <div className="flex flex-wrap gap-3 mt-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="flex flex-wrap gap-3 mt-6"
+            >
               <Link to="/requests">
                 <Button
                   variant="secondary"
@@ -438,7 +477,7 @@ const Dashboard: React.FC = () => {
                   Check Attendance
                 </Button>
               </Link>
-            </div>
+            </motion.div>
           </div>
 
           <div className="hidden lg:block text-right">
@@ -450,9 +489,23 @@ const Dashboard: React.FC = () => {
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               <span className="text-sm text-white/70">System Online</span>
             </div>
+
+            {/* Quick alerts */}
+            <div className="mt-4 flex gap-2 justify-end">
+              {expiringDocuments.length > 0 && (
+                <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-300 text-xs">
+                  <AlertTriangle className="w-3 h-3" />
+                  {expiringDocuments.length} expiring docs
+                </div>
+              )}
+              <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-xs">
+                <Bell className="w-3 h-3" />
+                {stats.pendingRequests} pending
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Filter Bar */}
       <FilterBar
@@ -467,7 +520,7 @@ const Dashboard: React.FC = () => {
         showFilterCount={true}
       />
 
-      {/* Stats Grid - Using Enhanced Stats with sparklines */}
+      {/* Stats Grid - Interactive Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {isLoading ? (
           <>
@@ -478,17 +531,33 @@ const Dashboard: React.FC = () => {
           </>
         ) : (
           <>
-            <EnhancedStat
-              label="Total Employees"
+            <InteractiveStatCard
+              title="Total Employees"
               value={stats.totalEmployees}
               icon={<Users className="w-5 h-5" />}
               color="blue"
               trend={{ value: 5, isPositive: true, label: "vs last month" }}
               sparkline={[45, 52, 48, 61, 58, 63, 69, 72, 78, 80]}
-              onClick={() => handleCardClick("employees")}
+              subtitle="Click for detailed breakdown"
+              detailTitle="Employee Overview"
+              detailContent={getEmployeeDetailContent()}
+              actions={[
+                {
+                  label: "Export",
+                  onClick: () => {},
+                  variant: "secondary",
+                  icon: <Download className="w-4 h-4" />,
+                },
+                {
+                  label: "View All",
+                  onClick: () => {},
+                  variant: "primary",
+                  icon: <ArrowRight className="w-4 h-4" />,
+                },
+              ]}
             />
-            <EnhancedStat
-              label="Present Today"
+            <InteractiveStatCard
+              title="Present Today"
               value={stats.presentToday}
               icon={<Clock className="w-5 h-5" />}
               color="green"
@@ -498,27 +567,131 @@ const Dashboard: React.FC = () => {
                 label: "rate",
               }}
               sparkline={[88, 92, 85, 90, 94, 91, 93, 89, 92, 94]}
-              onClick={() => handleCardClick("attendance")}
+              subtitle="Real-time attendance tracking"
+              detailTitle="Attendance Details"
+              detailContent={getAttendanceDetailContent()}
             />
-            <EnhancedStat
-              label="On Leave"
+            <InteractiveStatCard
+              title="On Leave"
               value={stats.onLeave}
               icon={<Palmtree className="w-5 h-5" />}
               color="amber"
               sparkline={[3, 5, 4, 6, 4, 5, 3, 4, 5, 4]}
-              onClick={() => handleCardClick("leaves")}
+              subtitle={`${pendingLeaves.length} pending requests`}
+              detailTitle="Leave Management"
+              detailContent={getLeavesDetailContent()}
             />
-            <EnhancedStat
-              label="Pending Requests"
+            <InteractiveStatCard
+              title="Pending Requests"
               value={stats.pendingRequests}
               icon={<FileText className="w-5 h-5" />}
               color="purple"
-              trend={{ value: 8, isPositive: false, label: "new" }}
+              trend={{ value: 8, isPositive: false, label: "new today" }}
               sparkline={[12, 8, 15, 10, 7, 11, 9, 13, 8, 10]}
-              onClick={() => handleCardClick("requests")}
+              subtitle="Requires your attention"
+              detailTitle="Request Queue"
+              detailContent={getRequestsDetailContent()}
             />
           </>
         )}
+      </div>
+
+      {/* Second Row - Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className={cn(
+            "p-5 rounded-2xl",
+            isGlass
+              ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
+              : isDark
+                ? "bg-gray-800/80 border border-gray-700"
+                : "bg-white border border-gray-100 shadow-sm"
+          )}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <span className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+              Attendance Rate
+            </span>
+            <Activity className={cn("w-4 h-4", isDark ? "text-emerald-400" : "text-emerald-500")} />
+          </div>
+          <ProgressRing
+            value={stats.attendanceRate}
+            size={80}
+            strokeWidth={8}
+            color="#10B981"
+            label="Today"
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className={cn(
+            "p-5 rounded-2xl",
+            isGlass
+              ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
+              : isDark
+                ? "bg-gray-800/80 border border-gray-700"
+                : "bg-white border border-gray-100 shadow-sm"
+          )}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <span className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-500")}>
+              Task Completion
+            </span>
+            <Target className={cn("w-4 h-4", isDark ? "text-blue-400" : "text-blue-500")} />
+          </div>
+          <ProgressRing
+            value={78}
+            size={80}
+            strokeWidth={8}
+            color="#2E3192"
+            label="This Week"
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className={cn(
+            "p-5 rounded-2xl",
+            isGlass
+              ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
+              : isDark
+                ? "bg-gray-800/80 border border-gray-700"
+                : "bg-white border border-gray-100 shadow-sm"
+          )}
+        >
+          <StatComparison
+            current={{ label: "This Month", value: 470000 }}
+            previous={{ label: "Last Month", value: 458000 }}
+            format={(v) => `${(v / 1000).toFixed(0)}K SAR`}
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className={cn(
+            "p-5 rounded-2xl",
+            isGlass
+              ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
+              : isDark
+                ? "bg-gray-800/80 border border-gray-700"
+                : "bg-white border border-gray-100 shadow-sm"
+          )}
+        >
+          <StatComparison
+            current={{ label: "Active Employees", value: stats.activeEmployees }}
+            previous={{ label: "Last Month", value: stats.activeEmployees - 5 }}
+          />
+        </motion.div>
       </div>
 
       {/* Main Content Grid */}
@@ -526,158 +699,49 @@ const Dashboard: React.FC = () => {
         {/* Left Column - 2 cols */}
         <div className="lg:col-span-2 space-y-6">
           {/* Attendance Trend Chart */}
-          <div
-            className={cn(
-              "p-6",
-              DESIGN_TOKENS.borderRadius.lg,
-              DESIGN_TOKENS.shadow.sm,
-              isGlass
-                ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
-                : isDark
-                  ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-                  : "bg-white border border-gray-100",
-            )}
+          <ChartWrapper
+            title="Attendance Trend"
+            subtitle="Weekly attendance statistics"
+            trend={{ value: 3.2, isPositive: true }}
+            onExport={() => console.log("Export")}
+            filters={
+              <select
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value)}
+                className={cn(
+                  "text-sm border px-3 py-2 rounded-lg focus:outline-none",
+                  isGlass
+                    ? "bg-white/5 border-white/15 text-white"
+                    : isDark
+                      ? "bg-gray-700 border-gray-600 text-white"
+                      : "bg-white border-gray-200 text-gray-700"
+                )}
+              >
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+              </select>
+            }
           >
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3
-                  className={cn(
-                    "text-lg font-semibold",
-                    isGlass || isGlass || isDark
-                      ? "text-white"
-                      : "text-gray-800",
-                  )}
-                >
-                  Attendance Trend
-                </h3>
-                <p
-                  className={cn(
-                    "text-sm mt-0.5",
-                    isGlass
-                      ? "text-white/60"
-                      : isDark
-                        ? "text-gray-400"
-                        : "text-gray-500",
-                  )}
-                >
-                  Weekly attendance statistics
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <select
-                  className={cn(
-                    "text-sm border px-3 py-2 focus:outline-none focus:ring-2",
-                    DESIGN_TOKENS.borderRadius.md,
-                    isGlass
-                      ? "bg-white/5 border-white/15 text-white focus:ring-[#80D1E9]/20"
-                      : isDark
-                        ? "bg-[var(--theme-bg)] border-[var(--theme-border)] text-gray-300 focus:ring-[#80D1E9]/20"
-                        : "border-gray-200 text-gray-700 focus:ring-[#2E3192]/20 focus:border-[#2E3192]",
-                  )}
-                >
-                  <option>Last 6 Weeks</option>
-                  <option>Last 3 Months</option>
-                  <option>Last 6 Months</option>
-                </select>
-                <ExportButton
-                  variant="icon"
-                  data={{
-                    headers: ["Week", "Present %", "Late %", "Absent %"],
-                    rows: attendanceTrendData.map((d) => [
-                      d.week,
-                      d.present,
-                      d.late,
-                      d.absent,
-                    ]),
-                    title: "Attendance Trend Report",
-                    filename: "attendance_trend",
-                  }}
-                />
-              </div>
-            </div>
-            <div className="h-72">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={attendanceTrendData}>
-                  <defs>
-                    <linearGradient
-                      id="presentGradient"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient
-                      id="lateGradient"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#F59E0B" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke={isDark ? "#374151" : "#E5E7EB"}
-                  />
-                  <XAxis
-                    dataKey="week"
-                    tick={{
-                      fill: isDark ? "#9CA3AF" : "#6B7280",
-                      fontSize: 12,
-                    }}
-                  />
-                  <YAxis
-                    tick={{
-                      fill: isDark ? "#9CA3AF" : "#6B7280",
-                      fontSize: 12,
-                    }}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: isDark ? "#1F2937" : "#fff",
-                      border: `1px solid ${isDark ? "#374151" : "#E5E7EB"}`,
-                      borderRadius: "12px",
-                      boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                      color: isDark ? "#F3F4F6" : "#1F2937",
-                    }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="present"
-                    stroke="#10B981"
-                    strokeWidth={2}
-                    fill="url(#presentGradient)"
-                    name="Present %"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="late"
-                    stroke="#F59E0B"
-                    strokeWidth={2}
-                    fill="url(#lateGradient)"
-                    name="Late %"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+            <EnhancedAreaChart
+              data={attendanceTrendData}
+              dataKeys={[
+                { key: "present", color: "#10B981", name: "Present %" },
+                { key: "target", color: "#2E3192", name: "Target %" },
+              ]}
+              height={300}
+            />
+          </ChartWrapper>
 
           {/* Pending Approvals */}
           <div
             className={cn(
-              "p-6",
-              DESIGN_TOKENS.borderRadius.lg,
-              DESIGN_TOKENS.shadow.sm,
+              "p-6 rounded-2xl",
               isGlass
                 ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
                 : isDark
-                  ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-                  : "bg-white border border-gray-100",
+                  ? "bg-gray-800/80 border border-gray-700"
+                  : "bg-white border border-gray-100 shadow-sm"
             )}
           >
             <div className="flex items-center justify-between mb-6">
@@ -685,9 +749,7 @@ const Dashboard: React.FC = () => {
                 <h2
                   className={cn(
                     "text-lg font-semibold",
-                    isGlass || isGlass || isDark
-                      ? "text-white"
-                      : "text-gray-800",
+                    isGlass || isDark ? "text-white" : "text-gray-800"
                   )}
                 >
                   Pending Approvals
@@ -695,11 +757,7 @@ const Dashboard: React.FC = () => {
                 <p
                   className={cn(
                     "text-sm",
-                    isGlass
-                      ? "text-white/60"
-                      : isDark
-                        ? "text-gray-400"
-                        : "text-gray-500",
+                    isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
                   )}
                 >
                   {pendingRequests.length} requests waiting for your action
@@ -711,7 +769,7 @@ const Dashboard: React.FC = () => {
                   "text-sm font-medium flex items-center gap-1 transition-colors",
                   isGlass || isDark
                     ? "text-[#80D1E9] hover:text-[#80D1E9]/80"
-                    : "text-[#2E3192] hover:underline",
+                    : "text-[#2E3192] hover:underline"
                 )}
               >
                 View All <ChevronRight className="w-4 h-4" />
@@ -723,51 +781,48 @@ const Dashboard: React.FC = () => {
                   <div
                     className={cn(
                       "w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4",
-                      isGlass || isDark ? "bg-emerald-500/20" : "bg-green-100",
+                      isGlass || isDark ? "bg-emerald-500/20" : "bg-green-100"
                     )}
                   >
                     <CheckCircle
                       className={cn(
                         "w-8 h-8",
-                        isGlass || isDark
-                          ? "text-emerald-400"
-                          : "text-green-500",
+                        isGlass || isDark ? "text-emerald-400" : "text-green-500"
                       )}
                     />
                   </div>
-                  <p
-                    className={
-                      isGlass || isDark ? "text-white/60" : "text-gray-500"
-                    }
-                  >
+                  <p className={isGlass || isDark ? "text-white/60" : "text-gray-500"}>
                     No pending approvals
                   </p>
                 </div>
               ) : (
                 pendingRequests.map((request, index) => (
-                  <div
+                  <motion.div
                     key={request.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
                     className={cn(
-                      "flex items-center justify-between p-4",
-                      DESIGN_TOKENS.borderRadius.md,
+                      "flex items-center justify-between p-4 rounded-xl cursor-pointer",
                       "transition-all duration-300 hover:-translate-y-0.5",
                       isGlass
-                        ? "bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.06] hover:border-[#80D1E9]/30"
+                        ? "bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.06]"
                         : isDark
-                          ? "bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#80D1E9]/30"
-                          : "bg-gradient-to-r from-gray-50 to-white border border-gray-100 hover:border-[#80D1E9]/30 hover:shadow-md",
+                          ? "bg-gray-700/50 border border-gray-600 hover:bg-gray-700"
+                          : "bg-gray-50 border border-gray-100 hover:shadow-md"
                     )}
-                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <div className="flex items-center gap-4">
-                      <Avatar name={request.employeeName} size="md" />
+                      <EnhancedAvatar
+                        name={request.employeeName}
+                        size="md"
+                        status="online"
+                      />
                       <div>
                         <p
                           className={cn(
                             "font-medium",
-                            isGlass || isGlass || isDark
-                              ? "text-white"
-                              : "text-gray-800",
+                            isGlass || isDark ? "text-white" : "text-gray-800"
                           )}
                         >
                           {request.employeeName}
@@ -775,11 +830,7 @@ const Dashboard: React.FC = () => {
                         <p
                           className={cn(
                             "text-sm",
-                            isGlass
-                              ? "text-white/60"
-                              : isDark
-                                ? "text-gray-400"
-                                : "text-gray-500",
+                            isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
                           )}
                         >
                           {request.title}
@@ -787,7 +838,7 @@ const Dashboard: React.FC = () => {
                         <p
                           className={cn(
                             "text-xs mt-0.5",
-                            isDark ? "text-gray-500" : "text-gray-400",
+                            isDark ? "text-gray-500" : "text-gray-400"
                           )}
                         >
                           {format(new Date(request.createdAt), "MMM dd, yyyy")}
@@ -799,29 +850,27 @@ const Dashboard: React.FC = () => {
                       <div className="flex gap-1">
                         <button
                           className={cn(
-                            "p-2 transition-colors",
-                            DESIGN_TOKENS.borderRadius.md,
+                            "p-2 rounded-lg transition-colors",
                             isDark
                               ? "text-emerald-400 hover:bg-emerald-500/20"
-                              : "text-green-600 hover:bg-green-50",
+                              : "text-green-600 hover:bg-green-50"
                           )}
                         >
                           <CheckCircle className="w-5 h-5" />
                         </button>
                         <button
                           className={cn(
-                            "p-2 transition-colors",
-                            DESIGN_TOKENS.borderRadius.md,
+                            "p-2 rounded-lg transition-colors",
                             isDark
                               ? "text-rose-400 hover:bg-rose-500/20"
-                              : "text-red-600 hover:bg-red-50",
+                              : "text-red-600 hover:bg-red-50"
                           )}
                         >
                           <XCircle className="w-5 h-5" />
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))
               )}
             </div>
@@ -830,14 +879,12 @@ const Dashboard: React.FC = () => {
           {/* Interactive Map */}
           <div
             className={cn(
-              "p-6",
-              DESIGN_TOKENS.borderRadius.lg,
-              DESIGN_TOKENS.shadow.sm,
+              "p-6 rounded-2xl",
               isGlass
                 ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
                 : isDark
-                  ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-                  : "bg-white border border-gray-100",
+                  ? "bg-gray-800/80 border border-gray-700"
+                  : "bg-white border border-gray-100 shadow-sm"
             )}
           >
             <div className="flex items-center justify-between mb-6">
@@ -845,7 +892,7 @@ const Dashboard: React.FC = () => {
                 <h2
                   className={cn(
                     "text-lg font-semibold",
-                    isGlass || isDark ? "text-white" : "text-gray-800",
+                    isGlass || isDark ? "text-white" : "text-gray-800"
                   )}
                 >
                   Employee Locations
@@ -853,11 +900,7 @@ const Dashboard: React.FC = () => {
                 <p
                   className={cn(
                     "text-sm",
-                    isGlass
-                      ? "text-white/60"
-                      : isDark
-                        ? "text-gray-400"
-                        : "text-gray-500",
+                    isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
                   )}
                 >
                   Distribution across {mapLocations.length} locations
@@ -866,13 +909,11 @@ const Dashboard: React.FC = () => {
               <Link
                 to="/locations"
                 className={cn(
-                  "text-sm font-medium flex items-center gap-1 transition-colors",
-                  isDark
-                    ? "text-[#80D1E9] hover:text-[#80D1E9]/80"
-                    : "text-[#2E3192] hover:underline",
+                  "text-sm font-medium flex items-center gap-1",
+                  isDark ? "text-[#80D1E9]" : "text-[#2E3192]"
                 )}
               >
-                Manage Locations <ChevronRight className="w-4 h-4" />
+                Manage <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
             <InteractiveMap locations={mapLocations} />
@@ -882,170 +923,124 @@ const Dashboard: React.FC = () => {
         {/* Right Column */}
         <div className="space-y-6">
           {/* Department Distribution */}
+          <ChartWrapper
+            title="Department Distribution"
+            subtitle="Employee distribution by department"
+            onExport={() => console.log("Export")}
+          >
+            <EnhancedDonutChart
+              data={departmentData}
+              height={280}
+              innerRadius={50}
+              outerRadius={90}
+              centerContent={
+                <div className="text-center">
+                  <p className={cn("text-2xl font-bold", isDark ? "text-white" : "text-gray-900")}>
+                    {stats.totalEmployees}
+                  </p>
+                  <p className={cn("text-xs", isDark ? "text-gray-400" : "text-gray-500")}>
+                    Total
+                  </p>
+                </div>
+              }
+            />
+          </ChartWrapper>
+
+          {/* Recent Activity */}
           <div
             className={cn(
-              "p-6",
-              DESIGN_TOKENS.borderRadius.lg,
-              DESIGN_TOKENS.shadow.sm,
+              "p-6 rounded-2xl",
               isGlass
                 ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
                 : isDark
-                  ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-                  : "bg-white border border-gray-100",
+                  ? "bg-gray-800/80 border border-gray-700"
+                  : "bg-white border border-gray-100 shadow-sm"
             )}
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-6">
               <h2
                 className={cn(
                   "text-lg font-semibold",
-                  isGlass || isDark ? "text-white" : "text-gray-800",
+                  isGlass || isDark ? "text-white" : "text-gray-800"
                 )}
               >
-                Department Distribution
+                Recent Activity
               </h2>
-              <ExportButton
-                variant="icon"
-                size="sm"
-                data={{
-                  headers: ["Department", "Employees", "Percentage"],
-                  rows: departmentData.map((d) => [
-                    d.name,
-                    d.value,
-                    `${Math.round((d.value / 55) * 100)}%`,
-                  ]),
-                  title: "Department Distribution",
-                  filename: "department_distribution",
-                }}
-              />
+              <button
+                className={cn(
+                  "p-1.5 rounded-lg transition-colors",
+                  isGlass
+                    ? "hover:bg-white/10"
+                    : isDark
+                      ? "hover:bg-gray-700"
+                      : "hover:bg-gray-100"
+                )}
+              >
+                <RefreshCw className={cn("w-4 h-4", isDark ? "text-gray-400" : "text-gray-500")} />
+              </button>
             </div>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={departmentData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={80}
-                    paddingAngle={2}
-                    dataKey="value"
-                  >
-                    {departmentData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: isDark ? "#1F2937" : "#fff",
-                      border: `1px solid ${isDark ? "#374151" : "#E5E7EB"}`,
-                      borderRadius: "8px",
-                      color: isDark ? "#F3F4F6" : "#1F2937",
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-2 gap-2 mt-4">
-              {departmentData.slice(0, 4).map((dept) => (
-                <div key={dept.name} className="flex items-center gap-2">
-                  <div
-                    className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: dept.color }}
-                  />
-                  <span
-                    className={cn(
-                      "text-sm truncate",
-                      isGlass
-                        ? "text-white/80"
-                        : isDark
-                          ? "text-gray-300"
-                          : "text-gray-600",
-                    )}
-                  >
-                    {dept.name} ({dept.value})
-                  </span>
-                </div>
-              ))}
-            </div>
+            <TimelineChart data={recentActivities} maxItems={5} />
           </div>
 
           {/* Upcoming Birthdays */}
           <div
             className={cn(
-              "p-6",
-              DESIGN_TOKENS.borderRadius.lg,
-              DESIGN_TOKENS.shadow.sm,
+              "p-6 rounded-2xl",
               isGlass
                 ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
                 : isDark
-                  ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-                  : "bg-white border border-gray-100",
+                  ? "bg-gray-800/80 border border-gray-700"
+                  : "bg-white border border-gray-100 shadow-sm"
             )}
           >
             <div className="flex items-center justify-between mb-4">
               <h2
                 className={cn(
                   "text-lg font-semibold",
-                  isGlass || isDark ? "text-white" : "text-gray-800",
+                  isGlass || isDark ? "text-white" : "text-gray-800"
                 )}
               >
                 Upcoming Birthdays
               </h2>
               <div
                 className={cn(
-                  "p-2",
-                  DESIGN_TOKENS.borderRadius.md,
-                  isDark ? "bg-pink-500/20" : "bg-pink-100",
+                  "p-2 rounded-lg",
+                  isDark ? "bg-pink-500/20" : "bg-pink-100"
                 )}
               >
-                <Cake
-                  className={cn(
-                    "w-5 h-5",
-                    isDark ? "text-pink-400" : "text-pink-500",
-                  )}
-                />
+                <Cake className={cn("w-5 h-5", isDark ? "text-pink-400" : "text-pink-500")} />
               </div>
             </div>
             {upcomingBirthdays.length === 0 ? (
               <p
                 className={cn(
                   "text-center py-4",
-                  isGlass
-                    ? "text-white/60"
-                    : isDark
-                      ? "text-gray-400"
-                      : "text-gray-500",
+                  isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
                 )}
               >
                 No upcoming birthdays
               </p>
             ) : (
               <div className="space-y-3">
-                {upcomingBirthdays.map((birthday) => (
-                  <div
+                {upcomingBirthdays.map((birthday, index) => (
+                  <motion.div
                     key={birthday.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
                     className={cn(
-                      "flex items-center gap-3 p-3",
-                      DESIGN_TOKENS.borderRadius.md,
-                      isDark
-                        ? "bg-pink-500/10 border border-pink-500/20"
-                        : "bg-gradient-to-r from-pink-50 to-white",
+                      "flex items-center gap-3 p-3 rounded-xl",
+                      isDark ? "bg-pink-500/10 border border-pink-500/20" : "bg-pink-50"
                     )}
                   >
-                    <div
-                      className={cn(
-                        "w-10 h-10 flex items-center justify-center",
-                        DESIGN_TOKENS.borderRadius.md,
-                        "bg-gradient-to-br from-pink-400 to-pink-600",
-                      )}
-                    >
+                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-pink-400 to-pink-600">
                       <Cake className="w-5 h-5 text-white" />
                     </div>
                     <div>
                       <p
                         className={cn(
                           "font-medium",
-                          isGlass || isDark ? "text-white" : "text-gray-800",
+                          isGlass || isDark ? "text-white" : "text-gray-800"
                         )}
                       >
                         {birthday.title.replace(" Birthday", "")}
@@ -1053,17 +1048,13 @@ const Dashboard: React.FC = () => {
                       <p
                         className={cn(
                           "text-sm",
-                          isGlass
-                            ? "text-white/60"
-                            : isDark
-                              ? "text-gray-400"
-                              : "text-gray-500",
+                          isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
                         )}
                       >
                         {format(new Date(birthday.startDate), "MMM dd")}
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             )}
@@ -1072,21 +1063,19 @@ const Dashboard: React.FC = () => {
           {/* Expiring Documents */}
           <div
             className={cn(
-              "p-6",
-              DESIGN_TOKENS.borderRadius.lg,
-              DESIGN_TOKENS.shadow.sm,
+              "p-6 rounded-2xl",
               isGlass
                 ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
                 : isDark
-                  ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-                  : "bg-white border border-gray-100",
+                  ? "bg-gray-800/80 border border-gray-700"
+                  : "bg-white border border-gray-100 shadow-sm"
             )}
           >
             <div className="flex items-center justify-between mb-4">
               <h2
                 className={cn(
                   "text-lg font-semibold",
-                  isGlass || isDark ? "text-white" : "text-gray-800",
+                  isGlass || isDark ? "text-white" : "text-gray-800"
                 )}
               >
                 Expiring Documents
@@ -1094,11 +1083,7 @@ const Dashboard: React.FC = () => {
               <Badge
                 variant="warning"
                 size="sm"
-                className={
-                  isDark
-                    ? "bg-amber-500/20 text-amber-400 border-amber-500/30"
-                    : ""
-                }
+                className={isDark ? "bg-amber-500/20 text-amber-400 border-amber-500/30" : ""}
               >
                 {expiringDocuments.length} alerts
               </Badge>
@@ -1107,181 +1092,114 @@ const Dashboard: React.FC = () => {
               <p
                 className={cn(
                   "text-center py-4",
-                  isGlass
-                    ? "text-white/60"
-                    : isDark
-                      ? "text-gray-400"
-                      : "text-gray-500",
+                  isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
                 )}
               >
                 No expiring documents
               </p>
             ) : (
               <div className="space-y-3">
-                {expiringDocuments.map((emp) => (
-                  <div
-                    key={emp.id}
-                    className={cn(
-                      "flex items-center gap-3 p-3 border",
-                      DESIGN_TOKENS.borderRadius.md,
-                      isDark
-                        ? "bg-amber-500/10 border-amber-500/20"
-                        : "bg-gradient-to-r from-amber-50 to-white border-amber-100",
-                    )}
-                  >
-                    <div
+                {expiringDocuments.map((emp, index) => {
+                  const daysUntilExpiry = emp.iqamaExpiry
+                    ? differenceInDays(new Date(emp.iqamaExpiry), today)
+                    : 999;
+                  return (
+                    <motion.div
+                      key={emp.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      onClick={() => handleEmployeeClick(emp)}
                       className={cn(
-                        "w-10 h-10 flex items-center justify-center flex-shrink-0",
-                        DESIGN_TOKENS.borderRadius.md,
-                        "bg-gradient-to-br from-amber-400 to-amber-600",
+                        "flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all hover:scale-[1.02]",
+                        daysUntilExpiry < 30
+                          ? "bg-rose-500/10 border border-rose-500/20"
+                          : "bg-amber-500/10 border border-amber-500/20"
                       )}
                     >
-                      <FileWarning className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p
+                      <div
                         className={cn(
-                          "font-medium truncate",
-                          isGlass || isDark ? "text-white" : "text-gray-800",
+                          "w-10 h-10 flex items-center justify-center rounded-lg",
+                          daysUntilExpiry < 30
+                            ? "bg-gradient-to-br from-rose-400 to-rose-600"
+                            : "bg-gradient-to-br from-amber-400 to-amber-600"
                         )}
                       >
-                        {emp.fullName}
-                      </p>
-                      <p
-                        className={cn(
-                          "text-xs",
-                          isGlass
-                            ? "text-white/60"
-                            : isDark
-                              ? "text-gray-400"
-                              : "text-gray-500",
-                        )}
-                      >
-                        Iqama expires:{" "}
-                        {emp.iqamaExpiry
-                          ? format(new Date(emp.iqamaExpiry), "dd MMM yyyy")
-                          : "N/A"}
-                      </p>
-                    </div>
-                    <ChevronRight
-                      className={cn(
-                        "w-4 h-4 flex-shrink-0",
-                        isDark ? "text-gray-600" : "text-gray-300",
-                      )}
-                    />
-                  </div>
-                ))}
+                        <FileWarning className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p
+                          className={cn(
+                            "font-medium truncate",
+                            isGlass || isDark ? "text-white" : "text-gray-800"
+                          )}
+                        >
+                          {emp.fullName}
+                        </p>
+                        <p
+                          className={cn(
+                            "text-xs",
+                            daysUntilExpiry < 30 ? "text-rose-400" : "text-amber-400"
+                          )}
+                        >
+                          Expires in {daysUntilExpiry} days
+                        </p>
+                      </div>
+                      <ChevronRight className={cn("w-4 h-4", isDark ? "text-gray-600" : "text-gray-300")} />
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </div>
 
-          {/* Monthly Payroll */}
-          <div
-            className={cn(
-              "p-6",
-              DESIGN_TOKENS.borderRadius.lg,
-              DESIGN_TOKENS.shadow.sm,
-              isGlass
-                ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
-                : isDark
-                  ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-                  : "bg-white border border-gray-100",
-            )}
+          {/* Payroll Trend */}
+          <ChartWrapper
+            title="Payroll Trend"
+            subtitle="Monthly payroll overview"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2
-                className={cn(
-                  "text-lg font-semibold",
-                  isGlass || isDark ? "text-white" : "text-gray-800",
-                )}
-              >
-                Payroll Trend
-              </h2>
-              <div
-                className={cn(
-                  "p-2",
-                  DESIGN_TOKENS.borderRadius.md,
-                  isDark ? "bg-emerald-500/20" : "bg-green-100",
-                )}
-              >
-                <DollarSign
-                  className={cn(
-                    "w-5 h-5",
-                    isDark ? "text-emerald-400" : "text-green-600",
-                  )}
-                />
-              </div>
-            </div>
-            <div className="h-32">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={payrollData}>
-                  <Bar
-                    dataKey="amount"
-                    fill={isDark ? "#80D1E9" : "#2E3192"}
-                    radius={[4, 4, 0, 0]}
-                  />
-                  <Tooltip
-                    formatter={(value) =>
-                      new Intl.NumberFormat("en-SA", {
-                        style: "currency",
-                        currency: "SAR",
-                        minimumFractionDigits: 0,
-                      }).format(value as number)
-                    }
-                    contentStyle={{
-                      backgroundColor: isDark ? "#1F2937" : "#fff",
-                      border: `1px solid ${isDark ? "#374151" : "#E5E7EB"}`,
-                      borderRadius: "8px",
-                      color: isDark ? "#F3F4F6" : "#1F2937",
-                    }}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            <EnhancedBarChart
+              data={payrollData}
+              dataKeys={[{ key: "amount", color: "#2E3192", name: "Amount (SAR)" }]}
+              height={180}
+              showLegend={false}
+            />
             <div
               className={cn(
-                "mt-4 pt-4 border-t",
-                isDark ? "border-[var(--theme-border)]" : "border-gray-100",
+                "mt-4 pt-4 border-t flex items-center justify-between",
+                isDark ? "border-gray-700" : "border-gray-100"
               )}
             >
-              <div className="flex items-center justify-between">
-                <span
-                  className={cn(
-                    "text-sm",
-                    isGlass
-                      ? "text-white/60"
-                      : isDark
-                        ? "text-gray-400"
-                        : "text-gray-500",
-                  )}
-                >
-                  This Month
-                </span>
-                <span
-                  className={cn(
-                    "text-lg font-bold",
-                    isDark ? "text-[#80D1E9]" : "text-[#2E3192]",
-                  )}
-                >
-                  470,000 SAR
-                </span>
-              </div>
+              <span
+                className={cn(
+                  "text-sm",
+                  isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
+                )}
+              >
+                This Month
+              </span>
+              <span
+                className={cn(
+                  "text-lg font-bold",
+                  isDark ? "text-[#80D1E9]" : "text-[#2E3192]"
+                )}
+              >
+                470,000 SAR
+              </span>
             </div>
-          </div>
+          </ChartWrapper>
         </div>
       </div>
 
-      {/* Quick Actions - Using new QuickActionsSection */}
+      {/* Quick Actions */}
       <div
         className={cn(
-          "p-6",
-          DESIGN_TOKENS.borderRadius.lg,
-          DESIGN_TOKENS.shadow.sm,
+          "p-6 rounded-2xl",
           isGlass
             ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
             : isDark
-              ? "bg-[var(--theme-card)] border border-[var(--theme-border)]"
-              : "bg-white border border-gray-100",
+              ? "bg-gray-800/80 border border-gray-700"
+              : "bg-white border border-gray-100 shadow-sm"
         )}
       >
         <QuickActionsSection
@@ -1292,6 +1210,19 @@ const Dashboard: React.FC = () => {
           }}
         />
       </div>
+
+      {/* Employee Detail Modal */}
+      {selectedEmployee && (
+        <EmployeeDetailModal
+          isOpen={showEmployeeModal}
+          onClose={() => {
+            setShowEmployeeModal(false);
+            setSelectedEmployee(null);
+          }}
+          employee={selectedEmployee}
+          onEdit={(emp) => console.log("Edit employee:", emp)}
+        />
+      )}
 
       {/* Data Export Modal */}
       {exportData && (

@@ -21,6 +21,7 @@ import PositionPage from "./components/pages/Position/PositionPage";
 import SettingsPage from "./components/pages/Settings/SettingsPage";
 import LocationsPage from "./components/pages/Locations/LocationsPage";
 import FilesPage from "./components/pages/Files/FilesPage";
+import ReportsPage from "./components/pages/Reports/ReportsPage";
 import PortalPage from "./components/portal/PortalPage";
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
             <Route path="settings" element={<SettingsPage />} />
             <Route path="locations" element={<LocationsPage />} />
             <Route path="files" element={<FilesPage />} />
+            <Route path="reports" element={<ReportsPage />} />
           </Route>
         </Routes>
       </Router>

@@ -531,7 +531,7 @@ export const TameeniPage: React.FC = () => {
         tabs={tabs}
         activeTab={activeTab}
         onChange={setActiveTab}
-        variant="separated"
+        variant="modern"
       />
 
       {/* Members Tab */}

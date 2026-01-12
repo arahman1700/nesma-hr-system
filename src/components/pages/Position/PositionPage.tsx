@@ -266,7 +266,7 @@ export const PositionPage: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="separated" />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="modern" />
 
       {/* List View */}
       <TabPanel id="list" activeTab={activeTab}>

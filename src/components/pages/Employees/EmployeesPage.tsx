@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
   Grid,
@@ -21,6 +22,14 @@ import {
   Eye,
   Edit,
   Trash2,
+  Phone,
+  Calendar,
+  TrendingUp,
+  Target,
+  Clock,
+  ChevronRight,
+  MoreHorizontal,
+  Star,
 } from "lucide-react";
 import {
   Button,
@@ -45,6 +54,19 @@ import {
   ProgressIndicator,
 } from "../../common/EnhancedUI";
 import {
+  InteractiveStatCard,
+  DetailModal,
+  DataTable,
+  SummaryStats,
+} from "../../common/InteractiveCard";
+import {
+  ChartWrapper,
+  EnhancedDonutChart,
+  EnhancedBarChart,
+  ProgressRing,
+  TimelineChart,
+} from "../../common/AdvancedCharts";
+import {
   FilterBar,
   ActiveFilter,
   FilterConfig,
@@ -58,70 +80,370 @@ import {
   AttendanceRateCard,
 } from "../../common/HRDashboardCards";
 import { DataExportModal, ExportData } from "../../common/DataExportModal";
+import { EmployeeDetailModal } from "../../common/EmployeeDetailModal";
 import { cn } from "../../../utils/cn";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { employees, departments, positions } from "../../../data";
 import { Employee } from "../../../types";
+import { format, differenceInYears } from "date-fns";
+
+// Enhanced Employee Card Component
+const EmployeeCard: React.FC<{
+  employee: Employee;
+  onClick: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+}> = ({ employee, onClick, onEdit, onDelete }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark" || theme === "company";
+  const isGlass = theme === "glass";
+  const [showMenu, setShowMenu] = useState(false);
+
+  const tenure = differenceInYears(new Date(), new Date(employee.hireDate));
+
+  return (
+    <motion.div
+      whileHover={{ y: -4, scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+      className={cn(
+        "relative p-5 rounded-2xl cursor-pointer group transition-all duration-300",
+        isGlass
+          ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1] hover:border-white/[0.2]"
+          : isDark
+            ? "bg-gray-800/80 border border-gray-700 hover:border-gray-600"
+            : "bg-white border border-gray-100 hover:border-gray-200 shadow-sm hover:shadow-lg"
+      )}
+      onClick={onClick}
+    >
+      {/* Status indicator */}
+      <div
+        className={cn(
+          "absolute top-4 right-4 w-3 h-3 rounded-full",
+          employee.status === "Active"
+            ? "bg-emerald-500"
+            : employee.status === "On Leave"
+              ? "bg-amber-500"
+              : "bg-gray-400"
+        )}
+      />
+
+      {/* Menu button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowMenu(!showMenu);
+        }}
+        className={cn(
+          "absolute top-4 right-10 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity",
+          isGlass
+            ? "hover:bg-white/10"
+            : isDark
+              ? "hover:bg-gray-700"
+              : "hover:bg-gray-100"
+        )}
+      >
+        <MoreHorizontal
+          className={cn(
+            "w-4 h-4",
+            isGlass || isDark ? "text-white/60" : "text-gray-400"
+          )}
+        />
+      </button>
+
+      {/* Dropdown menu */}
+      <AnimatePresence>
+        {showMenu && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className={cn(
+              "absolute top-12 right-4 z-10 min-w-[140px] py-1 rounded-lg shadow-lg",
+              isGlass
+                ? "bg-gray-900/90 backdrop-blur-xl border border-white/10"
+                : isDark
+                  ? "bg-gray-800 border border-gray-700"
+                  : "bg-white border border-gray-200"
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={cn(
+                "w-full px-3 py-2 text-left text-sm flex items-center gap-2",
+                isGlass
+                  ? "text-white/80 hover:bg-white/10"
+                  : isDark
+                    ? "text-gray-300 hover:bg-gray-700"
+                    : "text-gray-700 hover:bg-gray-100"
+              )}
+              onClick={() => {
+                onClick();
+                setShowMenu(false);
+              }}
+            >
+              <Eye className="w-4 h-4" />
+              View Details
+            </button>
+            <button
+              className={cn(
+                "w-full px-3 py-2 text-left text-sm flex items-center gap-2",
+                isGlass
+                  ? "text-white/80 hover:bg-white/10"
+                  : isDark
+                    ? "text-gray-300 hover:bg-gray-700"
+                    : "text-gray-700 hover:bg-gray-100"
+              )}
+              onClick={() => {
+                onEdit?.();
+                setShowMenu(false);
+              }}
+            >
+              <Edit className="w-4 h-4" />
+              Edit
+            </button>
+            <button
+              className={cn(
+                "w-full px-3 py-2 text-left text-sm flex items-center gap-2 text-rose-500 hover:bg-rose-500/10"
+              )}
+              onClick={() => {
+                onDelete?.();
+                setShowMenu(false);
+              }}
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Employee info */}
+      <div className="flex items-start gap-4">
+        <div className="relative">
+          <img
+            src={employee.photo}
+            alt={employee.fullName}
+            className="w-16 h-16 rounded-xl object-cover"
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3
+            className={cn(
+              "font-semibold truncate",
+              isGlass || isDark ? "text-white" : "text-gray-800"
+            )}
+          >
+            {employee.fullName}
+          </h3>
+          <p
+            className={cn(
+              "text-sm truncate",
+              isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
+            )}
+          >
+            {employee.position}
+          </p>
+          <div className="flex items-center gap-2 mt-2">
+            <Badge
+              variant={employee.employmentType === "Full-time" ? "primary" : "default"}
+              size="sm"
+            >
+              {employee.employmentType}
+            </Badge>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div
+        className={cn(
+          "mt-4 pt-4 grid grid-cols-3 gap-4 border-t",
+          isGlass
+            ? "border-white/10"
+            : isDark
+              ? "border-gray-700"
+              : "border-gray-100"
+        )}
+      >
+        <div className="text-center">
+          <p
+            className={cn(
+              "text-lg font-bold",
+              isDark ? "text-[#80D1E9]" : "text-[#2E3192]"
+            )}
+          >
+            {tenure}y
+          </p>
+          <p
+            className={cn(
+              "text-xs",
+              isGlass ? "text-white/50" : isDark ? "text-gray-500" : "text-gray-400"
+            )}
+          >
+            Tenure
+          </p>
+        </div>
+        <div className="text-center">
+          <p
+            className={cn(
+              "text-lg font-bold",
+              isDark ? "text-emerald-400" : "text-emerald-500"
+            )}
+          >
+            96%
+          </p>
+          <p
+            className={cn(
+              "text-xs",
+              isGlass ? "text-white/50" : isDark ? "text-gray-500" : "text-gray-400"
+            )}
+          >
+            Attendance
+          </p>
+        </div>
+        <div className="text-center">
+          <p
+            className={cn(
+              "text-lg font-bold",
+              isDark ? "text-amber-400" : "text-amber-500"
+            )}
+          >
+            4.2
+          </p>
+          <p
+            className={cn(
+              "text-xs",
+              isGlass ? "text-white/50" : isDark ? "text-gray-500" : "text-gray-400"
+            )}
+          >
+            Rating
+          </p>
+        </div>
+      </div>
+
+      {/* Quick contact */}
+      <div
+        className={cn(
+          "mt-4 pt-4 flex items-center justify-between border-t",
+          isGlass
+            ? "border-white/10"
+            : isDark
+              ? "border-gray-700"
+              : "border-gray-100"
+        )}
+      >
+        <div className="flex items-center gap-2">
+          <Mail className={cn("w-4 h-4", isDark ? "text-gray-500" : "text-gray-400")} />
+          <span
+            className={cn(
+              "text-xs truncate max-w-[120px]",
+              isGlass ? "text-white/50" : isDark ? "text-gray-500" : "text-gray-400"
+            )}
+          >
+            {employee.email}
+          </span>
+        </div>
+        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Tooltip content="Call" position="top">
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                isGlass
+                  ? "hover:bg-white/10"
+                  : isDark
+                    ? "hover:bg-gray-700"
+                    : "hover:bg-gray-100"
+              )}
+            >
+              <Phone
+                className={cn(
+                  "w-4 h-4",
+                  isDark ? "text-emerald-400" : "text-emerald-500"
+                )}
+              />
+            </button>
+          </Tooltip>
+          <Tooltip content="Email" position="top">
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                isGlass
+                  ? "hover:bg-white/10"
+                  : isDark
+                    ? "hover:bg-gray-700"
+                    : "hover:bg-gray-100"
+              )}
+            >
+              <Mail
+                className={cn(
+                  "w-4 h-4",
+                  isDark ? "text-blue-400" : "text-blue-500"
+                )}
+              />
+            </button>
+          </Tooltip>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 // Team Tab Component
-const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
+const TeamTab: React.FC<{
+  employees: Employee[];
+  onEmployeeClick: (emp: Employee) => void;
+  statusFilter?: string;
+  departmentFilter?: string;
+  typeFilter?: string;
+  searchQuery?: string;
+}> = ({
+  employees: empList,
+  onEmployeeClick,
+  statusFilter = "all",
+  departmentFilter = "all",
+  typeFilter = "all",
+  searchQuery = ""
+}) => {
   const { theme } = useTheme();
   const isDark = theme === "dark" || theme === "company";
   const isGlass = theme === "glass";
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [departmentFilter, setDepartmentFilter] = useState<string>("all");
-  const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredEmployees = employees.filter((emp) => {
+  const filteredEmployees = empList.filter((emp) => {
     const matchesStatus =
       statusFilter === "all" ||
       emp.status.toLowerCase() === statusFilter.toLowerCase();
     const matchesDepartment =
       departmentFilter === "all" || emp.department === departmentFilter;
+    const matchesType =
+      typeFilter === "all" || emp.employmentType === typeFilter;
     const matchesSearch =
-      emp.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.employeeId.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesDepartment && matchesSearch;
+      !searchQuery ||
+      emp.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      emp.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      emp.employeeId.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesStatus && matchesDepartment && matchesType && matchesSearch;
   });
 
   return (
     <div className="space-y-4">
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-4">
-        <div className="flex-1 min-w-[200px] max-w-md">
-          <Input
-            placeholder="Search employees..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            leftIcon={<Search className="w-4 h-4" />}
-          />
-        </div>
-        <Select
-          options={[
-            { value: "all", label: "All Status" },
-            { value: "active", label: "Active" },
-            { value: "inactive", label: "Inactive" },
-          ]}
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-40"
-        />
-        <Select
-          options={[
-            { value: "all", label: "All Departments" },
-            ...departments.map((d) => ({ value: d.name, label: d.name })),
-          ]}
-          value={departmentFilter}
-          onChange={(e) => setDepartmentFilter(e.target.value)}
-          className="w-48"
-        />
+      {/* View Mode Toggle */}
+      <div className="flex items-center justify-between">
+        <p
+          className={cn(
+            "text-sm",
+            isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
+          )}
+        >
+          Showing {filteredEmployees.length} of {empList.length} employees
+        </p>
         <div
           className={cn(
             "flex items-center gap-1 p-1 rounded-lg",
-            isGlass ? "bg-white/10" : isDark ? "bg-gray-700" : "bg-gray-100",
+            isGlass ? "bg-white/10" : isDark ? "bg-gray-700" : "bg-gray-100"
           )}
         >
           <Tooltip content="Grid View" position="top">
@@ -139,7 +461,7 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
                     ? "hover:bg-white/10"
                     : isDark
                       ? "hover:bg-gray-600"
-                      : "hover:bg-gray-200",
+                      : "hover:bg-gray-200"
               )}
             >
               <Grid
@@ -149,7 +471,7 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
                     ? "text-[#2E3192]"
                     : isGlass || isDark
                       ? "text-white/70"
-                      : "text-gray-500",
+                      : "text-gray-500"
                 )}
               />
             </button>
@@ -169,7 +491,7 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
                     ? "hover:bg-white/10"
                     : isDark
                       ? "hover:bg-gray-600"
-                      : "hover:bg-gray-200",
+                      : "hover:bg-gray-200"
               )}
             >
               <List
@@ -179,7 +501,7 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
                     ? "text-[#2E3192]"
                     : isGlass || isDark
                       ? "text-white/70"
-                      : "text-gray-500",
+                      : "text-gray-500"
                 )}
               />
             </button>
@@ -187,164 +509,41 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
         </div>
       </div>
 
-      {/* Results count */}
-      <p
-        className={cn(
-          "text-sm",
-          isGlass
-            ? "text-white/60"
-            : isDark
-              ? "text-gray-400"
-              : "text-gray-500",
-        )}
-      >
-        Showing {filteredEmployees.length} of {employees.length} employees
-      </p>
-
       {/* Empty State */}
       {filteredEmployees.length === 0 ? (
         <EmptyState
           icon={<Users />}
           title="No employees found"
-          description="Try adjusting your search or filter criteria"
-          action={{
-            label: "Clear Filters",
-            onClick: () => {
-              setSearchTerm("");
-              setStatusFilter("all");
-              setDepartmentFilter("all");
-            },
-          }}
+          description="Try adjusting your search or filter criteria using the filter bar above"
         />
       ) : viewMode === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.05 },
+            },
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+        >
           {filteredEmployees.map((emp) => (
-            <Card
+            <motion.div
               key={emp.id}
-              hover
-              className={cn(
-                "p-4 group transition-all duration-300",
-                "hover:shadow-lg hover:-translate-y-1",
-              )}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
             >
-              <div className="flex items-start gap-4">
-                <EnhancedAvatar
-                  src={emp.photo}
-                  name={emp.fullName}
-                  size="lg"
-                  status={
-                    emp.status === "Active"
-                      ? "online"
-                      : emp.status === "On Leave"
-                        ? "away"
-                        : "offline"
-                  }
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3
-                      className={cn(
-                        "font-semibold truncate",
-                        isGlass
-                          ? "text-[#2E3192]"
-                          : isDark
-                            ? "text-white"
-                            : "text-gray-800",
-                      )}
-                    >
-                      {emp.fullName}
-                    </h3>
-                  </div>
-                  <p
-                    className={cn(
-                      "text-sm truncate",
-                      isGlass
-                        ? "text-[#2E3192]/70"
-                        : isDark
-                          ? "text-gray-400"
-                          : "text-gray-500",
-                    )}
-                  >
-                    {emp.position}
-                  </p>
-                  <p
-                    className={cn(
-                      "text-xs mt-1 truncate",
-                      isGlass
-                        ? "text-[#2E3192]/50"
-                        : isDark
-                          ? "text-gray-500"
-                          : "text-gray-400",
-                    )}
-                  >
-                    {emp.email}
-                  </p>
-                  <p
-                    className={cn(
-                      "text-xs truncate",
-                      isGlass
-                        ? "text-[#2E3192]/50"
-                        : isDark
-                          ? "text-gray-500"
-                          : "text-gray-400",
-                    )}
-                  >
-                    {emp.phone}
-                  </p>
-                </div>
-              </div>
-              <div
-                className={cn(
-                  "mt-4 pt-4 border-t flex items-center justify-between",
-                  isGlass
-                    ? "border-white/10"
-                    : isDark
-                      ? "border-gray-700"
-                      : "border-gray-100",
-                )}
-              >
-                <Badge
-                  variant={
-                    emp.employmentType === "Full-time" ? "primary" : "default"
-                  }
-                  size="sm"
-                >
-                  {emp.employmentType}
-                </Badge>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Tooltip content="View" position="top">
-                    <button
-                      className={cn(
-                        "p-2 rounded-lg transition-colors",
-                        isGlass
-                          ? "hover:bg-white/10 text-[#2E3192]"
-                          : isDark
-                            ? "hover:bg-gray-700 text-gray-400"
-                            : "hover:bg-gray-100 text-gray-500",
-                      )}
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
-                  </Tooltip>
-                  <Tooltip content="Edit" position="top">
-                    <button
-                      className={cn(
-                        "p-2 rounded-lg transition-colors",
-                        isGlass
-                          ? "hover:bg-white/10 text-[#2E3192]"
-                          : isDark
-                            ? "hover:bg-gray-700 text-gray-400"
-                            : "hover:bg-gray-100 text-gray-500",
-                      )}
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
-                  </Tooltip>
-                </div>
-              </div>
-            </Card>
+              <EmployeeCard
+                employee={emp}
+                onClick={() => onEmployeeClick(emp)}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       ) : (
         <Table
           columns={[
@@ -353,26 +552,46 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
               label: "Employee",
               sortable: true,
               render: (row: Employee) => (
-                <EnhancedAvatar
-                  src={row.photo}
-                  name={row.fullName}
-                  size="md"
-                  status={
-                    row.status === "Active"
-                      ? "online"
-                      : row.status === "On Leave"
-                        ? "away"
-                        : "offline"
-                  }
-                  showName
-                  subtitle={row.employeeId}
-                />
+                <div
+                  className="flex items-center gap-3 cursor-pointer"
+                  onClick={() => onEmployeeClick(row)}
+                >
+                  <EnhancedAvatar
+                    src={row.photo}
+                    name={row.fullName}
+                    size="md"
+                    status={
+                      row.status === "Active"
+                        ? "online"
+                        : row.status === "On Leave"
+                          ? "away"
+                          : "offline"
+                    }
+                  />
+                  <div>
+                    <p
+                      className={cn(
+                        "font-medium",
+                        isDark ? "text-white" : "text-gray-800"
+                      )}
+                    >
+                      {row.fullName}
+                    </p>
+                    <p
+                      className={cn(
+                        "text-xs",
+                        isDark ? "text-gray-500" : "text-gray-400"
+                      )}
+                    >
+                      {row.employeeId}
+                    </p>
+                  </div>
+                </div>
               ),
             },
             { key: "position", label: "Position", sortable: true },
             { key: "department", label: "Department", sortable: true },
             { key: "email", label: "Email" },
-            { key: "phone", label: "Phone" },
             {
               key: "status",
               label: "Status",
@@ -383,17 +602,18 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
             {
               key: "actions",
               label: "Actions",
-              render: () => (
+              render: (row: Employee) => (
                 <div className="flex gap-1">
                   <Tooltip content="View Details" position="top">
                     <button
+                      onClick={() => onEmployeeClick(row)}
                       className={cn(
                         "p-2 rounded-lg transition-colors",
                         isGlass
-                          ? "hover:bg-white/10 text-[#2E3192]"
+                          ? "hover:bg-white/10 text-[#80D1E9]"
                           : isDark
                             ? "hover:bg-gray-700 text-gray-400"
-                            : "hover:bg-gray-100 text-gray-500",
+                            : "hover:bg-gray-100 text-gray-500"
                       )}
                     >
                       <Eye className="w-4 h-4" />
@@ -404,22 +624,17 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
                       className={cn(
                         "p-2 rounded-lg transition-colors",
                         isGlass
-                          ? "hover:bg-white/10 text-[#2E3192]"
+                          ? "hover:bg-white/10 text-[#80D1E9]"
                           : isDark
                             ? "hover:bg-gray-700 text-gray-400"
-                            : "hover:bg-gray-100 text-gray-500",
+                            : "hover:bg-gray-100 text-gray-500"
                       )}
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                   </Tooltip>
                   <Tooltip content="Delete" position="top">
-                    <button
-                      className={cn(
-                        "p-2 rounded-lg transition-colors",
-                        "hover:bg-rose-500/10 text-rose-500",
-                      )}
-                    >
+                    <button className="p-2 rounded-lg transition-colors hover:bg-rose-500/10 text-rose-500">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </Tooltip>
@@ -440,14 +655,27 @@ const TeamTab: React.FC<{ employees: Employee[] }> = ({ employees }) => {
 
 // Org Chart Tab
 const OrgChartTab: React.FC = () => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark" || theme === "company";
+
   return (
     <Card>
       <div className="text-center py-12">
-        <Building2 className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-        <h3 className="text-lg font-semibold text-gray-800">
+        <Building2
+          className={cn(
+            "w-16 h-16 mx-auto mb-4",
+            isDark ? "text-gray-600" : "text-gray-300"
+          )}
+        />
+        <h3
+          className={cn(
+            "text-lg font-semibold",
+            isDark ? "text-white" : "text-gray-800"
+          )}
+        >
           Organization Chart
         </h3>
-        <p className="text-gray-500 mt-2">
+        <p className={isDark ? "text-gray-400" : "text-gray-500"}>
           Interactive organization chart coming soon
         </p>
         <Button variant="primary" className="mt-4">
@@ -458,252 +686,201 @@ const OrgChartTab: React.FC = () => {
   );
 };
 
-// Onboarding Tab
-const OnboardingTab: React.FC = () => {
-  const newHires = employees.filter((e) => {
-    const hireDate = new Date(e.hireDate);
-    const monthsAgo = new Date();
-    monthsAgo.setMonth(monthsAgo.getMonth() - 3);
-    return hireDate > monthsAgo;
-  });
+// Performance Tab with Charts
+const PerformanceTab: React.FC<{ employees: Employee[] }> = ({ employees: empList }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark" || theme === "company";
+  const isGlass = theme === "glass";
 
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex gap-4">
-          <Card className="px-6 py-4">
-            <p className="text-sm text-gray-500">Ready</p>
-            <p className="text-2xl font-bold text-success">{newHires.length}</p>
-          </Card>
-          <Card className="px-6 py-4">
-            <p className="text-sm text-gray-500">Draft</p>
-            <p className="text-2xl font-bold text-warning">0</p>
-          </Card>
-        </div>
-        <Button icon={<UserPlus className="w-4 h-4" />}>New Hire</Button>
-      </div>
+  const performanceData = [
+    { name: "Excellent", value: 15, color: "#10B981" },
+    { name: "Good", value: 35, color: "#2E3192" },
+    { name: "Average", value: 20, color: "#F59E0B" },
+    { name: "Needs Improvement", value: 8, color: "#EF4444" },
+  ];
 
-      <Table
-        columns={[
-          {
-            key: "fullName",
-            label: "Employee",
-            render: (row: Employee) => (
-              <div className="flex items-center gap-3">
-                <Avatar name={row.fullName} size="sm" />
-                <div>
-                  <p className="font-medium">{row.fullName}</p>
-                  <p className="text-xs text-gray-500">{row.employeeId}</p>
-                </div>
-              </div>
-            ),
-          },
-          { key: "position", label: "Position" },
-          { key: "department", label: "Department" },
-          { key: "hireDate", label: "Hire Date" },
-          {
-            key: "status",
-            label: "Status",
-            render: () => <Badge variant="success">Ready</Badge>,
-          },
-        ]}
-        data={newHires}
-        keyField="id"
-        emptyMessage="No pending onboarding processes"
-      />
-    </div>
-  );
-};
-
-// Offboarding Tab
-const OffboardingTab: React.FC = () => {
-  return (
-    <Card>
-      <div className="text-center py-12">
-        <UserMinus className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-        <h3 className="text-lg font-semibold text-gray-800">Offboarding</h3>
-        <p className="text-gray-500 mt-2">No active offboarding processes</p>
-        <Button
-          variant="outline"
-          className="mt-4"
-          icon={<Plus className="w-4 h-4" />}
-        >
-          Initiate Offboarding
-        </Button>
-      </div>
-    </Card>
-  );
-};
-
-// Tracking Tab
-const TrackingTab: React.FC = () => {
-  return (
-    <Card>
-      <div className="text-center py-12">
-        <Activity className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-        <h3 className="text-lg font-semibold text-gray-800">
-          Employee Tracking
-        </h3>
-        <p className="text-gray-500 mt-2">
-          Track employee activities and progress
-        </p>
-      </div>
-    </Card>
-  );
-};
-
-// Reports Tab
-const ReportsTab: React.FC = () => {
-  const reportTypes = [
-    {
-      name: "Employee Directory",
-      description: "Full list with contact details",
-      icon: <Users className="w-5 h-5" />,
-    },
-    {
-      name: "Department Distribution",
-      description: "Employees by department",
-      icon: <Building2 className="w-5 h-5" />,
-    },
-    {
-      name: "Position Analysis",
-      description: "Employees by position/role",
-      icon: <Award className="w-5 h-5" />,
-    },
-    {
-      name: "New Hires Report",
-      description: "Onboarding in last 90 days",
-      icon: <UserPlus className="w-5 h-5" />,
-    },
-    {
-      name: "Turnover Report",
-      description: "Employees left in period",
-      icon: <UserMinus className="w-5 h-5" />,
-    },
+  const monthlyPerformance = [
+    { name: "Jan", score: 82 },
+    { name: "Feb", score: 85 },
+    { name: "Mar", score: 78 },
+    { name: "Apr", score: 88 },
+    { name: "May", score: 92 },
+    { name: "Jun", score: 89 },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {reportTypes.map((report, index) => (
-        <Card key={index} hover className="cursor-pointer">
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-primary-light rounded-lg text-primary">
-              {report.icon}
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-800">{report.name}</h3>
-              <p className="text-sm text-gray-500 mt-1">{report.description}</p>
-              <Button variant="ghost" size="sm" className="mt-2 -ml-3">
-                Generate Report
-              </Button>
-            </div>
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-};
-
-// Muqeem Services Tab
-const MuqeemServicesTab: React.FC = () => {
-  const expiringIqamas = employees.filter((e) => e.iqamaExpiry).slice(0, 10);
-
-  return (
-    <div className="space-y-4">
-      <div className="flex gap-4">
-        <Button icon={<Plus className="w-4 h-4" />}>Issue New Iqama</Button>
-        <Button variant="outline">Transfer Iqama</Button>
-        <Button variant="outline">View All</Button>
+    <div className="space-y-6">
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <InteractiveStatCard
+          title="Top Performers"
+          value={15}
+          icon={<Star className="w-5 h-5" />}
+          color="green"
+          sparkline={[10, 12, 11, 14, 15, 15]}
+        />
+        <InteractiveStatCard
+          title="Average Score"
+          value="4.2/5"
+          icon={<Target className="w-5 h-5" />}
+          color="blue"
+        />
+        <InteractiveStatCard
+          title="Reviews Due"
+          value={8}
+          icon={<Clock className="w-5 h-5" />}
+          color="amber"
+          trend={{ value: 3, isPositive: false, label: "this week" }}
+        />
+        <InteractiveStatCard
+          title="Goals Met"
+          value="78%"
+          icon={<Award className="w-5 h-5" />}
+          color="purple"
+          trend={{ value: 12, isPositive: true }}
+        />
       </div>
 
-      <Table
-        columns={[
-          {
-            key: "fullName",
-            label: "Employee",
-            render: (row: Employee) => (
-              <div className="flex items-center gap-3">
-                <Avatar name={row.fullName} size="sm" />
-                <span className="font-medium">{row.fullName}</span>
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ChartWrapper
+          title="Performance Distribution"
+          subtitle="Employee performance ratings"
+        >
+          <EnhancedDonutChart
+            data={performanceData}
+            height={280}
+            innerRadius={50}
+            outerRadius={90}
+          />
+        </ChartWrapper>
+
+        <ChartWrapper
+          title="Performance Trend"
+          subtitle="Average score over time"
+        >
+          <EnhancedBarChart
+            data={monthlyPerformance}
+            dataKeys={[{ key: "score", color: "#2E3192", name: "Score" }]}
+            height={250}
+            showLegend={false}
+          />
+        </ChartWrapper>
+      </div>
+
+      {/* Top Performers List */}
+      <div
+        className={cn(
+          "p-6 rounded-2xl",
+          isGlass
+            ? "bg-white/[0.04] backdrop-blur-2xl border border-white/[0.1]"
+            : isDark
+              ? "bg-gray-800/80 border border-gray-700"
+              : "bg-white border border-gray-100 shadow-sm"
+        )}
+      >
+        <h3
+          className={cn(
+            "text-lg font-semibold mb-4",
+            isGlass || isDark ? "text-white" : "text-gray-800"
+          )}
+        >
+          Top Performers This Month
+        </h3>
+        <div className="space-y-3">
+          {empList.slice(0, 5).map((emp, index) => (
+            <motion.div
+              key={emp.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className={cn(
+                "flex items-center justify-between p-4 rounded-xl",
+                isGlass
+                  ? "bg-white/[0.03] border border-white/[0.08]"
+                  : isDark
+                    ? "bg-gray-700/50 border border-gray-600"
+                    : "bg-gray-50 border border-gray-100"
+              )}
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center font-bold",
+                    index === 0
+                      ? "bg-amber-500 text-white"
+                      : index === 1
+                        ? "bg-gray-400 text-white"
+                        : index === 2
+                          ? "bg-amber-700 text-white"
+                          : isDark
+                            ? "bg-gray-700 text-gray-300"
+                            : "bg-gray-200 text-gray-600"
+                  )}
+                >
+                  {index + 1}
+                </div>
+                <EnhancedAvatar src={emp.photo} name={emp.fullName} size="md" />
+                <div>
+                  <p
+                    className={cn(
+                      "font-medium",
+                      isGlass || isDark ? "text-white" : "text-gray-800"
+                    )}
+                  >
+                    {emp.fullName}
+                  </p>
+                  <p
+                    className={cn(
+                      "text-sm",
+                      isGlass
+                        ? "text-white/60"
+                        : isDark
+                          ? "text-gray-400"
+                          : "text-gray-500"
+                    )}
+                  >
+                    {emp.department}
+                  </p>
+                </div>
               </div>
-            ),
-          },
-          { key: "iqamaNumber", label: "Iqama Number" },
-          { key: "iqamaExpiry", label: "Expiry Date" },
-          {
-            key: "status",
-            label: "Status",
-            render: (row: Employee) => {
-              const expiry = row.iqamaExpiry ? new Date(row.iqamaExpiry) : null;
-              const now = new Date();
-              const daysUntilExpiry = expiry
-                ? Math.floor(
-                    (expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
-                  )
-                : 999;
-
-              if (daysUntilExpiry < 30)
-                return <Badge variant="error">Expiring Soon</Badge>;
-              if (daysUntilExpiry < 90)
-                return <Badge variant="warning">Attention</Badge>;
-              return <Badge variant="success">Valid</Badge>;
-            },
-          },
-          {
-            key: "actions",
-            label: "Actions",
-            render: () => (
-              <Button variant="outline" size="sm">
-                Renew
-              </Button>
-            ),
-          },
-        ]}
-        data={expiringIqamas}
-        keyField="id"
-      />
-    </div>
-  );
-};
-
-// Performance Tab
-const PerformanceTab: React.FC = () => {
-  return (
-    <div className="space-y-4">
-      <div className="flex gap-4">
-        <Button icon={<Plus className="w-4 h-4" />}>New Evaluation</Button>
-        <Button variant="outline">Set Goals</Button>
-        <Button variant="outline" icon={<BarChart3 className="w-4 h-4" />}>
-          View Analytics
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="text-center">
-          <p className="text-sm text-gray-500">Top Performers</p>
-          <p className="text-3xl font-bold text-success mt-2">5</p>
-        </Card>
-        <Card className="text-center">
-          <p className="text-sm text-gray-500">Needs Improvement</p>
-          <p className="text-3xl font-bold text-warning mt-2">2</p>
-        </Card>
-        <Card className="text-center">
-          <p className="text-sm text-gray-500">Average Score</p>
-          <p className="text-3xl font-bold text-primary mt-2">4.2/5</p>
-        </Card>
-      </div>
-
-      <Card>
-        <div className="text-center py-8">
-          <Award className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-          <h3 className="text-lg font-semibold text-gray-800">
-            Performance Evaluation
-          </h3>
-          <p className="text-gray-500 mt-2">
-            Start evaluating employee performance
-          </p>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={cn(
+                          "w-4 h-4",
+                          star <= 4 ? "text-amber-400 fill-amber-400" : "text-gray-300"
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <p
+                    className={cn(
+                      "text-sm mt-1",
+                      isGlass
+                        ? "text-white/60"
+                        : isDark
+                          ? "text-gray-400"
+                          : "text-gray-500"
+                    )}
+                  >
+                    {(4.5 - index * 0.1).toFixed(1)} rating
+                  </p>
+                </div>
+                <ChevronRight
+                  className={cn(
+                    "w-5 h-5",
+                    isDark ? "text-gray-600" : "text-gray-300"
+                  )}
+                />
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </Card>
+      </div>
     </div>
   );
 };
@@ -719,12 +896,27 @@ const EmployeesPage: React.FC = () => {
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportData, setExportData] = useState<ExportData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Extract filter values from activeFilters
+  const getFilterValue = (filterId: string): string => {
+    const filter = activeFilters.find(f => f.filterId === filterId);
+    return filter ? String(filter.value) : "all";
+  };
 
   // Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Handle employee click
+  const handleEmployeeClick = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setShowEmployeeModal(true);
+  };
 
   // Calculate stats
   const activeEmployees = employees.filter((e) => e.status === "Active").length;
@@ -735,6 +927,20 @@ const EmployeesPage: React.FC = () => {
     monthAgo.setMonth(monthAgo.getMonth() - 1);
     return hireDate > monthAgo;
   }).length;
+
+  // Calculate detailed stats
+  const fullTimeCount = employees.filter((e) => e.employmentType === "Full-time").length;
+  const partTimeCount = employees.filter((e) => e.employmentType === "Part-time").length;
+  const contractorCount = employees.filter((e) => e.employmentType === "Contractor").length;
+
+  // Department distribution
+  const departmentData = departments.map((dept) => ({
+    name: dept.name,
+    value: employees.filter((e) => e.department === dept.name).length,
+    color: ["#2E3192", "#80D1E9", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"][
+      departments.indexOf(dept) % 6
+    ],
+  }));
 
   // Filter configuration
   const filterConfigs: FilterConfig[] = [
@@ -770,24 +976,9 @@ const EmployeesPage: React.FC = () => {
       type: "select",
       placeholder: "All Types",
       options: [
-        {
-          value: "Full-time",
-          label: "Full-time",
-          count: employees.filter((e) => e.employmentType === "Full-time")
-            .length,
-        },
-        {
-          value: "Part-time",
-          label: "Part-time",
-          count: employees.filter((e) => e.employmentType === "Part-time")
-            .length,
-        },
-        {
-          value: "Contractor",
-          label: "Contractor",
-          count: employees.filter((e) => e.employmentType === "Contractor")
-            .length,
-        },
+        { value: "Full-time", label: "Full-time", count: fullTimeCount },
+        { value: "Part-time", label: "Part-time", count: partTimeCount },
+        { value: "Contractor", label: "Contractor", count: contractorCount },
       ],
     },
   ];
@@ -810,26 +1001,18 @@ const EmployeesPage: React.FC = () => {
           if (existing) {
             return prev.map((f) =>
               f.filterId === filterId
-                ? {
-                    ...f,
-                    value,
-                    label: option?.label || config?.label || filterId,
-                  }
-                : f,
+                ? { ...f, value, label: option?.label || config?.label || filterId }
+                : f
             );
           }
           return [
             ...prev,
-            {
-              filterId,
-              value,
-              label: option?.label || config?.label || filterId,
-            },
+            { filterId, value, label: option?.label || config?.label || filterId },
           ];
         });
       }
     },
-    [filterConfigs],
+    [filterConfigs]
   );
 
   const handleClearFilter = useCallback((filterId: string) => {
@@ -840,81 +1023,10 @@ const EmployeesPage: React.FC = () => {
     setActiveFilters([]);
   }, []);
 
-  // Calculate detailed stats for HR cards
-  const fullTimeCount = employees.filter(
-    (e) => e.employmentType === "Full-time",
-  ).length;
-  const partTimeCount = employees.filter(
-    (e) => e.employmentType === "Part-time",
-  ).length;
-  const contractorCount = employees.filter(
-    (e) => e.employmentType === "Contractor",
-  ).length;
-  const internCount = employees.filter(
-    (e) => e.employmentType === "Intern",
-  ).length;
-
-  // Simulate demographics data
-  const maleCount = Math.round(employees.length * 0.65);
-  const femaleCount = employees.length - maleCount;
-  const averageAge = 32;
-
-  // Simulate attendance rate
-  const attendanceRate = 94;
-
-  // Handle card click for export
-  const handleCardClick = (cardType: string) => {
-    let data: ExportData;
-
-    switch (cardType) {
-      case "employees":
-        data = {
-          title: "Employee Directory",
-          columns: [
-            { key: "id", label: "Employee ID" },
-            { key: "name", label: "Full Name" },
-            { key: "department", label: "Department" },
-            { key: "position", label: "Position" },
-            { key: "status", label: "Status" },
-            { key: "type", label: "Employment Type" },
-          ],
-          data: employees.map((emp) => ({
-            id: emp.employeeId,
-            name: emp.fullName,
-            department: emp.department,
-            position: emp.position,
-            status: emp.status,
-            type: emp.employmentType,
-          })),
-          summary: [
-            { label: "Total", value: employees.length },
-            { label: "Active", value: activeEmployees },
-            { label: "Departments", value: departments.length },
-            { label: "New Hires", value: newHires },
-          ],
-        };
-        break;
-      default:
-        return;
-    }
-
-    setExportData(data);
-    setShowExportModal(true);
-  };
-
   const tabs = [
     { id: "team", label: "Team", badge: employees.length },
     { id: "org-chart", label: "Org Chart" },
-    { id: "onboarding", label: "Onboarding" },
-    { id: "offboarding", label: "Offboarding" },
-    { id: "tracking", label: "Tracking" },
-    { id: "reports", label: "Reports" },
-    { id: "muqeem", label: "Muqeem Services" },
-    {
-      id: "performance",
-      label: "Performance",
-      icon: <Award className="w-4 h-4" />,
-    },
+    { id: "performance", label: "Performance", icon: <Award className="w-4 h-4" /> },
   ];
 
   return (
@@ -925,18 +1037,14 @@ const EmployeesPage: React.FC = () => {
           <h1
             className={cn(
               "text-2xl font-bold",
-              isGlass || isDark ? "text-white" : "text-gray-800",
+              isGlass || isDark ? "text-white" : "text-gray-800"
             )}
           >
             Employees
           </h1>
           <p
             className={cn(
-              isGlass
-                ? "text-white/60"
-                : isDark
-                  ? "text-gray-400"
-                  : "text-gray-500",
+              isGlass ? "text-white/60" : isDark ? "text-gray-400" : "text-gray-500"
             )}
           >
             Manage your organization's workforce
@@ -944,19 +1052,16 @@ const EmployeesPage: React.FC = () => {
         </div>
         <div className="flex gap-3">
           <Button variant="outline" icon={<Upload className="w-4 h-4" />}>
-            Bulk Import
+            Import
           </Button>
           <Button variant="outline" icon={<Download className="w-4 h-4" />}>
             Export
-          </Button>
-          <Button variant="outline" icon={<Mail className="w-4 h-4" />}>
-            Send Email
           </Button>
           <Button icon={<Plus className="w-4 h-4" />}>Add Employee</Button>
         </div>
       </div>
 
-      {/* Stats Cards - Row 1 with Enhanced Stats */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {isLoading ? (
           <>
@@ -967,17 +1072,16 @@ const EmployeesPage: React.FC = () => {
           </>
         ) : (
           <>
-            <EnhancedStat
-              label="Total Employees"
+            <InteractiveStatCard
+              title="Total Employees"
               value={employees.length}
               icon={<Users className="w-5 h-5" />}
               color="blue"
               trend={{ value: 5, isPositive: true, label: "vs last month" }}
               sparkline={[65, 68, 72, 70, 75, 78, 80]}
-              onClick={() => handleCardClick("employees")}
             />
-            <EnhancedStat
-              label="Active"
+            <InteractiveStatCard
+              title="Active"
               value={activeEmployees}
               icon={<Activity className="w-5 h-5" />}
               color="green"
@@ -988,36 +1092,35 @@ const EmployeesPage: React.FC = () => {
               }}
               sparkline={[60, 62, 65, 68, 70, 72, 75]}
             />
-            <EnhancedStat
-              label="New Hires"
+            <InteractiveStatCard
+              title="New Hires"
               value={newHires}
               icon={<UserPlus className="w-5 h-5" />}
               color="purple"
               sparkline={[2, 3, 1, 4, 2, 3, 5]}
             />
-            <EnhancedStat
-              label="Departments"
+            <InteractiveStatCard
+              title="Departments"
               value={departments.length}
               icon={<Building2 className="w-5 h-5" />}
               color="amber"
-              sparkline={[5, 5, 6, 6, 6, 6, 6]}
             />
           </>
         )}
       </div>
 
-      {/* HR Analytics Cards - Row 2 */}
+      {/* HR Analytics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <EmployeeTypeCard
           fullTime={fullTimeCount}
           partTime={partTimeCount}
           contractors={contractorCount}
-          interns={internCount}
+          interns={0}
         />
         <DemographicsCard
-          maleCount={maleCount}
-          femaleCount={femaleCount}
-          averageAge={averageAge}
+          maleCount={Math.round(employees.length * 0.65)}
+          femaleCount={Math.round(employees.length * 0.35)}
+          averageAge={32}
         />
         <TenureCard
           averageTenure={3.5}
@@ -1026,12 +1129,7 @@ const EmployeesPage: React.FC = () => {
           threeToFiveYears={25}
           overFiveYears={25}
         />
-        <AttendanceRateCard
-          rate={attendanceRate}
-          present={72}
-          absent={3}
-          late={5}
-        />
+        <AttendanceRateCard rate={94} present={72} absent={3} late={5} />
       </div>
 
       {/* Filter Bar */}
@@ -1040,9 +1138,14 @@ const EmployeesPage: React.FC = () => {
         activeFilters={activeFilters}
         onFilterChange={handleFilterChange}
         onClearFilter={handleClearFilter}
-        onClearAll={handleClearAllFilters}
+        onClearAll={() => {
+          handleClearAllFilters();
+          setSearchQuery("");
+        }}
         searchPlaceholder="Search employees..."
         showSearch={true}
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       {/* Tabs */}
@@ -1050,34 +1153,39 @@ const EmployeesPage: React.FC = () => {
         tabs={tabs}
         activeTab={activeTab}
         onChange={setActiveTab}
-        variant="separated"
+        variant="modern"
       />
 
       {/* Tab Panels */}
       <TabPanel id="team" activeTab={activeTab}>
-        <TeamTab employees={employees} />
+        <TeamTab
+          employees={employees}
+          onEmployeeClick={handleEmployeeClick}
+          statusFilter={getFilterValue("status")}
+          departmentFilter={getFilterValue("department")}
+          typeFilter={getFilterValue("type")}
+          searchQuery={searchQuery}
+        />
       </TabPanel>
       <TabPanel id="org-chart" activeTab={activeTab}>
         <OrgChartTab />
       </TabPanel>
-      <TabPanel id="onboarding" activeTab={activeTab}>
-        <OnboardingTab />
-      </TabPanel>
-      <TabPanel id="offboarding" activeTab={activeTab}>
-        <OffboardingTab />
-      </TabPanel>
-      <TabPanel id="tracking" activeTab={activeTab}>
-        <TrackingTab />
-      </TabPanel>
-      <TabPanel id="reports" activeTab={activeTab}>
-        <ReportsTab />
-      </TabPanel>
-      <TabPanel id="muqeem" activeTab={activeTab}>
-        <MuqeemServicesTab />
-      </TabPanel>
       <TabPanel id="performance" activeTab={activeTab}>
-        <PerformanceTab />
+        <PerformanceTab employees={employees} />
       </TabPanel>
+
+      {/* Employee Detail Modal */}
+      {selectedEmployee && (
+        <EmployeeDetailModal
+          isOpen={showEmployeeModal}
+          onClose={() => {
+            setShowEmployeeModal(false);
+            setSelectedEmployee(null);
+          }}
+          employee={selectedEmployee}
+          onEdit={(emp) => console.log("Edit employee:", emp)}
+        />
+      )}
 
       {/* Data Export Modal */}
       {exportData && (

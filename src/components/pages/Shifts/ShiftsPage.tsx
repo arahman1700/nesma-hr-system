@@ -371,7 +371,7 @@ export const ShiftsPage: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="separated" />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} variant="modern" />
 
       {/* Shift Types Tab */}
       <TabPanel id="shifts" activeTab={activeTab}>
