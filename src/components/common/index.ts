@@ -163,9 +163,18 @@ export {
   EnhancedStat,
   EnhancedTableRow,
   ContextMenu,
-  EmptyState,
+  EmptyState as EnhancedEmptyState,
   ProgressIndicator,
   EnhancedAvatar,
   Tooltip,
   commonTableActions,
 } from "./EnhancedUI";
+
+// Error Boundary
+export { ErrorBoundary } from "./ErrorBoundary";
+
+// Empty State Component
+export { EmptyState, SearchEmptyState, TableEmptyState } from "./EmptyState";
+
+// Page Loader
+export { PageLoader, PageSkeleton } from "./PageLoader";

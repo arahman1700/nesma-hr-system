@@ -205,6 +205,7 @@ export function Table<T extends Record<string, any>>({
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
+                aria-label="Search table data"
                 className={cn(
                   "w-full pl-10 pr-4 py-2.5 text-sm rounded-xl transition-all",
                   "focus:outline-none focus:ring-2",
@@ -233,8 +234,8 @@ export function Table<T extends Record<string, any>>({
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
+      <div className="overflow-x-auto" role="region" aria-label="Data table">
+        <table className="w-full" role="table">
           <thead
             className={cn(
               "bg-gradient-to-r from-[#2E3192] to-[#0E2841]",
@@ -260,6 +261,7 @@ export function Table<T extends Record<string, any>>({
               {columns.map((column, idx) => (
                 <th
                   key={String(column.key)}
+                  scope="col"
                   style={{ width: column.width }}
                   className={cn(
                     TABLE_TOKENS.headerPadding,
@@ -273,6 +275,20 @@ export function Table<T extends Record<string, any>>({
                     column.className,
                   )}
                   onClick={() => handleSort(column)}
+                  aria-sort={
+                    sortColumn === String(column.key)
+                      ? sortDirection === "asc"
+                        ? "ascending"
+                        : "descending"
+                      : undefined
+                  }
+                  tabIndex={column.sortable ? 0 : undefined}
+                  onKeyDown={(e) => {
+                    if (column.sortable && (e.key === "Enter" || e.key === " ")) {
+                      e.preventDefault();
+                      handleSort(column);
+                    }
+                  }}
                 >
                   <div
                     className={cn(
@@ -491,6 +507,7 @@ export function Table<T extends Record<string, any>>({
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
+              aria-label="Previous page"
               className={cn(
                 "p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all",
                 isDark || isGlass
@@ -533,6 +550,7 @@ export function Table<T extends Record<string, any>>({
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
+              aria-label="Next page"
               className={cn(
                 "p-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all",
                 isDark || isGlass

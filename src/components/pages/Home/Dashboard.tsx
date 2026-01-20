@@ -1287,8 +1287,8 @@ const Dashboard: React.FC = () => {
         <QuickActionsSection
           title="Quick Actions"
           columns={4}
-          onActionClick={(actionId) => {
-            console.log("Action clicked:", actionId);
+          onActionClick={() => {
+            // Action handler - implement navigation or modal
           }}
         />
       </div>
@@ -1302,8 +1302,8 @@ const Dashboard: React.FC = () => {
             setExportData(null);
           }}
           data={exportData}
-          onExport={(format, data) => {
-            console.log("Exporting:", format, data);
+          onExport={() => {
+            // Export handler - data is processed by DataExportModal
           }}
         />
       )}

@@ -130,8 +130,7 @@ export const Header: React.FC<HeaderProps> = ({
       icon: <Truck className="w-6 h-6" />,
       active: false,
       description: "Logistics & procurement management",
-      url: "file:///Users/a.rahman/Claude/nesma-dashboard-v02/index.html",
-      isExternal: true,
+      comingSoon: true,
     },
     {
       id: "mitc",
@@ -139,8 +138,7 @@ export const Header: React.FC<HeaderProps> = ({
       icon: <FileBarChart className="w-6 h-6" />,
       active: false,
       description: "Monthly IT Committee Reports",
-      url: "file:///Users/a.rahman/Desktop/NIT/MITC/MITC%20Report%20and%20Dashboard/index.html",
-      isExternal: true,
+      comingSoon: true,
     },
     {
       id: "accounting",
@@ -174,6 +172,8 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onMenuToggle}
             className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label={isSidebarOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isSidebarOpen}
           >
             <Menu className="w-6 h-6 text-white" />
           </button>
@@ -226,6 +226,8 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setShowSearch(!showSearch)}
             className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label={showSearch ? "Close search" : "Open search"}
+            aria-expanded={showSearch}
           >
             <Search className="w-5 h-5 text-white" />
           </button>
@@ -256,6 +258,9 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={() => setShowModules(!showModules)}
                 className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                aria-label="NESMA Applications Menu"
+                aria-expanded={showModules}
+                aria-haspopup="menu"
               >
                 <Grid className="w-5 h-5 text-white/80" />
               </button>
@@ -275,9 +280,7 @@ export const Header: React.FC<HeaderProps> = ({
                     {modules.map((module) => {
                       const handleClick = () => {
                         if (module.comingSoon) return;
-                        if (module.isExternal && module.url) {
-                          window.open(module.url, "_blank");
-                        } else if (module.isInternal && module.path) {
+                        if (module.isInternal && module.path) {
                           navigate(module.path);
                         }
                         setShowModules(false);
@@ -317,9 +320,6 @@ export const Header: React.FC<HeaderProps> = ({
                               )}
                             >
                               {module.name}
-                              {module.isExternal && (
-                                <ExternalLink className="w-3 h-3 text-gray-400" />
-                              )}
                             </p>
                             <p className="text-xs text-gray-500">
                               {module.description}
@@ -360,6 +360,9 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => setShowProfile(!showProfile)}
               className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              aria-label="User profile menu"
+              aria-expanded={showProfile}
+              aria-haspopup="menu"
             >
               <Avatar name="Abdulrahman Hussein" size="sm" status="online" />
               <div className="hidden md:block text-left">

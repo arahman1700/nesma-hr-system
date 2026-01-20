@@ -1088,8 +1088,8 @@ const EmployeesPage: React.FC = () => {
             setExportData(null);
           }}
           data={exportData}
-          onExport={(format, data) => {
-            console.log("Exporting:", format, data);
+          onExport={() => {
+            // Export handler - data is processed by DataExportModal
           }}
         />
       )}
