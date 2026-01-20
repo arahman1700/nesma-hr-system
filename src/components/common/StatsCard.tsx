@@ -15,37 +15,37 @@ import { useTheme } from "../../contexts/ThemeContext";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import {
+  BORDER_RADIUS,
+  SPACING,
+  SHADOWS,
+  ICON_ONLY_SIZES,
+} from "../../utils/designTokens";
 
 // ============================================
-// UNIFIED DESIGN SYSTEM TOKENS
+// UNIFIED DESIGN SYSTEM TOKENS (Re-exported for backward compatibility)
 // ============================================
 export const DESIGN_TOKENS = {
-  borderRadius: {
-    none: "rounded-none",
-    sm: "rounded-xl", // 12px
-    md: "rounded-2xl", // 16px
-    lg: "rounded-[20px]", // 20px - DEFAULT for cards
-    xl: "rounded-3xl", // 24px
-  },
+  borderRadius: BORDER_RADIUS,
   spacing: {
-    card: "p-6",
+    card: SPACING.card.lg,
     cardLg: "p-7",
-    icon: "p-3",
+    icon: SPACING.padding.sm,
     iconSm: "p-2.5",
-    iconLg: "p-4",
-    gap: "gap-5",
-    gapLg: "gap-6",
+    iconLg: SPACING.padding.md,
+    gap: SPACING.gap.lg,
+    gapLg: SPACING.gap.xl,
   },
   shadow: {
-    sm: "shadow-[0_2px_8px_rgba(14,40,65,0.06)]",
-    md: "shadow-[0_4px_16px_rgba(14,40,65,0.08)]",
-    lg: "shadow-[0_8px_32px_rgba(14,40,65,0.12)]",
-    glow: "shadow-[0_0_40px_rgba(128,209,233,0.2)]",
+    sm: SHADOWS.sm,
+    md: SHADOWS.md,
+    lg: SHADOWS.lg,
+    glow: SHADOWS.glow,
   },
   iconSize: {
-    sm: "w-4 h-4",
-    md: "w-5 h-5",
-    lg: "w-6 h-6",
+    sm: ICON_ONLY_SIZES.sm,
+    md: ICON_ONLY_SIZES.md,
+    lg: ICON_ONLY_SIZES.lg,
     xl: "w-8 h-8",
   },
 };

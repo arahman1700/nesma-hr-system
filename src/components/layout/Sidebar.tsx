@@ -24,7 +24,12 @@ import {
   TrendingDown,
 } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
-import { DESIGN_TOKENS } from "../common/StatsCard";
+import { BORDER_RADIUS, ICON_ONLY_SIZES, SHADOWS } from "../../utils/designTokens";
+
+// Re-export DESIGN_TOKENS for compatibility
+const DESIGN_TOKENS = {
+  shadow: SHADOWS,
+};
 
 interface SidebarItem {
   id: string;
@@ -37,8 +42,9 @@ interface SidebarItem {
   fullLogo?: React.ReactNode;
 }
 
-// Unified icon size for consistency
-const ICON_SIZE = "w-[18px] h-[18px]";
+// Unified icon size for sidebar - using design tokens
+const ICON_SIZE = ICON_ONLY_SIZES.md; // w-5 h-5 (20px)
+const LOGO_ICON_SIZE = "h-5 w-5"; // For external service logos
 
 const sidebarItems: SidebarItem[] = [
   {
@@ -92,7 +98,7 @@ const sidebarItems: SidebarItem[] = [
       <img
         src={`${import.meta.env.BASE_URL}assets/logos/muqeem-icon.svg`}
         alt="Muqeem"
-        className="h-5 w-auto"
+        className={LOGO_ICON_SIZE}
       />
     ),
     path: "/muqeem",
@@ -117,7 +123,7 @@ const sidebarItems: SidebarItem[] = [
       <img
         src={`${import.meta.env.BASE_URL}assets/logos/mudad-icon.svg`}
         alt="Mudad"
-        className="h-5 w-auto"
+        className={LOGO_ICON_SIZE}
       />
     ),
     path: "/mudad",
@@ -136,7 +142,7 @@ const sidebarItems: SidebarItem[] = [
       <img
         src={`${import.meta.env.BASE_URL}assets/logos/qsalary-icon.svg`}
         alt="Qsalary"
-        className="h-5 w-auto"
+        className={LOGO_ICON_SIZE}
       />
     ),
     path: "/qsalary",
@@ -156,7 +162,7 @@ const sidebarItems: SidebarItem[] = [
       <img
         src={`${import.meta.env.BASE_URL}assets/logos/gosi-icon.svg`}
         alt="GOSI"
-        className="h-5 w-auto"
+        className={LOGO_ICON_SIZE}
       />
     ),
     path: "/gosi",
@@ -175,7 +181,7 @@ const sidebarItems: SidebarItem[] = [
       <img
         src={`${import.meta.env.BASE_URL}assets/logos/tameeni-icon.svg`}
         alt="Tameeni"
-        className="h-5 w-auto"
+        className={LOGO_ICON_SIZE}
       />
     ),
     path: "/tameeni",
@@ -455,7 +461,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     // Base item styles - unified across all items
     const baseItemStyles = cn(
       "group flex items-center gap-3 px-3 py-2.5 mx-2 my-0.5",
-      DESIGN_TOKENS.borderRadius.md,
+      BORDER_RADIUS.md,
       "font-medium text-sm transition-all duration-200",
     );
 
@@ -477,7 +483,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     // Icon wrapper styles
     const iconWrapperStyles = cn(
       "flex items-center justify-center w-8 h-8",
-      DESIGN_TOKENS.borderRadius.md,
+      BORDER_RADIUS.md,
       "transition-all duration-200",
     );
 
@@ -682,7 +688,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className={cn(
               "w-10 h-10 flex-shrink-0",
               "bg-gradient-to-br from-[#2E3192] to-[#0E2841]",
-              DESIGN_TOKENS.borderRadius.md,
+              BORDER_RADIUS.md,
               "flex items-center justify-center",
             )}
           >
@@ -740,7 +746,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className={cn(
               "w-10 h-10 flex-shrink-0",
               "bg-gradient-to-br from-[#2E3192] to-[#0E2841]",
-              DESIGN_TOKENS.borderRadius.md,
+              BORDER_RADIUS.md,
               "flex items-center justify-center",
               DESIGN_TOKENS.shadow.md,
               "relative overflow-hidden",
@@ -907,7 +913,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div
               className={cn(
                 "w-8 h-8 flex items-center justify-center",
-                DESIGN_TOKENS.borderRadius.md,
+                BORDER_RADIUS.md,
                 isGlass || isDark ? "bg-white/5" : "bg-gray-100",
               )}
             >

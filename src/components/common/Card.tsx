@@ -2,39 +2,38 @@ import React, { useState } from "react";
 import { cn } from "../../utils/cn";
 import { ChevronRight, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
+import {
+  BORDER_RADIUS,
+  SPACING,
+  SHADOWS,
+  TRANSITIONS,
+} from "../../utils/designTokens";
 
 // ============================================
-// UNIFIED DESIGN SYSTEM TOKENS
+// UNIFIED DESIGN SYSTEM TOKENS (Re-exported for backward compatibility)
 // ============================================
 export const DESIGN_TOKENS = {
-  borderRadius: {
-    none: "rounded-none",
-    sm: "rounded-lg", // 8px
-    md: "rounded-xl", // 12px
-    lg: "rounded-2xl", // 16px - DEFAULT for cards
-    xl: "rounded-3xl", // 24px
-    full: "rounded-full",
-  },
+  borderRadius: BORDER_RADIUS,
   spacing: {
-    xs: "p-3",
-    sm: "p-4",
-    md: "p-5",
-    lg: "p-6",
-    xl: "p-8",
+    xs: SPACING.padding.xs,
+    sm: SPACING.padding.sm,
+    md: SPACING.padding.md,
+    lg: SPACING.padding.lg,
+    xl: SPACING.padding["2xl"],
   },
   shadow: {
-    none: "",
-    sm: "shadow-[0_2px_8px_rgba(14,40,65,0.06)]",
-    md: "shadow-[0_4px_16px_rgba(14,40,65,0.08)]",
-    lg: "shadow-[0_8px_32px_rgba(14,40,65,0.12)]",
-    xl: "shadow-[0_16px_48px_rgba(14,40,65,0.16)]",
-    glow: "shadow-[0_0_40px_rgba(128,209,233,0.2)]",
+    none: SHADOWS.none,
+    sm: SHADOWS.sm,
+    md: SHADOWS.md,
+    lg: SHADOWS.lg,
+    xl: SHADOWS.xl,
+    glow: SHADOWS.glow,
     glowStrong: "shadow-[0_0_60px_rgba(128,209,233,0.3)]",
   },
   transition: {
-    fast: "transition-all duration-150 ease-out",
-    normal: "transition-all duration-300 ease-out",
-    slow: "transition-all duration-500 ease-out",
+    fast: TRANSITIONS.fast,
+    normal: TRANSITIONS.normal,
+    slow: TRANSITIONS.slow,
     bounce:
       "transition-all duration-300 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)]",
   },

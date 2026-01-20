@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { cn } from "../../utils/cn";
 import { TrendingUp, TrendingDown, ArrowRight, Sparkles } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
+import { BORDER_RADIUS, ICON_SIZES } from "../../utils/designTokens";
 
 // ============================================
 // COLOR PRESETS - Beautiful Gradients
@@ -148,9 +149,9 @@ export const ColoredStatsCard: React.FC<ColoredStatsCardProps> = ({
   };
 
   const iconSizes = {
-    sm: "w-10 h-10 [&>svg]:w-5 [&>svg]:h-5",
-    md: "w-12 h-12 [&>svg]:w-6 [&>svg]:h-6",
-    lg: "w-14 h-14 [&>svg]:w-7 [&>svg]:h-7",
+    sm: `${ICON_SIZES.md.container} [&>svg]:${ICON_SIZES.md.icon}`,
+    md: `${ICON_SIZES.lg.container} [&>svg]:${ICON_SIZES.lg.icon}`,
+    lg: `${ICON_SIZES.xl.container} [&>svg]:${ICON_SIZES.xl.icon}`,
   };
 
   const valueSizes = {
@@ -190,7 +191,8 @@ export const ColoredStatsCard: React.FC<ColoredStatsCardProps> = ({
     <div
       className={cn(
         // Base
-        "relative overflow-hidden rounded-2xl",
+        "relative overflow-hidden",
+        BORDER_RADIUS.lg,
         "transition-all duration-500 ease-out",
         "cursor-pointer group",
         // Size
