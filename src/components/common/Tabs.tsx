@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "../../utils/cn";
 import { useTheme } from "../../contexts/ThemeContext";
+import { ICON_CHILD_SIZES } from "../../utils/designTokens";
 
 interface Tab {
   id: string;
@@ -28,9 +29,9 @@ const sizeStyles = {
 };
 
 const iconSizeStyles = {
-  sm: "[&>svg]:w-4 [&>svg]:h-4",
-  md: "[&>svg]:w-5 [&>svg]:h-5",
-  lg: "[&>svg]:w-6 [&>svg]:h-6",
+  sm: ICON_CHILD_SIZES.sm,
+  md: ICON_CHILD_SIZES.md,
+  lg: ICON_CHILD_SIZES.lg,
 };
 
 export const Tabs: React.FC<TabsProps> = ({

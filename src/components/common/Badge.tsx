@@ -14,6 +14,7 @@ import {
   Flame,
 } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
+import { ICON_CHILD_SIZES, ICON_ONLY_SIZES } from "../../utils/designTokens";
 
 // ============================================
 // BASE BADGE COMPONENT
@@ -169,7 +170,7 @@ export const Badge: React.FC<BadgeProps> = ({
         />
       )}
       {icon && (
-        <span className="flex-shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5">
+        <span className={cn("flex-shrink-0", ICON_CHILD_SIZES.xs)}>
           {icon}
         </span>
       )}
@@ -225,87 +226,87 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
     active: {
       variant: "success",
       label: "Active",
-      icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+      icon: <CheckCircle2 className={ICON_ONLY_SIZES.xs} />,
     },
     inactive: {
       variant: "gray",
       label: "Inactive",
-      icon: <Minus className="w-3.5 h-3.5" />,
+      icon: <Minus className={ICON_ONLY_SIZES.xs} />,
     },
     pending: {
       variant: "warning",
       label: "Pending",
-      icon: <Clock className="w-3.5 h-3.5" />,
+      icon: <Clock className={ICON_ONLY_SIZES.xs} />,
     },
     approved: {
       variant: "success",
       label: "Approved",
-      icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+      icon: <CheckCircle2 className={ICON_ONLY_SIZES.xs} />,
     },
     rejected: {
       variant: "danger",
       label: "Rejected",
-      icon: <XCircle className="w-3.5 h-3.5" />,
+      icon: <XCircle className={ICON_ONLY_SIZES.xs} />,
     },
     completed: {
       variant: "success",
       label: "Completed",
-      icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+      icon: <CheckCircle2 className={ICON_ONLY_SIZES.xs} />,
     },
     cancelled: {
       variant: "gray",
       label: "Cancelled",
-      icon: <XCircle className="w-3.5 h-3.5" />,
+      icon: <XCircle className={ICON_ONLY_SIZES.xs} />,
     },
     draft: {
       variant: "gray",
       label: "Draft",
-      icon: <Circle className="w-3.5 h-3.5" />,
+      icon: <Circle className={ICON_ONLY_SIZES.xs} />,
     },
     in_progress: {
       variant: "info",
       label: "In Progress",
-      icon: <Zap className="w-3.5 h-3.5" />,
+      icon: <Zap className={ICON_ONLY_SIZES.xs} />,
     },
     on_hold: {
       variant: "warning",
       label: "On Hold",
-      icon: <AlertTriangle className="w-3.5 h-3.5" />,
+      icon: <AlertTriangle className={ICON_ONLY_SIZES.xs} />,
     },
     expired: {
       variant: "danger",
       label: "Expired",
-      icon: <AlertTriangle className="w-3.5 h-3.5" />,
+      icon: <AlertTriangle className={ICON_ONLY_SIZES.xs} />,
     },
     paid: {
       variant: "success",
       label: "Paid",
-      icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+      icon: <CheckCircle2 className={ICON_ONLY_SIZES.xs} />,
     },
     unpaid: {
       variant: "danger",
       label: "Unpaid",
-      icon: <XCircle className="w-3.5 h-3.5" />,
+      icon: <XCircle className={ICON_ONLY_SIZES.xs} />,
     },
     new: {
       variant: "info",
       label: "New",
-      icon: <Star className="w-3.5 h-3.5" />,
+      icon: <Star className={ICON_ONLY_SIZES.xs} />,
     },
     processing: {
       variant: "info",
       label: "Processing",
-      icon: <Zap className="w-3.5 h-3.5" />,
+      icon: <Zap className={ICON_ONLY_SIZES.xs} />,
     },
     shipped: {
       variant: "secondary",
       label: "Shipped",
-      icon: <Shield className="w-3.5 h-3.5" />,
+      icon: <Shield className={ICON_ONLY_SIZES.xs} />,
     },
     delivered: {
       variant: "success",
       label: "Delivered",
-      icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+      icon: <CheckCircle2 className={ICON_ONLY_SIZES.xs} />,
     },
   };
 
@@ -313,7 +314,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   const config = statusConfig[normalizedStatus] || {
     variant: "gray" as const,
     label: status,
-    icon: <Circle className="w-3.5 h-3.5" />,
+    icon: <Circle className={ICON_ONLY_SIZES.xs} />,
   };
 
   return (
@@ -354,27 +355,27 @@ export const PriorityBadge: React.FC<PriorityBadgeProps> = ({
     low: {
       variant: "gray",
       label: "Low",
-      icon: <Minus className="w-3.5 h-3.5" />,
+      icon: <Minus className={ICON_ONLY_SIZES.xs} />,
     },
     medium: {
       variant: "info",
       label: "Medium",
-      icon: <Circle className="w-3.5 h-3.5" />,
+      icon: <Circle className={ICON_ONLY_SIZES.xs} />,
     },
     high: {
       variant: "warning",
       label: "High",
-      icon: <AlertTriangle className="w-3.5 h-3.5" />,
+      icon: <AlertTriangle className={ICON_ONLY_SIZES.xs} />,
     },
     urgent: {
       variant: "danger",
       label: "Urgent",
-      icon: <Flame className="w-3.5 h-3.5" />,
+      icon: <Flame className={ICON_ONLY_SIZES.xs} />,
     },
     critical: {
       variant: "danger",
       label: "Critical",
-      icon: <Zap className="w-3.5 h-3.5" />,
+      icon: <Zap className={ICON_ONLY_SIZES.xs} />,
     },
   };
 
@@ -506,7 +507,7 @@ export const TagBadge: React.FC<TagBadgeProps> = ({
             "hover:scale-110",
           )}
         >
-          <XCircle className="w-3.5 h-3.5" />
+          <XCircle className={ICON_ONLY_SIZES.xs} />
         </button>
       )}
     </span>

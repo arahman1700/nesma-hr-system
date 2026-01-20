@@ -142,11 +142,28 @@ export const ICON_SIZES = {
 
 // Standalone icon sizes (without container)
 export const ICON_ONLY_SIZES = {
-  xs: "w-3.5 h-3.5",  // 14px
-  sm: "w-4 h-4",      // 16px
-  md: "w-5 h-5",      // 20px
-  lg: "w-6 h-6",      // 24px
-  xl: "w-7 h-7",      // 28px
+  "2xs": "w-3 h-3",    // 12px
+  xs: "w-3.5 h-3.5",   // 14px
+  sm: "w-4 h-4",       // 16px
+  md: "w-5 h-5",       // 20px
+  lg: "w-6 h-6",       // 24px
+  xl: "w-7 h-7",       // 28px
+  "2xl": "w-8 h-8",    // 32px
+  "3xl": "w-9 h-9",    // 36px
+  "4xl": "w-10 h-10",  // 40px
+} as const;
+
+// Icon sizes with CSS selector format (for wrapping elements)
+export const ICON_CHILD_SIZES = {
+  "2xs": "[&>svg]:w-3 [&>svg]:h-3",
+  xs: "[&>svg]:w-3.5 [&>svg]:h-3.5",
+  sm: "[&>svg]:w-4 [&>svg]:h-4",
+  md: "[&>svg]:w-5 [&>svg]:h-5",
+  lg: "[&>svg]:w-6 [&>svg]:h-6",
+  xl: "[&>svg]:w-7 [&>svg]:h-7",
+  "2xl": "[&>svg]:w-8 [&>svg]:h-8",
+  "3xl": "[&>svg]:w-9 [&>svg]:h-9",
+  "4xl": "[&>svg]:w-10 [&>svg]:h-10",
 } as const;
 
 // ============================================
@@ -289,15 +306,79 @@ export const generateCSSVariables = (): Record<string, string> => {
   return variables;
 };
 
+// ============================================
+// STATUS TYPE COLORS - For pages
+// ============================================
+export const STATUS_COLORS = {
+  // Leave Types
+  leave: {
+    annual: { bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-200" },
+    sick: { bg: "bg-red-100", text: "text-red-700", border: "border-red-200" },
+    emergency: { bg: "bg-orange-100", text: "text-orange-700", border: "border-orange-200" },
+    maternity: { bg: "bg-pink-100", text: "text-pink-700", border: "border-pink-200" },
+    hajj: { bg: "bg-purple-100", text: "text-purple-700", border: "border-purple-200" },
+    unpaid: { bg: "bg-gray-100", text: "text-gray-700", border: "border-gray-200" },
+  },
+  // Request Types
+  request: {
+    Leave: { bg: "bg-emerald-100", text: "text-emerald-700", color: "#10B981" },
+    Overtime: { bg: "bg-amber-100", text: "text-amber-700", color: "#F59E0B" },
+    Document: { bg: "bg-blue-100", text: "text-blue-700", color: "#3B82F6" },
+    Equipment: { bg: "bg-violet-100", text: "text-violet-700", color: "#8B5CF6" },
+    Transfer: { bg: "bg-pink-100", text: "text-pink-700", color: "#EC4899" },
+    Training: { bg: "bg-teal-100", text: "text-teal-700", color: "#14B8A6" },
+    Advance: { bg: "bg-red-100", text: "text-red-700", color: "#EF4444" },
+    Other: { bg: "bg-gray-100", text: "text-gray-700", color: "#6B7280" },
+  },
+  // Priority Colors
+  priority: {
+    low: { bg: "bg-gray-100", text: "text-gray-700", color: "#6B7280" },
+    medium: { bg: "bg-blue-100", text: "text-blue-700", color: "#3B82F6" },
+    high: { bg: "bg-orange-100", text: "text-orange-700", color: "#F59E0B" },
+    urgent: { bg: "bg-red-100", text: "text-red-700", color: "#EF4444" },
+  },
+  // General Status
+  status: {
+    active: { bg: "bg-emerald-100", text: "text-emerald-700" },
+    inactive: { bg: "bg-gray-100", text: "text-gray-500" },
+    pending: { bg: "bg-amber-100", text: "text-amber-700" },
+    approved: { bg: "bg-green-100", text: "text-green-700" },
+    rejected: { bg: "bg-red-100", text: "text-red-700" },
+    expired: { bg: "bg-gray-100", text: "text-gray-500" },
+  },
+} as const;
+
+// ============================================
+// TEXT STYLES
+// ============================================
+export const TEXT_STYLES = {
+  heading: {
+    xl: "text-2xl font-bold text-gray-900",
+    lg: "text-xl font-semibold text-gray-900",
+    md: "text-lg font-semibold text-gray-800",
+    sm: "text-base font-medium text-gray-800",
+  },
+  body: {
+    lg: "text-base text-gray-700",
+    md: "text-sm text-gray-600",
+    sm: "text-xs text-gray-500",
+  },
+  label: "text-sm font-medium text-gray-700",
+  caption: "text-xs text-gray-500",
+} as const;
+
 // Default export for convenience
 export default {
   COLORS,
   BORDER_RADIUS,
   ICON_SIZES,
   ICON_ONLY_SIZES,
+  ICON_CHILD_SIZES,
   SPACING,
   SHADOWS,
   TRANSITIONS,
   GRADIENTS,
   COMPONENT_TOKENS,
+  STATUS_COLORS,
+  TEXT_STYLES,
 };

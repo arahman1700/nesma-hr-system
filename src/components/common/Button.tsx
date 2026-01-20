@@ -2,6 +2,7 @@ import React from "react";
 import { cn } from "../../utils/cn";
 import { Loader2 } from "lucide-react";
 import { useTheme } from "../../contexts/ThemeContext";
+import { ICON_CHILD_SIZES, ICON_ONLY_SIZES, GRADIENTS, SHADOWS } from "../../utils/designTokens";
 
 // ============================================
 // BUTTON COMPONENT
@@ -220,13 +221,13 @@ export const Button: React.FC<ButtonProps> = ({
         ) : (
           <>
             {effectiveLeftIcon && (
-              <span className="flex-shrink-0 [&>svg]:w-4 [&>svg]:h-4">
+              <span className={cn("flex-shrink-0", ICON_CHILD_SIZES.sm)}>
                 {effectiveLeftIcon}
               </span>
             )}
             {children}
             {rightIcon && (
-              <span className="flex-shrink-0 [&>svg]:w-4 [&>svg]:h-4">
+              <span className={cn("flex-shrink-0", ICON_CHILD_SIZES.sm)}>
                 {rightIcon}
               </span>
             )}
@@ -289,10 +290,10 @@ export const IconButton: React.FC<IconButtonProps> = ({
   };
 
   const sizes: Record<string, string> = {
-    xs: "p-1 [&>*>svg]:w-3.5 [&>*>svg]:h-3.5",
-    sm: "p-1.5 [&>*>svg]:w-4 [&>*>svg]:h-4",
-    md: "p-2 [&>*>svg]:w-5 [&>*>svg]:h-5",
-    lg: "p-3 [&>*>svg]:w-6 [&>*>svg]:h-6",
+    xs: `p-1 [&>*>svg]:w-3.5 [&>*>svg]:h-3.5`,
+    sm: `p-1.5 [&>*>svg]:w-4 [&>*>svg]:h-4`,
+    md: `p-2 [&>*>svg]:w-5 [&>*>svg]:h-5`,
+    lg: `p-3 [&>*>svg]:w-6 [&>*>svg]:h-6`,
   };
 
   const glowStyles: Record<string, string> = {

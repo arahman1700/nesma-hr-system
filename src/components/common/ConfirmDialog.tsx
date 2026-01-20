@@ -2,6 +2,7 @@ import React from "react";
 import { cn } from "../../utils/cn";
 import { AlertTriangle, Trash2, CheckCircle, Info, X } from "lucide-react";
 import { Button } from "./Button";
+import { ICON_ONLY_SIZES, BORDER_RADIUS } from "../../utils/designTokens";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -30,22 +31,22 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   const typeConfig = {
     danger: {
-      icon: <Trash2 className="w-6 h-6" />,
+      icon: <Trash2 className={ICON_ONLY_SIZES.lg} />,
       iconBg: "bg-red-100 text-red-600",
       confirmVariant: "danger" as const,
     },
     warning: {
-      icon: <AlertTriangle className="w-6 h-6" />,
+      icon: <AlertTriangle className={ICON_ONLY_SIZES.lg} />,
       iconBg: "bg-amber-100 text-amber-600",
       confirmVariant: "primary" as const,
     },
     success: {
-      icon: <CheckCircle className="w-6 h-6" />,
+      icon: <CheckCircle className={ICON_ONLY_SIZES.lg} />,
       iconBg: "bg-emerald-100 text-emerald-600",
       confirmVariant: "success" as const,
     },
     info: {
-      icon: <Info className="w-6 h-6" />,
+      icon: <Info className={ICON_ONLY_SIZES.lg} />,
       iconBg: "bg-blue-100 text-blue-600",
       confirmVariant: "primary" as const,
     },
@@ -75,7 +76,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           onClick={onClose}
           className="absolute top-4 right-4 p-1 rounded-lg hover:bg-[var(--theme-surface-hover)] transition-colors"
         >
-          <X className="w-5 h-5 text-[var(--theme-text-muted)]" />
+          <X className={cn(ICON_ONLY_SIZES.md, "text-[var(--theme-text-muted)]")} />
         </button>
 
         {/* Content */}
@@ -217,13 +218,13 @@ export const RejectConfirmDialog: React.FC<RejectDialogProps> = ({
           onClick={onClose}
           className="absolute top-4 right-4 p-1 rounded-lg hover:bg-[var(--theme-surface-hover)] transition-colors"
         >
-          <X className="w-5 h-5 text-[var(--theme-text-muted)]" />
+          <X className={cn(ICON_ONLY_SIZES.md, "text-[var(--theme-text-muted)]")} />
         </button>
 
         <div className="p-6">
           <div className="flex justify-center mb-4">
             <div className="w-14 h-14 rounded-full flex items-center justify-center bg-red-100 text-red-600">
-              <X className="w-6 h-6" />
+              <X className={ICON_ONLY_SIZES.lg} />
             </div>
           </div>
 

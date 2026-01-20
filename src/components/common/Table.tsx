@@ -11,15 +11,16 @@ import {
 import Input from "./Input";
 import Select from "./Select";
 import { useTheme } from "../../contexts/ThemeContext";
+import { BORDER_RADIUS, ICON_ONLY_SIZES, GRADIENTS, SHADOWS, COMPONENT_TOKENS } from "../../utils/designTokens";
 
 // ============================================
 // DESIGN TOKENS
 // ============================================
 const TABLE_TOKENS = {
-  borderRadius: "rounded-2xl",
+  borderRadius: BORDER_RADIUS.lg,
   headerRadius: "rounded-t-2xl",
-  cellPadding: "px-4 py-3",
-  headerPadding: "px-4 py-4",
+  cellPadding: COMPONENT_TOKENS.table.cellPadding,
+  headerPadding: COMPONENT_TOKENS.table.headerPadding,
 };
 
 interface Column<T> {

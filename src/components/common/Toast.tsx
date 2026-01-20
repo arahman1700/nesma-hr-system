@@ -2,6 +2,7 @@ import React from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { CheckCircle, XCircle, AlertTriangle, Info, X } from "lucide-react";
 import { cn } from "../../utils/cn";
+import { ICON_ONLY_SIZES, BORDER_RADIUS, SHADOWS } from "../../utils/designTokens";
 
 // Toast Provider Component
 export const ToastProvider: React.FC = () => {
@@ -40,7 +41,7 @@ export const showToast = {
           )}
         >
           <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+            <CheckCircle className={cn(ICON_ONLY_SIZES.md, "text-green-600")} />
           </div>
           <div className="flex-1 min-w-0">
             {options?.title && (
@@ -52,7 +53,7 @@ export const showToast = {
             onClick={() => toast.dismiss(t.id)}
             className="flex-shrink-0 p-1 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <X className="w-4 h-4 text-gray-400" />
+            <X className={cn(ICON_ONLY_SIZES.sm, "text-gray-400")} />
           </button>
         </div>
       ),
@@ -71,7 +72,7 @@ export const showToast = {
           )}
         >
           <div className="flex-shrink-0 w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
-            <XCircle className="w-5 h-5 text-red-600" />
+            <XCircle className={cn(ICON_ONLY_SIZES.md, "text-red-600")} />
           </div>
           <div className="flex-1 min-w-0">
             {options?.title && (
@@ -83,7 +84,7 @@ export const showToast = {
             onClick={() => toast.dismiss(t.id)}
             className="flex-shrink-0 p-1 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <X className="w-4 h-4 text-gray-400" />
+            <X className={cn(ICON_ONLY_SIZES.sm, "text-gray-400")} />
           </button>
         </div>
       ),
@@ -105,7 +106,7 @@ export const showToast = {
           )}
         >
           <div className="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            <AlertTriangle className={cn(ICON_ONLY_SIZES.md, "text-amber-600")} />
           </div>
           <div className="flex-1 min-w-0">
             {options?.title && (
@@ -117,7 +118,7 @@ export const showToast = {
             onClick={() => toast.dismiss(t.id)}
             className="flex-shrink-0 p-1 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <X className="w-4 h-4 text-gray-400" />
+            <X className={cn(ICON_ONLY_SIZES.sm, "text-gray-400")} />
           </button>
         </div>
       ),
@@ -136,7 +137,7 @@ export const showToast = {
           )}
         >
           <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-            <Info className="w-5 h-5 text-blue-600" />
+            <Info className={cn(ICON_ONLY_SIZES.md, "text-blue-600")} />
           </div>
           <div className="flex-1 min-w-0">
             {options?.title && (
@@ -148,7 +149,7 @@ export const showToast = {
             onClick={() => toast.dismiss(t.id)}
             className="flex-shrink-0 p-1 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <X className="w-4 h-4 text-gray-400" />
+            <X className={cn(ICON_ONLY_SIZES.sm, "text-gray-400")} />
           </button>
         </div>
       ),
