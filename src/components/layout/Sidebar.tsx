@@ -31,6 +31,14 @@ const DESIGN_TOKENS = {
   shadow: SHADOWS,
 };
 
+
+// Unified icon size for sidebar - using design tokens
+const ICON_SIZE = ICON_ONLY_SIZES.md; // w-5 h-5 (20px)
+const LOGO_ICON_SIZE = "h-5 w-5 object-contain"; // For external service logos
+
+// Section types for grouping
+type SectionType = "main" | "services" | "management";
+
 interface SidebarItem {
   id: string;
   label: string;
@@ -39,37 +47,38 @@ interface SidebarItem {
   children?: SidebarItem[];
   badge?: number;
   isNew?: boolean;
-  fullLogo?: React.ReactNode;
+  section?: SectionType;
 }
 
-// Unified icon size for sidebar - using design tokens
-const ICON_SIZE = ICON_ONLY_SIZES.md; // w-5 h-5 (20px)
-const LOGO_ICON_SIZE = "h-5 w-5"; // For external service logos
-
 const sidebarItems: SidebarItem[] = [
+  // Main Navigation
   {
     id: "home",
     label: "Dashboard",
     icon: <LayoutDashboard className={ICON_SIZE} />,
     path: "/",
+    section: "main",
   },
   {
     id: "calendar",
     label: "Calendar",
     icon: <Calendar className={ICON_SIZE} />,
     path: "/calendar",
+    section: "main",
   },
   {
     id: "attendance",
     label: "Attendance",
     icon: <Clock className={ICON_SIZE} />,
     path: "/attendance",
+    section: "main",
   },
   {
     id: "shifts",
     label: "Shifts",
     icon: <CalendarClock className={ICON_SIZE} />,
     path: "/shifts",
+    section: "main",
   },
   {
     id: "leaves",
@@ -77,6 +86,7 @@ const sidebarItems: SidebarItem[] = [
     icon: <Palmtree className={ICON_SIZE} />,
     path: "/leaves",
     badge: 3,
+    section: "main",
   },
   {
     id: "requests",
@@ -84,13 +94,16 @@ const sidebarItems: SidebarItem[] = [
     icon: <FileText className={ICON_SIZE} />,
     path: "/requests",
     badge: 5,
+    section: "main",
   },
   {
     id: "letters",
     label: "Letters",
     icon: <Mail className={ICON_SIZE} />,
     path: "/letters",
+    section: "main",
   },
+  // External Services
   {
     id: "muqeem",
     label: "Muqeem",
@@ -102,19 +115,14 @@ const sidebarItems: SidebarItem[] = [
       />
     ),
     path: "/muqeem",
-    fullLogo: (
-      <img
-        src={`${import.meta.env.BASE_URL}assets/logos/muqeem.svg`}
-        alt="Muqeem"
-        className="h-8 w-auto"
-      />
-    ),
+    section: "services",
   },
   {
     id: "payroll",
     label: "Payroll",
     icon: <DollarSign className={ICON_SIZE} />,
     path: "/payroll",
+    section: "services",
   },
   {
     id: "mudad",
@@ -127,13 +135,7 @@ const sidebarItems: SidebarItem[] = [
       />
     ),
     path: "/mudad",
-    fullLogo: (
-      <img
-        src={`${import.meta.env.BASE_URL}assets/logos/mudad.svg`}
-        alt="Mudad"
-        className="h-8 w-auto"
-      />
-    ),
+    section: "services",
   },
   {
     id: "qsalary",
@@ -147,13 +149,7 @@ const sidebarItems: SidebarItem[] = [
     ),
     path: "/qsalary",
     isNew: true,
-    fullLogo: (
-      <img
-        src={`${import.meta.env.BASE_URL}assets/logos/qsalary.svg`}
-        alt="Qsalary"
-        className="h-8 w-auto"
-      />
-    ),
+    section: "services",
   },
   {
     id: "gosi",
@@ -166,13 +162,7 @@ const sidebarItems: SidebarItem[] = [
       />
     ),
     path: "/gosi",
-    fullLogo: (
-      <img
-        src={`${import.meta.env.BASE_URL}assets/logos/gosi.svg`}
-        alt="GOSI"
-        className="h-8 w-auto"
-      />
-    ),
+    section: "services",
   },
   {
     id: "tameeni",
@@ -185,49 +175,50 @@ const sidebarItems: SidebarItem[] = [
       />
     ),
     path: "/tameeni",
-    fullLogo: (
-      <img
-        src={`${import.meta.env.BASE_URL}assets/logos/tameeni.svg`}
-        alt="Tameeni"
-        className="h-8 w-auto"
-      />
-    ),
+    section: "services",
   },
+  // Management
   {
     id: "employees",
     label: "Employees",
     icon: <Users className={ICON_SIZE} />,
     path: "/employees",
+    section: "management",
   },
   {
     id: "tasks",
     label: "Tasks",
     icon: <CheckSquare className={ICON_SIZE} />,
     path: "/tasks",
+    section: "management",
   },
   {
     id: "position",
     label: "Positions",
     icon: <Briefcase className={ICON_SIZE} />,
     path: "/position",
+    section: "management",
   },
   {
     id: "settings",
     label: "Settings",
     icon: <Settings className={ICON_SIZE} />,
     path: "/settings",
+    section: "management",
   },
   {
     id: "locations",
     label: "Locations",
     icon: <MapPin className={ICON_SIZE} />,
     path: "/locations",
+    section: "management",
   },
   {
     id: "files",
     label: "Files",
     icon: <FolderOpen className={ICON_SIZE} />,
     path: "/files",
+    section: "management",
   },
 ];
 
@@ -541,48 +532,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       );
     }
 
-    // If item has fullLogo and sidebar is open, show full logo
-    if (item.fullLogo && isOpen) {
-      return (
-        <NavLink
-          key={item.id}
-          to={item.path || "#"}
-          onClick={() => isMobile && onClose?.()}
-          className={({ isActive: linkIsActive }) =>
-            cn(
-              baseItemStyles,
-              linkIsActive || isActive ? activeStyles : defaultStyles,
-              !linkIsActive && !isActive && hoverStyles,
-              // Active indicator bar
-              (linkIsActive || isActive) &&
-                "relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-6 before:rounded-r-full",
-              (linkIsActive || isActive) &&
-                (isDark || isGlass
-                  ? "before:bg-[#80D1E9]"
-                  : "before:bg-[#2E3192]"),
-            )
-          }
-          style={{ marginLeft: `${depth * 12}px` }}
-        >
-          <div className="flex items-center gap-2 flex-1">{item.fullLogo}</div>
-          <div className="flex items-center gap-1.5">
-            {item.isNew && (
-              <span
-                className={cn(
-                  "px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded",
-                  isDark || isGlass
-                    ? "bg-emerald-500/20 text-emerald-400"
-                    : "bg-emerald-500 text-white",
-                )}
-              >
-                New
-              </span>
-            )}
-          </div>
-        </NavLink>
-      );
-    }
-
     return (
       <NavLink
         key={item.id}
@@ -875,7 +824,70 @@ export const Sidebar: React.FC<SidebarProps> = ({
             : "scrollbar-thumb-gray-300",
         )}
       >
-        {sidebarItems.map((item) => renderSidebarItem(item))}
+        {/* Main Navigation */}
+        {sidebarItems
+          .filter((item) => item.section === "main")
+          .map((item) => renderSidebarItem(item))}
+
+        {/* Services Section */}
+        {isOpen && (
+          <div
+            className={cn(
+              "mx-4 mt-4 mb-2 pt-3 border-t",
+              isGlass || isDark ? "border-white/10" : "border-gray-200",
+            )}
+          >
+            <span
+              className={cn(
+                "text-[10px] font-semibold uppercase tracking-wider",
+                isGlass || isDark ? "text-gray-500" : "text-gray-400",
+              )}
+            >
+              Services
+            </span>
+          </div>
+        )}
+        {!isOpen && (
+          <div
+            className={cn(
+              "mx-2 mt-3 mb-1 border-t",
+              isGlass || isDark ? "border-white/10" : "border-gray-200",
+            )}
+          />
+        )}
+        {sidebarItems
+          .filter((item) => item.section === "services")
+          .map((item) => renderSidebarItem(item))}
+
+        {/* Management Section */}
+        {isOpen && (
+          <div
+            className={cn(
+              "mx-4 mt-4 mb-2 pt-3 border-t",
+              isGlass || isDark ? "border-white/10" : "border-gray-200",
+            )}
+          >
+            <span
+              className={cn(
+                "text-[10px] font-semibold uppercase tracking-wider",
+                isGlass || isDark ? "text-gray-500" : "text-gray-400",
+              )}
+            >
+              Management
+            </span>
+          </div>
+        )}
+        {!isOpen && (
+          <div
+            className={cn(
+              "mx-2 mt-3 mb-1 border-t",
+              isGlass || isDark ? "border-white/10" : "border-gray-200",
+            )}
+          />
+        )}
+        {sidebarItems
+          .filter((item) => item.section === "management")
+          .map((item) => renderSidebarItem(item))}
       </nav>
 
       {/* Footer */}

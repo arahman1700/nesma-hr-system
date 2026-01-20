@@ -182,6 +182,8 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
 
   const isDark = theme === "dark" || theme === "company" || theme === "glass";
   const isGlass = theme === "glass";
+  // Check if we're in the header (transparent background needed)
+  const isInHeader = className?.includes("header") || true; // Default to header style
 
   const getTypeIcon = (type: NotificationType) => {
     switch (type) {
@@ -230,14 +232,12 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "relative p-2 rounded-xl transition-all duration-300",
-          "hover:scale-105",
-          isGlass
-            ? "bg-white/10 hover:bg-white/20 text-[#2E3192]"
-            : isDark
-              ? "bg-gray-800 hover:bg-gray-700 text-gray-300"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-600",
+          "relative p-2 rounded-lg transition-all duration-200",
+          "hover:bg-white/10 text-white/80 hover:text-white",
         )}
+        aria-label="Notifications"
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
       >
         <Bell
           className={cn(
